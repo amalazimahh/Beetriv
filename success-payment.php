@@ -8,7 +8,7 @@
 </head>
 <body>
     <div id="success-logo">
-        <img src="assets/paid.png" alt="">
+        <img src="img/paid.png" alt="">
     </div>
 
     <h4>Successful !</h4>
