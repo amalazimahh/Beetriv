@@ -17,7 +17,7 @@
     </div>
 
     <script src="https://www.paypal.com/sdk/js?client-id=AXuQ2h0um_ALgb9wZNHXwi7eEIXRIdnaNXKcfn7GQw7v5SnUuXRpL71Ysjr5h6Y8Ac-5OwDRqLtB975P&disable-funding=credit,card"></script>
-    <script src="paypal.js"></script>
+    <script src="js/paypal.js"></script>
 
     
 </body>
