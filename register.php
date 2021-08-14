@@ -1,3 +1,17 @@
+<?php
+require_once('connection.php');
+?>
+
+<?php
+//cara install phpmailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +23,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Register</title>
+    <title>Beetriv - Register</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,7 +37,89 @@
 </head>
 
 <body class="bg-gradient-primary">
+<?php
+if (isset($_POST['submit']))
+{
+    $username   = $_POST['username'];
+    $password   = $_POST['password'];
+    $email      = $_POST['email'];
 
+    $mail= new PHPMailer(true);
+
+    try {
+        
+        //Enable debug output
+        $mail->SMTPDebug = 0;
+
+        //Send using SMTP
+        $mail->isSMTP();
+
+        //Set the SMTP server 
+        $mail->Host = 'smtp.gmail.com';
+
+        //Enable SMTP authentication
+        $mail->SMTPAuth = true;
+
+        //SMTP username
+        $mail->Username = 'haziqzulhazmi@gmail.com';
+
+        //SMTP password
+        $mail->Password = 'Haziq,804';
+
+        //SMTP username
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+        //SMTP PORT
+        $mail->Port = 587;
+
+        //Recipients
+        $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+        //add recipient
+        $mail->addAddress($email,$username);
+
+        //Set email format to HTML
+        $mail->isHTML(true);
+
+        //converting text to html
+        // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+        //generating random 4 digit code
+        $vcode=substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyzABCDEFGHIJKLMNOPQRSTVWXYZ"), 0, 4);
+
+        $mail->Subject = 'Email Authentication Code';
+        $mail->Body    = '<p>Verification code is: </p>' . $vcode;
+        //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+        $mail->send();
+
+        $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = "INSERT INTO user (Username, Email, Password) VALUES ('" . $username . "', '" . $password . "', '" . $email . "')";
+        //mysql_query($conn, $sql);
+        // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
+
+        // if($result){
+        //     echo 'Success';
+        // }else{
+        //     echo 'Error';
+        // }
+
+        header("Location: email-verification.php?email=" . $email);
+        exit();
+    }catch (Exception $e){
+        echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+    
+
+    
+    }
+
+   
+    
+}
+?>
+
+<form method= "post" action="emailverification.php" id="myForm">
     <div class="container">
 
         <div class="card o-hidden border-0 shadow-lg my-5">
@@ -39,30 +135,29 @@
                             <form class="user">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder="First Name">
+                                        <input type="text" class="form-control form-control-user" id="firstname" name="username"
+                                            placeholder="First Name" required/>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                            placeholder="Last Name">
+                                        <input type="text" class="form-control form-control-user" id="lastname" name="username"
+                                            placeholder="Last Name" required/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address">
+                                    <input type="email" class="form-control form-control-user" id="email" name="email"
+                                        placeholder="Email Address" required/>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password">
+                                        <input type="password" class="form-control form-control-user" name="password"
+                                            id="exampleInputPassword" placeholder="Password" required/>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user"
-                                            id="exampleRepeatPassword" placeholder="Repeat Password">
+                                        <input type="password" class="form-control form-control-user" name="password"
+                                            id="exampleRepeatPassword" placeholder="Repeat Password" required/>
                                     </div>
                                 </div>
-                                <a href="login.html" class="btn btn-primary btn-user btn-block">
-                                    Register Account
+                                <input type="submit" name="submit" id="submit" class="btn btn-primary btn-user btn-block" value="Register Account" required>
                                 </a>
                                 <hr>
                                 <a href="index.html" class="btn btn-google btn-user btn-block">
@@ -77,7 +172,7 @@
                                 <a class="small" href="forgot-password.html">Forgot Password?</a>
                             </div>
                             <div class="text-center">
-                                <a class="small" href="login.html">Already have an account? Login!</a>
+                                <a class="small" href="login.php">Already have an account? Login!</a>
                             </div>
                         </div>
                     </div>
@@ -86,6 +181,11 @@
         </div>
 
     </div>
+    
+    </form>
+   
+
+    
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
