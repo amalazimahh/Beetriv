@@ -3,7 +3,7 @@
 if(isset($_POST['reset-password-submit'])){
 
     $email = $_POST["email"];
-    $url = "http:localhost/Beetriv/create-new-password.php?email=" . $email;
+    $url = "http://localhost/Beetriv/create-new-password.php?email=" . $email;
 
     require 'connection.php';
 
@@ -27,9 +27,9 @@ if(isset($_POST['reset-password-submit'])){
 
     mail($to, $subject, $message, $headers);
 
-    header("Location: reset-password.php?reset=success");
+    header("Location: forgot-password.php?reset=success");
 
 
 }else {
-    header("Location: forgot-password.php?reset=success");
+    header("Location: login.php");
 }

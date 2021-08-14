@@ -23,6 +23,12 @@
 </head>
 
 <body class="bg-gradient-primary">
+<?php
+
+require 'connection.php';
+$email = $_GET['email'];
+echo $email;
+?>
 
     <div class="container">
 
@@ -39,18 +45,23 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                                        <p class="mb-4">We get it, stuff happens. Just enter your email address below
-                                            and we'll send you a link to reset your password!</p>
+                                        <h1 class="h4 text-gray-900 mb-2">Create New Password</h1>
+                                        <p class="mb-4">Create your new password here</p>
                                     </div>
-                                    <form action="reset-password-request.php" method="post" class="user">
+                                    <form action="reset-password-page.php" method="post" class="user">
                                         <div class="form-group">
-                                            <input type="email" name="email" class="form-control form-control-user"
+                                            <input type="password" name="pwd" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                                placeholder="Enter New Password...">
+                                            <input type="password" name="pwd-repeat" class="form-control form-control-user"
+                                                id="exampleInputEmail" aria-describedby="emailHselp"
+                                                placeholder="Repeat New Password...">
+
+                                                <input type="disable" name='email' value="<?php echo ($_GET['email']); ?>">
+                                    
                                         </div>
                                         
-                                        <button type="submit" name="reset-password-submit">Send email for password reset...</button>
+                                        <button type="submit" name="reset-new-password-submit">Create new Password</button>
                                         </form>
                                     </form>
                                     <hr>
