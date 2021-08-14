@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
     <link rel="stylesgeet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
     <link rel="stylesheet" href="css/user-profile.css">
+    <link rel="stylesheet" href="css/footer.css">
 </head>
 
 <body class="profile-page">
@@ -65,14 +66,23 @@
 	                        </div>
 	                        <div class="name">
 	                            <h3 class="title">@username</h3>
-								<h6>Designer</h6>
+								<h6>Ratings</h6>
 	                        </div>
 	                    </div>
     	            </div>
                 </div>
                 <div class="description text-center">
-                    <p>An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. </p>
+                  <h6>Kuala Belait</h6>
+                    <p>Joined 1 year ago</p>
                 </div>
+
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Edit Profile</a></div>
+                </div>
+
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Sell Items</a></div>
+                            </div>
 				<div class="row">
 					<div class="col-md-6 ml-auto mr-auto">
                         <div class="profile-tabs">
@@ -145,14 +155,60 @@
         </div>
 	</div>
 	
-	<footer class="footer text-center ">
-        <p>Made with <a href="https://demos.creative-tim.com/material-kit/index.html" target="_blank">Material Kit</a> by Creative Tim</p>
-    </footer>
+	<!-- Footer-->
+  <footer class="site-footer">
+
+<div class="container">
+    <div class="row">
+    <!-- first section -->
+    <div class="col-xs-6 col-md-3">
+        <h6>CORPORATE</h6>
+        <ul class="footer-links">
+            <li><a href="about.php">About Beetriv</a></li>
+            <li><a href="privacy-policy.php">Privacy Policy</a></li>
+            <li><a href="termsco.php">Terms and Conditions</a></li>
+        </ul>
+    </div>
+
+    <!-- second section -->
+    <div class="col-xs-6 col-md-3">
+        <h6>DEALS, PAYMENT & DELIVERY</h6>
+        <ul class="footer-links">
+            <li><a href="deals.php">Our Deals</a></li>
+            <li><a href="delivery.php">Delivery Services</a></li>
+            <li><a href="payment.php">Payment</a></li>
+        </ul>
+    </div>
+
+    <!-- third section -->
+    <div class="col-xs-6 col-md-3">
+        <h6>CUSTOMER CARE</h6>
+        <ul class="footer-links">
+            <li><a href="be-seller.php">Become Our Seller</a></li>
+            <li><a href="faq.php">FAQ</a></li>
+            <li><a href="buy-guides.php">How to Buy on Beetriv</a></li>
+            <li><a href="sell-guides.php">How to Sell on Beetriv</a></li>
+            <li><a href="bid-guides.php">How Bidding Works</a></li>
+            <li><a href="customer-protection.php">Customer Protection</a></li>
+        </ul>
+    </div>
+
+    <!-- fourth section -->
+    <div class="col-xs-6 col-md-3">
+        <h6>CONTACT US</h6>
+        <p>Phone: 257 3663</p>
+        <p>Email: beetrivteam@gmail.com</p>
+        <p>Instagram: @beetriv</p>
+        <p>Facebook: @beetriv</p>
+    </div>
+  </div>
+</div>
+</footer>
   
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 
 
    
