@@ -48,21 +48,6 @@
       						<i class="material-icons">cloud_download</i> Download
       					</a>
       				</li>
-      				<li class="nav-item">
-      					<a class="nav-link" href="https://twitter.com/CreativeTim" target="_blank">
-      						<i class="fa fa-twitter"></i>
-      					</a>
-      				</li>
-      				<li class="nav-item">
-      					<a class="nav-link" href="https://www.facebook.com/CreativeTim" target="_blank">
-      						<i class="fa fa-facebook-square"></i>
-      					</a>
-      				</li>
-      				<li class="nav-item">
-      					<a class="nav-link"  href="https://www.instagram.com/CreativeTimOfficial" target="_blank">
-      						<i class="fa fa-instagram"></i>
-      					</a>
-      				</li>
                 </ul>
             </div>
         </div>
