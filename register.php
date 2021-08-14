@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once "connection.php";
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,32 +42,32 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
-                            <form class="user" action="emailverification.php">
+                            <form class="user" method="POST">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName" name="username"
+                                        <input type="text" class="form-control form-control-user" id="exampleFirstName" name="firstname" pattern="[a-zA-Z]{1,}"
                                             placeholder="First Name" required/>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="exampleLastName"
+                                        <input type="text" class="form-control form-control-user" id="exampleLastName" name="lastname" pattern="[a-zA-Z]{1,}"
                                             placeholder="Last Name" required/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email"
                                         placeholder="Email Address" required/>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user"
+                                        <input type="password" class="form-control form-control-user" name="password"
                                             id="exampleInputPassword" placeholder="Password" required>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user"
+                                        <input type="password" class="form-control form-control-user" name="rpassword"
                                             id="exampleRepeatPassword" placeholder="Repeat Password" required/>
                                     </div>
                                 </div>
-                                <input type="submit" class="btn btn-primary btn-user btn-block" name="Register Account">
+                                <input type="submit" class="btn btn-primary btn-user btn-block" name="submit" value="Register Account">
                                    
                                 
                                 <!-- <hr>
@@ -87,6 +92,28 @@
         </div>
 
     </div>
+    <?php
+        //select from which database table
+        $select = "SELECT * FROM USER WHERE 1";
+
+        //variable to be insert into database
+        if(isset($_POST['submit'])){
+            $email           = ($_POST['email']);
+            $firstname       = ($_POST['firstname']);
+            $lastname        = ($_POST['lastname']);
+            $password        = ($_POST['password']);
+            
+            $sql = $conn->query ("INSERT INTO user (Email, Firstname, Lastname, Password) VALUES ('$email','$firstname','$lastname','$password')");
+
+            header("location: emailverification.php");
+    exit;
+    }
+    
+
+
+
+?>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
