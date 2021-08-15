@@ -4,6 +4,16 @@ session_start();
 require_once "connection.php";
 ?>
 
+<?php
+//cara install phpmailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +56,7 @@ require_once "connection.php";
                             <form class="user" method="POST">
                             <div class="form-group">
                                 <!-- Email -->
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email"
+                                    <input type="email" class="form-control form-control-user" id="email" name="email"
                                         placeholder="Email Address" required/>
                                 </div>
                                 <div class="form-group">
@@ -88,7 +98,7 @@ require_once "connection.php";
                                 </div>
                                 <div class="form-group">
                                 <!-- checkbox -->
-                                <input id="checkbox" type="checkbox" style="float: left; margin-top: 5px;>">
+                                <input id="checkbox" type="checkbox" style="float: left; margin-top: 5px;>" required/>
                                 <div style="margin-left: 25px; margin-top: 15px; margin-bottom: 15px;">
                                 I agree to Beetriv Terms and Conditions
                                 </div>
@@ -135,53 +145,87 @@ require_once "connection.php";
             
             $sql = $conn->query ("INSERT INTO user (Email, Username, Ic_no, Ic_color, Phone_Number, Password) VALUES ('$email','$username','$ic','$ic2','$phone','$password')");
 
+            $mail= new PHPMailer(true);
+
+            try {
+                
+                //Enable debug output
+                $mail->SMTPDebug = 0;
+
+                //Send using SMTP
+                $mail->isSMTP();
+
+                //Set the SMTP server 
+                $mail->Host = 'smtp.gmail.com';
+
+                //Enable SMTP authentication
+                $mail->SMTPAuth = true;
+
+                //SMTP username
+                $mail->Username = 'haziqzulhazmi@gmail.com';
+
+                //SMTP password
+                $mail->Password = 'Haziq,804';
+
+                //SMTP username
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+                //SMTP PORT
+                $mail->Port = 587;
+
+                //Recipients
+                $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+                //add recipient
+                $mail->addAddress($email,$username);
+
+                //Set email format to HTML
+                $mail->isHTML(true);
+
+                //converting text to html
+                // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+                //generating random 4 digit code
+                $vcode=substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyzABCDEFGHIJKLMNOPQRSTVWXYZ"), 0, 4);
+
+                $mail->Subject = 'Email Authentication Code';
+                $mail->Body    = '<p>Verification code is: </p>' . $vcode;
+                //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+                $mail->send();
+
+                $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+                $sql = "INSERT INTO users(name, email, password, vcode, email_verified) VALUES ('" . $username . "', '" . $password . "', '" . $email . "', '" . $vcode . "', NULL)";
+                //mysql_query($conn, $sql);
+                // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
+
+                // if($result){
+                //     echo 'Success';
+                // }else{
+                //     echo 'Error';
+                // }
+
+                //password match validation
+            if ($password == $rpassword){
+                header("location: emailverification.php");
+            exit;
+            }else{
+                echo '<script>alert("Password does not match")</script>';
+            }
+            }catch (Exception $e){
+                echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+
             
+
+            }
+
+
+
             
     }
     
 ?>
-
-<?php
-
-if(isset($_POST['submit'])){
-
-     $email = $_POST["email"];
-    // $url = "http:localhost/Beetriv/create-new-password.php?email=" . $email;
-
-     $to = $email;
-
-     $subject = "Verification Code";
-
-     $vcode=substr(str_shuffle("0123456789"), 0, 4);
-     //$vcode=substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyzABCDEFGHIJKLMNOPQRSTVWXYZ"), 0, 4);
-
-     $message = '<p> Verification code is' . $vcode;
-
-    // $message .= 'Here is your password link: ';
-
-    // $message .=  $url ;
-
-
-     $headers = "From: beetriv.com <haziqzulhazmi@gmail.com> \r\n";
-
-     $headers .= "Reply-to: haziqzulhazmi@gmail.com\r\n";
-
-     $headers .= "Content-type: text/html; \r\n";
-
-    mail($to, $subject, $message, $headers);
-    
-    
-
-
-    if ($password == $rpassword){
-        header("location: emailverification.php");
-    exit;
-    }else{
-        echo '<script>alert("Password does not match")</script>';
-    }
-}
-?>
-
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
