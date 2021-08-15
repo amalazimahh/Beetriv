@@ -86,70 +86,78 @@
 
 				<div class="row">
 					<div class="col-md-6 ml-auto mr-auto">
-                        <!-- <div class="profile-tabs">
-                          <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#studio" role="tab" data-toggle="tab">
-                                  <i class="material-icons">camera</i>
-                                  Studio
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#works" role="tab" data-toggle="tab">
-                                  <i class="material-icons">palette</i>
-                                    Work
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#favorite" role="tab" data-toggle="tab">
-                                  <i class="material-icons">favorite</i>
-                                    Favorite
-                                </a>
-                            </li>
-                          </ul>
-                        </div> -->
+                        
+                    <h5>ACCOUNT INFORMATION</h5>
+
+                        <div class="form-group row">
+                            <!-- First Name -->
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input type="text" class="form-control form-control-user" id="fname" name="fname" pattern="[a-zA-Z]{1,}" placeholder="First Name" required/>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-sm-6 ">
+                                <input type="text" class="form-control form-control-user" id="lname" name="lname" pattern="[a-zA-Z]{1,}" placeholder="Last Name" required/>
+                            </div>
+                        </div>
+
+                        <!-- Username -->
                         <div class="form-group">
-                                <!-- Email -->
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email"
-                                        placeholder="Email Address" required/>
-                                </div>
-                                <div class="form-group">
-                                <!-- Username -->
-                                    <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}"
-                                        placeholder="Username" required/>
-                                </div>
-                                <!-- IC Number -->
-                                <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="ic" name="ic" 
-                                        placeholder="IC Number" required/> 
-                                </div>
-                                <!-- IC Colour -->
-                                <div class="col-sm-6 " >
-                                        <input type="text" class="form-control form-control-user" name="ic2" list="ic2"
-                                             placeholder="IC Colour" required/>
-                                            <datalist id="ic2">
-                                                <option value = "Yellow">
-                                                <option value = "Purple">
-                                                <option value = "Green">
-                                            </datalist>
-                                    </div>
-                                    </div>
-                                <!-- Phone number -->
-                                <div class="form-group">
-                                    <input type="tel" class="form-control form-control-user" id="phone" name="phone" 
-                                    placeholder= "Phone Number" required/>
-                                </div>
-                                <!-- Create Password -->
-                                <div class="form-group">
-                                    <input type="password" class="form-control form-control-user" id="password" name="password" pattern=".{8,25}" title="Required atleast 8 to 25 characters"
-                                    placeholder= "Create Password" required/>
-                                </div>
-                                <!-- Confirm Password -->
-                                <div class="form-group">
-                                    <input type="password" class="form-control form-control-user" id="rpassword" name="rpassword" 
-                                    placeholder= "Confirm Password" required/>
-                                </div>
+                            <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}" placeholder="Username" required/>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email" placeholder="Email Address" required/>
+                        </div>
+
+                        <!-- IC Number -->
+                        <div class="form-group row">
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input type="text" class="form-control form-control-user" id="ic" name="ic" placeholder="IC Number" required/> 
+                            </div>
+                                
+                            <!-- IC Colour -->
+                            <div class="col-sm-6 " >
+                                <input type="text" class="form-control form-control-user" name="ic2" list="ic2" placeholder="IC Colour" required/>
+                                    <datalist id="ic2">
+                                        <option value = "Yellow">
+                                        <option value = "Purple">
+                                        <option value = "Green">
+                                    </datalist>
+                            </div>
+                        </div>
+
+                        <!-- Phone number -->
+                        <div class="form-group">
+                            <input type="tel" class="form-control form-control-user" id="phone" name="phone" placeholder= "Phone Number" required/>
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="form-group">
+                            <input type="textarea" class="form-control form-control-user" id="bio" name="bio" placeholder= "Bio"/>
+                        </div>
+                        
+                        <br>
+
+                    <h5>CHANGE PASSWORD</h5>
+
+                        <!-- Current Password -->
+                        <div class="form-group">
+                            <input type="password" class="form-control form-control-user" id="currentpwd" name="currentpwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Current Password" required/>
+                        </div>
+
+                        <!-- New Password -->
+                        <div class="form-group">
+                            <input type="password" class="form-control form-control-user" id="newpwd" name="newpwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "New Password" required/>
+                        </div>
+
+                        <!-- Confirm New Password -->
+                        <div class="form-group">
+                            <input type="password" class="form-control form-control-user" id="confirmpwd" name="confirmpwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Confirm Password" required/>
+                        </div>
+
+                        <br>
     	    	</div>
             </div>
 
