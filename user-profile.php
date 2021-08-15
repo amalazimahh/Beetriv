@@ -83,13 +83,14 @@
                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Sell Items</a></div>
                             </div>
+
 				<div class="row">
 					<div class="col-md-6 ml-auto mr-auto">
-                        <div class="profile-tabs">
-                          <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#studio" role="tab" data-toggle="tab">
-                                  <i class="material-icons">camera</i>
+                <div class="profile-tabs">
+                    <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+                      <li class="nav-item">
+                          <a class="nav-link active" href="#studio" role="tab" data-toggle="tab">
+                            <i class="material-icons">camera</i>
                                   Studio
                                 </a>
                             </li>
@@ -106,7 +107,7 @@
                                 </a>
                             </li>
                           </ul>
-                        </div>
+                  </div>
     	    	</div>
             </div>
         
@@ -122,7 +123,7 @@
   						<img src="https://images.unsplash.com/photo-1506667527953-22eca67dd919?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6326214b7ce18d74dde5e88db4a12dd5&auto=format&fit=crop&w=750&q=80" class="rounded">
   					</div>
   				</div>
-  			</div>
+  			  </div>
             <div class="tab-pane text-center gallery" id="works">
       			<div class="row">
       				<div class="col-md-3 ml-auto">
@@ -134,7 +135,7 @@
                       <img src="https://images.unsplash.com/photo-1494028698538-2cd52a400b17?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=83bf0e71786922a80c420c17b664a1f5&auto=format&fit=crop&w=334&q=80" class="rounded">
       				</div>
       			</div>
-  			</div>
+  			  </div>
             <div class="tab-pane text-center gallery" id="favorite">
       			<div class="row">
       				<div class="col-md-3 ml-auto">

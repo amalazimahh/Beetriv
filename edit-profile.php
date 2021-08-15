@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Edit Profile</title>
 </head>
 <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
@@ -17,7 +17,7 @@
 </head>
 
 <body class="profile-page">
-    <nav class="navbar navbar-color-on-scroll navbar-transparent    fixed-top  navbar-expand-lg "  color-on-scroll="100"  id="sectionsNav">
+    <nav class="navbar navbar-color-on-scroll navbar-transparent fixed-top  navbar-expand-lg "  color-on-scroll="100"  id="sectionsNav">
         <div class="container">
             <div class="navbar-translate">
                 <a class="navbar-brand" href="https://demos.creative-tim.com/material-kit/index.html" target="_blank">Material Kit </a>
@@ -65,27 +65,28 @@
 	                            <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0NjQzOTk4OTQ4OTkyMzQy/ansel-elgort-poses-for-a-portrait-during-the-baby-driver-premiere-2017-sxsw-conference-and-festivals-on-march-11-2017-in-austin-texas-photo-by-matt-winkelmeyer_getty-imagesfor-sxsw-square.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid">
 	                        </div>
 	                        <div class="name">
-	                            <h3 class="title">@username</h3>
-								<h6>Ratings</h6>
+	                            <h3 class="title">EDIT PROFILE INFORMATION</h3>
 	                        </div>
 	                    </div>
+                        <div class="avatar">
+	                        <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0NjQzOTk4OTQ4OTkyMzQy/ansel-elgort-poses-for-a-portrait-during-the-baby-driver-premiere-2017-sxsw-conference-and-festivals-on-march-11-2017-in-austin-texas-photo-by-matt-winkelmeyer_getty-imagesfor-sxsw-square.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid">
+	                    </div>
+
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="edit-profile.php">Choose A File</a>
+                            
+                                    <div class="description text-center">
+                                    <p>Acceptable formats are .jpg, .jpeg and .png only</p>
+                                    <p>Maximum file size is 500kb</p>
+                                </div>
+                        </div>
+                        </div>
     	            </div>
                 </div>
-                <div class="description text-center">
-                  <h6>Kuala Belait</h6>
-                    <p>Joined 1 year ago</p>
-                </div>
 
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="edit-profile.php">Edit Profile</a></div>
-                </div>
-
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Sell Items</a></div>
-                            </div>
 				<div class="row">
 					<div class="col-md-6 ml-auto mr-auto">
-                        <div class="profile-tabs">
+                        <!-- <div class="profile-tabs">
                           <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" href="#studio" role="tab" data-toggle="tab">
@@ -106,51 +107,52 @@
                                 </a>
                             </li>
                           </ul>
-                        </div>
+                        </div> -->
+                        <div class="form-group">
+                                <!-- Email -->
+                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email"
+                                        placeholder="Email Address" required/>
+                                </div>
+                                <div class="form-group">
+                                <!-- Username -->
+                                    <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}"
+                                        placeholder="Username" required/>
+                                </div>
+                                <!-- IC Number -->
+                                <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="ic" name="ic" 
+                                        placeholder="IC Number" required/> 
+                                </div>
+                                <!-- IC Colour -->
+                                <div class="col-sm-6 " >
+                                        <input type="text" class="form-control form-control-user" name="ic2" list="ic2"
+                                             placeholder="IC Colour" required/>
+                                            <datalist id="ic2">
+                                                <option value = "Yellow">
+                                                <option value = "Purple">
+                                                <option value = "Green">
+                                            </datalist>
+                                    </div>
+                                    </div>
+                                <!-- Phone number -->
+                                <div class="form-group">
+                                    <input type="tel" class="form-control form-control-user" id="phone" name="phone" 
+                                    placeholder= "Phone Number" required/>
+                                </div>
+                                <!-- Create Password -->
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-user" id="password" name="password" pattern=".{8,25}" title="Required atleast 8 to 25 characters"
+                                    placeholder= "Create Password" required/>
+                                </div>
+                                <!-- Confirm Password -->
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-user" id="rpassword" name="rpassword" 
+                                    placeholder= "Confirm Password" required/>
+                                </div>
     	    	</div>
             </div>
-        
-          <div class="tab-content tab-space">
-            <div class="tab-pane active text-center gallery" id="studio">
-  				<div class="row">
-  					<div class="col-md-3 ml-auto">
-  					    <img src="https://images.unsplash.com/photo-1524498250077-390f9e378fc0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=83079913579babb9d2c94a5941b2e69d&auto=format&fit=crop&w=751&q=80" class="rounded">
-  						<img src="https://images.unsplash.com/photo-1528249227670-9ba48616014f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=66b8e7db17b83084f16fdeadfc93b95b&auto=format&fit=crop&w=357&q=80" class="rounded">
-  					</div>
-  					<div class="col-md-3 mr-auto">
-  						<img src="https://images.unsplash.com/photo-1521341057461-6eb5f40b07ab?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=72da2f550f8cbd0ec252ad6fb89c96b2&auto=format&fit=crop&w=334&q=80" class="rounded">
-  						<img src="https://images.unsplash.com/photo-1506667527953-22eca67dd919?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6326214b7ce18d74dde5e88db4a12dd5&auto=format&fit=crop&w=750&q=80" class="rounded">
-  					</div>
-  				</div>
-  			</div>
-            <div class="tab-pane text-center gallery" id="works">
-      			<div class="row">
-      				<div class="col-md-3 ml-auto">
-                      <img src="https://images.unsplash.com/photo-1524498250077-390f9e378fc0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=83079913579babb9d2c94a5941b2e69d&auto=format&fit=crop&w=751&q=80" class="rounded">
-  					  <img src="https://images.unsplash.com/photo-1506667527953-22eca67dd919?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6326214b7ce18d74dde5e88db4a12dd5&auto=format&fit=crop&w=750&q=80" class="rounded">
-  					  <img src="https://images.unsplash.com/photo-1505784045224-1247b2b29cf3?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ec2bdc92a9687b6af5089b335691830e&auto=format&fit=crop&w=750&q=80" class="rounded">  					</div>
-      				<div class="col-md-3 mr-auto">
-                      <img src="https://images.unsplash.com/photo-1504346466600-714572c4b726?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6754ded479383b7e3144de310fa88277&auto=format&fit=crop&w=750&q=80" class="rounded">
-                      <img src="https://images.unsplash.com/photo-1494028698538-2cd52a400b17?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=83bf0e71786922a80c420c17b664a1f5&auto=format&fit=crop&w=334&q=80" class="rounded">
-      				</div>
-      			</div>
-  			</div>
-            <div class="tab-pane text-center gallery" id="favorite">
-      			<div class="row">
-      				<div class="col-md-3 ml-auto">
-      				  <img src="https://images.unsplash.com/photo-1504346466600-714572c4b726?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6754ded479383b7e3144de310fa88277&auto=format&fit=crop&w=750&q=80" class="rounded">
-                      <img src="https://images.unsplash.com/photo-1494028698538-2cd52a400b17?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=83bf0e71786922a80c420c17b664a1f5&auto=format&fit=crop&w=334&q=80" class="rounded">
-      				</div>
-      				<div class="col-md-3 mr-auto">
-      				  <img src="https://images.unsplash.com/photo-1505784045224-1247b2b29cf3?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ec2bdc92a9687b6af5089b335691830e&auto=format&fit=crop&w=750&q=80" class="rounded">  					
-      				  <img src="https://images.unsplash.com/photo-1524498250077-390f9e378fc0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=83079913579babb9d2c94a5941b2e69d&auto=format&fit=crop&w=751&q=80" class="rounded">
-  					  <img src="https://images.unsplash.com/photo-1506667527953-22eca67dd919?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6326214b7ce18d74dde5e88db4a12dd5&auto=format&fit=crop&w=750&q=80" class="rounded">
-      			    </div>
-      			</div>
-      		</div>
-          </div>
 
-        
             </div>
         </div>
 	</div>
