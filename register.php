@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once "connection.php";
 ?>
@@ -92,6 +93,7 @@ require_once "connection.php";
         </div>
 
     </div>
+    
     <?php
         //select from which database table
         $select = "SELECT * FROM USER WHERE 1";
@@ -102,16 +104,53 @@ require_once "connection.php";
             $firstname       = ($_POST['firstname']);
             $lastname        = ($_POST['lastname']);
             $password        = ($_POST['password']);
+            $rpassword        = ($_POST['rpassword']);
             
             $sql = $conn->query ("INSERT INTO user (Email, Firstname, Lastname, Password) VALUES ('$email','$firstname','$lastname','$password')");
 
-            header("location: emailverification.php");
-    exit;
+            
+            
+            
     }
+    
+?>
+
+<?php
+
+if(isset($_POST['submit'])){
+
+    // $email = $_POST["email"];
+    // $url = "http:localhost/Beetriv/create-new-password.php?email=" . $email;
+
+    // $to = $email;
+
+    // $subject = "Reset your Password";
+
+    // $message = '<p> The link to reset your password is below.';
+
+    // $message .= 'Here is your password link: ';
+
+    // $message .=  $url ;
+
+
+    // $headers = "From: beetrive.com <yusnadi247@gmail.com> \r\n";
+
+    // $headers .= "Reply-to: yusnadi247@gmail.com\r\n";
+
+    // $headers .= "Content-type: text/html; \r\n";
+
+    // mail($to, $subject, $message, $headers);
+    
     
 
 
-
+    if ($password == $rpassword){
+        header("location: emailverification.php");
+    exit;
+    }else{
+        echo '<script>alert("Password does not match")</script>';
+    }
+}
 ?>
 
 
