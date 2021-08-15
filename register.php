@@ -57,7 +57,7 @@ require_once "connection.php";
 
                                 <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="number" class="form-control form-control-user" id="ic" name="ic" 
+                                    <input type="text" class="form-control form-control-user" id="ic" name="ic" 
                                         placeholder="IC Number" required/>
                                         
                                 </div>
@@ -67,7 +67,8 @@ require_once "connection.php";
                                              placeholder="IC Colour" required/>
                                             <datalist id="ic2">
                                                 <option value = "Yellow">
-                                                <option value = "Red">
+                                                <option value = "Purple">
+                                                <option value = "Green">
                                             </datalist>
                                     </div>
                                     </div>
@@ -120,12 +121,14 @@ require_once "connection.php";
         //variable to be insert into database
         if(isset($_POST['submit'])){
             $email           = ($_POST['email']);
-            $firstname       = ($_POST['firstname']);
-            $lastname        = ($_POST['lastname']);
+            $username        = ($_POST['username']);
+            $ic              = ($_POST['ic']);
+            $ic2             = ($_POST['ic2']);
+            $phone           = ($_POST['phone']);
             $password        = ($_POST['password']);
-            $rpassword        = ($_POST['rpassword']);
+            $rpassword       = ($_POST['rpassword']);
             
-            $sql = $conn->query ("INSERT INTO user (Email, Firstname, Lastname, Password) VALUES ('$email','$firstname','$lastname','$password')");
+            $sql = $conn->query ("INSERT INTO user (Email, Username, Ic_no, Ic_color, Phone_Number, Password) VALUES ('$email','$username','$ic','$ic2','$phone','$password')");
 
             
             
