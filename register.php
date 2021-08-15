@@ -45,23 +45,22 @@ require_once "connection.php";
                             </div>
                             <form class="user" method="POST">
                             <div class="form-group">
-                                
+                                <!-- Email -->
                                     <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email"
                                         placeholder="Email Address" required/>
                                 </div>
                                 <div class="form-group">
-                                
+                                <!-- Username -->
                                     <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}"
                                         placeholder="Username" required/>
                                 </div>
-
+                                <!-- IC Number -->
                                 <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <input type="text" class="form-control form-control-user" id="ic" name="ic" 
-                                        placeholder="IC Number" required/>
-                                        
+                                        placeholder="IC Number" required/> 
                                 </div>
-
+                                <!-- IC Colour -->
                                 <div class="col-sm-6 " >
                                         <input type="text" class="form-control form-control-user" name="ic2" list="ic2"
                                              placeholder="IC Colour" required/>
@@ -72,22 +71,23 @@ require_once "connection.php";
                                             </datalist>
                                     </div>
                                     </div>
+                                <!-- Phone number -->
                                 <div class="form-group">
-
                                     <input type="tel" class="form-control form-control-user" id="phone" name="phone" 
                                     placeholder= "Phone Number" required/>
                                 </div>
+                                <!-- Create Password -->
                                 <div class="form-group">
-                                
-                                    <input type="password" class="form-control form-control-user" id="password" name="password" 
+                                    <input type="password" class="form-control form-control-user" id="password" name="password" pattern=".{8,25}" title="Required atleast 8 to 25 characters"
                                     placeholder= "Create Password" required/>
                                 </div>
+                                <!-- Confirm Password -->
                                 <div class="form-group">
-                                
                                     <input type="password" class="form-control form-control-user" id="rpassword" name="rpassword" 
                                     placeholder= "Confirm Password" required/>
                                 </div>
                                 <div class="form-group">
+                                <!-- Register Account -->
                                 <input type="submit" class="btn btn-primary btn-user btn-block" name="submit" value="Register Account">
                                    
                                 
