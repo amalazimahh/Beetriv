@@ -87,6 +87,11 @@ require_once "connection.php";
                                     placeholder= "Confirm Password" required/>
                                 </div>
                                 <div class="form-group">
+                                <!-- checkbox -->
+                                <input id="checkbox" type="checkbox" style="float: left; margin-top: 5px;>">
+                                <div style="margin-left: 25px; margin-top: 15px; margin-bottom: 15px;">
+                                I agree to Beetriv Terms and Conditions
+                                </div>
                                 <!-- Register Account -->
                                 <input type="submit" class="btn btn-primary btn-user btn-block" name="submit" value="Register Account">
                                    
