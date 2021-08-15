@@ -21,11 +21,8 @@ if(isset($_POST["reset-new-password-sumbit"])){
     } 
 
 
-     $sql ="UPDATE REGISTRATION SET password=$password WHERE email=$email";
-     $stmt = mysqli_stmt_init($conn);
-     mysqli_stmt_execute($stmt);
-    
-        //add excute statement
+    $sql ="UPDATE REGISTRATION SET password=:pwd WHERE registration_id=:id";
+    $pdo->prepare($sql)->execute([$password, $registration_id]);
 
 }else {
     header("Location: login.php");
