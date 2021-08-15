@@ -72,17 +72,21 @@
 	                        <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0NjQzOTk4OTQ4OTkyMzQy/ansel-elgort-poses-for-a-portrait-during-the-baby-driver-premiere-2017-sxsw-conference-and-festivals-on-march-11-2017-in-austin-texas-photo-by-matt-winkelmeyer_getty-imagesfor-sxsw-square.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid">
 	                    </div>
 
+                        <form action="edit-profile.php" method="post">
+
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="edit-profile.php">Choose A File</a>
+                                <div class="text-center">
+                                        <label for="image"></label>
+                                        <input type="file" name="image" value="Select Image File">
                             
                                     <div class="description text-center">
-                                    <p>Acceptable formats are .jpg, .jpeg and .png only</p>
-                                    <p>Maximum file size is 500kb</p>
+                                        <p>Acceptable formats are .jpg, .jpeg and .png only</p>
+                                        <p>Maximum file size is 500kb</p>
+                                    </div>
                                 </div>
-                        </div>
-                        </div>
-    	            </div>
-                </div>
+                            </div>
+    	                </div>
+                    </div>
 
 				<div class="row">
 					<div class="col-md-6 ml-auto mr-auto">
@@ -114,12 +118,12 @@
                         <!-- IC Number -->
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="ic" name="ic" placeholder="IC Number" required/> 
+                                <input type="text" class="form-control form-control-user" id="ic" name="icNum" placeholder="IC Number" required/> 
                             </div>
                                 
                             <!-- IC Colour -->
                             <div class="col-sm-6 " >
-                                <input type="text" class="form-control form-control-user" name="ic2" list="ic2" placeholder="IC Colour" required/>
+                                <input type="text" class="form-control form-control-user" name="icCol" list="ic2" placeholder="IC Colour" required/>
                                     <datalist id="ic2">
                                         <option value = "Yellow">
                                         <option value = "Purple">
@@ -144,20 +148,58 @@
 
                         <!-- Current Password -->
                         <div class="form-group">
-                            <input type="password" class="form-control form-control-user" id="currentpwd" name="currentpwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Current Password" required/>
+                            <input type="password" class="form-control form-control-user" id="currentpwd" name="currentPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Current Password" required/>
                         </div>
 
                         <!-- New Password -->
                         <div class="form-group">
-                            <input type="password" class="form-control form-control-user" id="newpwd" name="newpwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "New Password" required/>
+                            <input type="password" class="form-control form-control-user" id="newpwd" name="newPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "New Password" required/>
                         </div>
 
                         <!-- Confirm New Password -->
                         <div class="form-group">
-                            <input type="password" class="form-control form-control-user" id="confirmpwd" name="confirmpwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Confirm Password" required/>
+                            <input type="password" class="form-control form-control-user" id="confirmpwd" name="confirmPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Confirm Password" required/>
                         </div>
 
                         <br>
+
+                        <input type="submit" value="SAVE" name="save" class="btn btn-outline-dark mt-auto">
+                    </form>
+
+                    <!-- php- update into database -->
+                    <?php
+                        if(isset($_POST["save"])){
+                            if(!empty($_FILES['image']['name'])) {
+                                $fileName = basename($_FILES['image']['name']);
+                                $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                                $fname = $_POST['fname'];
+                                $lname = $_POST['lname'];
+                                $username = $_POST['username'];
+                                $email = $_POST['email'];
+                                $icNum = $_POST['icNum'];
+                                $icCol = $_POST['icCol'];
+                                $phone = $_POST['phone'];
+                                $bio = $_POST['bio'];
+                                $bio = $_POST['bio'];
+                                $currentPwd = $_POST['currentPwd'];
+                                $newPwd = $_POST['newPwd'];
+                                $confirmPwd = $_POST['confirmPwd'];
+
+                                // allow certain formats
+                                $allowTypes = array('jpg','png','jpeg','gif');
+                                if(in_array($fileType, $allowTypes)){
+                                    $image = $_FILES['image']['tmp_name'];
+                                    $imgContent = addslashes(file_get_contents($image));
+
+                                    //select table from database
+                                    //update & insert data in db 
+
+                                }
+                            }
+                        }
+
+                    ?>
     	    	</div>
             </div>
 
@@ -166,54 +208,54 @@
 	</div>
 	
 	<!-- Footer-->
-  <footer class="site-footer">
+    <footer class="site-footer">
 
-<div class="container">
-    <div class="row">
-    <!-- first section -->
-    <div class="col-xs-6 col-md-3">
-        <h6>CORPORATE</h6>
-        <ul class="footer-links">
-            <li><a href="footer/about.php">About Beetriv</a></li>
-            <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
-            <li><a href="footer/termsco.php">Terms and Conditions</a></li>
-        </ul>
-    </div>
+        <div class="container">
+            <div class="row">
+                <!-- first section -->
+                <div class="col-xs-6 col-md-3">
+                    <h6>CORPORATE</h6>
+                    <ul class="footer-links">
+                        <li><a href="footer/about.php">About Beetriv</a></li>
+                        <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
+                        <li><a href="footer/termsco.php">Terms and Conditions</a></li>
+                    </ul>
+                </div>
 
-    <!-- second section -->
-    <div class="col-xs-6 col-md-3">
-        <h6>DEALS, PAYMENT & DELIVERY</h6>
-        <ul class="footer-links">
-            <li><a href="footer/deals.php">Our Deals</a></li>
-            <li><a href="footer/delivery.php">Delivery Services</a></li>
-            <li><a href="footer/payment.php">Payment</a></li>
-        </ul>
-    </div>
+                <!-- second section -->
+                <div class="col-xs-6 col-md-3">
+                    <h6>DEALS, PAYMENT & DELIVERY</h6>
+                    <ul class="footer-links">
+                        <li><a href="footer/deals.php">Our Deals</a></li>
+                        <li><a href="footer/delivery.php">Delivery Services</a></li>
+                        <li><a href="footer/payment.php">Payment</a></li>
+                    </ul>
+                </div>
 
-    <!-- third section -->
-    <div class="col-xs-6 col-md-3">
-        <h6>CUSTOMER CARE</h6>
-        <ul class="footer-links">
-            <li><a href="footer/be-seller.php">Become Our Seller</a></li>
-            <li><a href="footer/faq.php">FAQ</a></li>
-            <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
-            <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
-            <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
-            <li><a href="footer/customer-protection.php">Customer Protection</a></li>
-        </ul>
-    </div>
+                <!-- third section -->
+                <div class="col-xs-6 col-md-3">
+                    <h6>CUSTOMER CARE</h6>
+                    <ul class="footer-links">
+                        <li><a href="footer/be-seller.php">Become Our Seller</a></li>
+                        <li><a href="footer/faq.php">FAQ</a></li>
+                        <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
+                        <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
+                        <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
+                        <li><a href="footer/customer-protection.php">Customer Protection</a></li>
+                    </ul>
+                </div>
 
-    <!-- fourth section -->
-    <div class="col-xs-6 col-md-3">
-        <h6>CONTACT US</h6>
-        <p>Phone: 257 3663</p>
-        <p>Email: beetrivteam@gmail.com</p>
-        <p>Instagram: @beetriv</p>
-        <p>Facebook: @beetriv</p>
-    </div>
-  </div>
-</div>
-</footer>
+                <!-- fourth section -->
+                <div class="col-xs-6 col-md-3">
+                    <h6>CONTACT US</h6>
+                    <p>Phone: 257 3663</p>
+                    <p>Email: beetrivteam@gmail.com</p>
+                    <p>Instagram: @beetriv</p>
+                    <p>Facebook: @beetriv</p>
+                </div>
+            </div>
+        </div>
+    </footer>
   
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
