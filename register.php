@@ -16,7 +16,7 @@ require_once "connection.php";
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Beetriv - Register</title>
+    <title>Beetriv - Sign Up</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -41,33 +41,52 @@ require_once "connection.php";
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Sign Up to Beetriv</h1>
                             </div>
                             <form class="user" method="POST">
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName" name="firstname" pattern="[a-zA-Z]{1,}"
-                                            placeholder="First Name" required/>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="exampleLastName" name="lastname" pattern="[a-zA-Z]{1,}"
-                                            placeholder="Last Name" required/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
+                            <div class="form-group">
+                                
                                     <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email"
                                         placeholder="Email Address" required/>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user" name="password"
-                                            id="exampleInputPassword" placeholder="Password" required>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user" name="rpassword"
-                                            id="exampleRepeatPassword" placeholder="Repeat Password" required/>
-                                    </div>
+                                <div class="form-group">
+                                
+                                    <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}"
+                                        placeholder="Username" required/>
                                 </div>
+
+                                <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="number" class="form-control form-control-user" id="ic" name="ic" 
+                                        placeholder="IC Number" required/>
+                                        
+                                </div>
+
+                                <div class="col-sm-6 " >
+                                        <input type="text" class="form-control form-control-user" name="ic2" list="ic2"
+                                             placeholder="IC Colour" required/>
+                                            <datalist id="ic2">
+                                                <option value = "Yellow">
+                                                <option value = "Red">
+                                            </datalist>
+                                    </div>
+                                    </div>
+                                <div class="form-group">
+
+                                    <input type="tel" class="form-control form-control-user" id="phone" name="phone" 
+                                    placeholder= "Phone Number" required/>
+                                </div>
+                                <div class="form-group">
+                                
+                                    <input type="password" class="form-control form-control-user" id="password" name="password" 
+                                    placeholder= "Create Password" required/>
+                                </div>
+                                <div class="form-group">
+                                
+                                    <input type="password" class="form-control form-control-user" id="rpassword" name="rpassword" 
+                                    placeholder= "Confirm Password" required/>
+                                </div>
+                                <div class="form-group">
                                 <input type="submit" class="btn btn-primary btn-user btn-block" name="submit" value="Register Account">
                                    
                                 
@@ -110,7 +129,6 @@ require_once "connection.php";
 
             
             
-            
     }
     
 ?>
@@ -119,27 +137,30 @@ require_once "connection.php";
 
 if(isset($_POST['submit'])){
 
-    // $email = $_POST["email"];
+     $email = $_POST["email"];
     // $url = "http:localhost/Beetriv/create-new-password.php?email=" . $email;
 
-    // $to = $email;
+     $to = $email;
 
-    // $subject = "Reset your Password";
+     $subject = "Verification Code";
 
-    // $message = '<p> The link to reset your password is below.';
+     $vcode=substr(str_shuffle("0123456789"), 0, 4);
+     //$vcode=substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyzABCDEFGHIJKLMNOPQRSTVWXYZ"), 0, 4);
+
+     $message = '<p> Verification code is' . $vcode;
 
     // $message .= 'Here is your password link: ';
 
     // $message .=  $url ;
 
 
-    // $headers = "From: beetrive.com <yusnadi247@gmail.com> \r\n";
+     $headers = "From: beetriv.com <haziqzulhazmi@gmail.com> \r\n";
 
-    // $headers .= "Reply-to: yusnadi247@gmail.com\r\n";
+     $headers .= "Reply-to: haziqzulhazmi@gmail.com\r\n";
 
-    // $headers .= "Content-type: text/html; \r\n";
+     $headers .= "Content-type: text/html; \r\n";
 
-    // mail($to, $subject, $message, $headers);
+    mail($to, $subject, $message, $headers);
     
     
 
