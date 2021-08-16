@@ -45,9 +45,13 @@
                                     </div>
                                     <form action="reset-password-request.php" method="post" class="user">
                                         <div class="form-group">
+                                            <input type="text" name="username" class="form-control form-control-user"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter your username....">  
                                             <input type="email" name="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Enter Email Address...">
+                                                
                                         </div>
                                         
                                         <button type="submit" name="reset-password-submit">Send email for password reset...</button>
