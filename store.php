@@ -3,7 +3,7 @@ session_start();
 require_once "connection.php";
 
 // Get image data from database
-$result = $conn->query("SELECT prd_img FROM PRODUCT ORDER BY prd_id DESC");
+$result = $conn->query("SELECT * FROM PRODUCT ORDER BY prd_id DESC");
 ?>
 
 <!DOCTYPE html>
@@ -272,14 +272,14 @@ $result = $conn->query("SELECT prd_img FROM PRODUCT ORDER BY prd_id DESC");
                             <div class="card-body p-4">
                                 <div class="text-center">
                                     <!-- Product name-->
-                                    <h5 class="fw-bolder"><?php echo $row['name'];?></h5>
+                                    <h5 class="fw-bolder"><?php printf( $row['prd_name']);?></h5>
                                     <!-- Product price-->
-                                    $40.00 - $80.00
+                                    <h5 class="fw-bolder"><?php printf ($row['prd_price']);?></h5>
                                 </div>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
                             </div>
                         </div>
                     </div>
