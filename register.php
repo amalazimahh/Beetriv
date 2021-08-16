@@ -1,6 +1,17 @@
 <?php
+ob_start();
 session_start();
 require_once "connection.php";
+?>
+
+<?php
+//cara install phpmailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
 ?>
 
 
@@ -15,7 +26,7 @@ require_once "connection.php";
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Beetriv - Register</title>
+    <title>Beetriv - Sign Up</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -40,33 +51,58 @@ require_once "connection.php";
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Sign Up to Beetriv</h1>
                             </div>
                             <form class="user" method="POST">
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName" name="firstname" pattern="[a-zA-Z]{1,}"
-                                            placeholder="First Name" required/>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="exampleLastName" name="lastname" pattern="[a-zA-Z]{1,}"
-                                            placeholder="Last Name" required/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email"
+                            <div class="form-group">
+                                <!-- Email -->
+                                    <input type="email" class="form-control form-control-user" id="email" name="email"
                                         placeholder="Email Address" required/>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user" name="password"
-                                            id="exampleInputPassword" placeholder="Password" required>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user" name="rpassword"
-                                            id="exampleRepeatPassword" placeholder="Repeat Password" required/>
-                                    </div>
+                                <div class="form-group">
+                                <!-- Username -->
+                                    <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}"
+                                        placeholder="Username" required/>
                                 </div>
+                                <!-- IC Number -->
+                                <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="ic" name="ic" 
+                                        placeholder="IC Number" required/> 
+                                </div>
+                                <!-- IC Colour -->
+                                <div class="col-sm-6 " >
+                                        <input type="text" class="form-control form-control-user" name="ic2" list="ic2"
+                                             placeholder="IC Colour" required/>
+                                            <datalist id="ic2">
+                                                <option value = "Yellow">
+                                                <option value = "Purple">
+                                                <option value = "Green">
+                                            </datalist>
+                                    </div>
+                                    </div>
+                                <!-- Phone number -->
+                                <div class="form-group">
+                                    <input type="tel" class="form-control form-control-user" id="phone" name="phone" 
+                                    placeholder= "Phone Number" required/>
+                                </div>
+                                <!-- Create Password -->
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-user" id="password" name="password" pattern=".{8,25}" title="Required atleast 8 to 25 characters"
+                                    placeholder= "Create Password" required/>
+                                </div>
+                                <!-- Confirm Password -->
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-user" id="rpassword" name="rpassword" 
+                                    placeholder= "Confirm Password" required/>
+                                </div>
+                                <div class="form-group">
+                                <!-- checkbox -->
+                                <input id="checkbox" type="checkbox" style="float: left; margin-top: 5px;>" required/>
+                                <div style="margin-left: 25px; margin-top: 15px; margin-bottom: 15px;">
+                                I agree to Beetriv Terms and Conditions
+                                </div>
+                                <!-- Register Account -->
                                 <input type="submit" class="btn btn-primary btn-user btn-block" name="submit" value="Register Account">
                                    
                                 
@@ -92,6 +128,7 @@ require_once "connection.php";
         </div>
 
     </div>
+    
     <?php
         //select from which database table
         $select = "SELECT * FROM USER WHERE 1";
@@ -99,21 +136,96 @@ require_once "connection.php";
         //variable to be insert into database
         if(isset($_POST['submit'])){
             $email           = ($_POST['email']);
-            $firstname       = ($_POST['firstname']);
-            $lastname        = ($_POST['lastname']);
+            $username        = ($_POST['username']);
+            $ic              = ($_POST['ic']);
+            $ic2             = ($_POST['ic2']);
+            $phone           = ($_POST['phone']);
             $password        = ($_POST['password']);
+            $rpassword       = ($_POST['rpassword']);
             
-            $sql = $conn->query ("INSERT INTO user (Email, Firstname, Lastname, Password) VALUES ('$email','$firstname','$lastname','$password')");
+            $sql = $conn->query ("INSERT INTO user (Email, Username, Ic_no, Ic_color, Phone_Number, Password) VALUES ('$email','$username','$ic','$ic2','$phone','$password')");
 
-            header("location: emailverification.php");
-    exit;
+            $mail= new PHPMailer(true);
+
+            try {
+                
+                //Enable debug output
+                $mail->SMTPDebug = 0;
+
+                //Send using SMTP
+                $mail->isSMTP();
+
+                //Set the SMTP server 
+                $mail->Host = 'smtp.gmail.com';
+
+                //Enable SMTP authentication
+                $mail->SMTPAuth = true;
+
+                //SMTP username
+                $mail->Username = 'email';
+
+                //SMTP password
+                $mail->Password = 'password';
+
+                //SMTP username
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+                //SMTP PORT
+                $mail->Port = 587;
+
+                //Recipients
+                $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+                //add recipient
+                $mail->addAddress($email,$username);
+
+                //Set email format to HTML
+                $mail->isHTML(true);
+
+                //converting text to html
+                // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+                //generating random 4 digit code
+                $vcode=substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyzABCDEFGHIJKLMNOPQRSTVWXYZ"), 0, 4);
+
+                $mail->Subject = 'Email Authentication Code';
+                $mail->Body    = '<p>Verification code is: </p>' . $vcode;
+                //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+                $mail->send();
+
+                $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+                $sql = "INSERT INTO users(name, email, password, vcode, email_verified) VALUES ('" . $username . "', '" . $password . "', '" . $email . "', '" . $vcode . "', NULL)";
+                //mysql_query($conn, $sql);
+                // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
+
+                // if($result){
+                //     echo 'Success';
+                // }else{
+                //     echo 'Error';
+                // }
+
+                //password match validation
+            if ($password == $rpassword){
+                header("location: emailverification.php");
+            exit;
+            }else{
+                echo '<script>alert("Password does not match")</script>';
+            }
+            }catch (Exception $e){
+                echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+
+            
+
+            }
+
+
+
+            
     }
     
-
-
-
 ?>
-
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>

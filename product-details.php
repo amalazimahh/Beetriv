@@ -12,6 +12,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/footer.css">
+        <link rel="stylesheet" href="css/user-profile.css">
     </head>
     <body>
         <!-- Navigation-->
@@ -173,10 +175,58 @@
                 </div>
             </div>
         </section>
+
         <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
+        <footer class="site-footer">
+
+        <div class="container">
+            <div class="row">
+                <!-- first section -->
+                <div class="col-xs-6 col-md-3">
+                <h6>CORPORATE</h6>
+                <ul class="footer-links">
+                    <li><a href="footer/about.php">About Beetriv</a></li>
+                    <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
+                    <li><a href="footer/termsco.php">Terms and Conditions</a></li>
+                </ul>
+                </div>
+
+                <!-- second section -->
+                <div class="col-xs-6 col-md-3">
+                <h6>DEALS, PAYMENT & DELIVERY</h6>
+                <ul class="footer-links">
+                    <li><a href="footer/deals.php">Our Deals</a></li>
+                    <li><a href="footer/delivery.php">Delivery Services</a></li>
+                    <li><a href="footer/payment.php">Payment</a></li>
+                </ul>
+                </div>
+
+                <!-- third section -->
+                <div class="col-xs-6 col-md-3">
+                <h6>CUSTOMER CARE</h6>
+                <ul class="footer-links">
+                    <li><a href="footer/be-seller.php">Become Our Seller</a></li>
+                    <li><a href="footer/faq.php">FAQ</a></li>
+                    <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
+                    <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
+                    <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
+                    <li><a href="footer/customer-protection.php">Customer Protection</a></li>
+                </ul>
+                </div>
+
+                <!-- fourth section -->
+                <div class="col-xs-6 col-md-3">
+                <h6>CONTACT US</h6>
+                <p>Phone: 257 3663</p>
+                <p>Email: beetrivteam@gmail.com</p>
+                <p>Instagram: @beetriv</p>
+                <p>Facebook: @beetriv</p>
+                </div>
+            </div>
+        </div>
+
         </footer>
+
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->

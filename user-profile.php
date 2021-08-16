@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
     <link rel="stylesgeet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
     <link rel="stylesheet" href="css/user-profile.css">
+    <link rel="stylesheet" href="css/footer.css">
 </head>
 
 <body class="profile-page">
@@ -48,21 +49,6 @@
       						<i class="material-icons">cloud_download</i> Download
       					</a>
       				</li>
-      				<li class="nav-item">
-      					<a class="nav-link" href="https://twitter.com/CreativeTim" target="_blank">
-      						<i class="fa fa-twitter"></i>
-      					</a>
-      				</li>
-      				<li class="nav-item">
-      					<a class="nav-link" href="https://www.facebook.com/CreativeTim" target="_blank">
-      						<i class="fa fa-facebook-square"></i>
-      					</a>
-      				</li>
-      				<li class="nav-item">
-      					<a class="nav-link"  href="https://www.instagram.com/CreativeTimOfficial" target="_blank">
-      						<i class="fa fa-instagram"></i>
-      					</a>
-      				</li>
                 </ul>
             </div>
         </div>
@@ -79,25 +65,32 @@
 	                            <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0NjQzOTk4OTQ4OTkyMzQy/ansel-elgort-poses-for-a-portrait-during-the-baby-driver-premiere-2017-sxsw-conference-and-festivals-on-march-11-2017-in-austin-texas-photo-by-matt-winkelmeyer_getty-imagesfor-sxsw-square.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid">
 	                        </div>
 	                        <div class="name">
-	                            <h3 class="title">Christian Louboutin</h3>
-								<h6>Designer</h6>
-								<a href="#pablo" class="btn btn-just-icon btn-link btn-dribbble"><i class="fa fa-dribbble"></i></a>
-                                <a href="#pablo" class="btn btn-just-icon btn-link btn-twitter"><i class="fa fa-twitter"></i></a>
-                                <a href="#pablo" class="btn btn-just-icon btn-link btn-pinterest"><i class="fa fa-pinterest"></i></a>
+	                            <h3 class="title">@username</h3>
+								<h6>Ratings</h6>
 	                        </div>
 	                    </div>
     	            </div>
                 </div>
                 <div class="description text-center">
-                    <p>An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. </p>
+                  <h6>Kuala Belait</h6>
+                    <p>Joined 1 year ago</p>
                 </div>
+
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="edit-profile.php">Edit Profile</a></div>
+                </div>
+
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Sell Items</a></div>
+                            </div>
+
 				<div class="row">
 					<div class="col-md-6 ml-auto mr-auto">
-                        <div class="profile-tabs">
-                          <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#studio" role="tab" data-toggle="tab">
-                                  <i class="material-icons">camera</i>
+                <div class="profile-tabs">
+                    <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+                      <li class="nav-item">
+                          <a class="nav-link active" href="#studio" role="tab" data-toggle="tab">
+                            <i class="material-icons">camera</i>
                                   Studio
                                 </a>
                             </li>
@@ -114,7 +107,7 @@
                                 </a>
                             </li>
                           </ul>
-                        </div>
+                  </div>
     	    	</div>
             </div>
         
@@ -130,7 +123,7 @@
   						<img src="https://images.unsplash.com/photo-1506667527953-22eca67dd919?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6326214b7ce18d74dde5e88db4a12dd5&auto=format&fit=crop&w=750&q=80" class="rounded">
   					</div>
   				</div>
-  			</div>
+  			  </div>
             <div class="tab-pane text-center gallery" id="works">
       			<div class="row">
       				<div class="col-md-3 ml-auto">
@@ -142,7 +135,7 @@
                       <img src="https://images.unsplash.com/photo-1494028698538-2cd52a400b17?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=83bf0e71786922a80c420c17b664a1f5&auto=format&fit=crop&w=334&q=80" class="rounded">
       				</div>
       			</div>
-  			</div>
+  			  </div>
             <div class="tab-pane text-center gallery" id="favorite">
       			<div class="row">
       				<div class="col-md-3 ml-auto">
@@ -163,14 +156,60 @@
         </div>
 	</div>
 	
-	<footer class="footer text-center ">
-        <p>Made with <a href="https://demos.creative-tim.com/material-kit/index.html" target="_blank">Material Kit</a> by Creative Tim</p>
-    </footer>
+	<!-- Footer-->
+  <footer class="site-footer">
+
+<div class="container">
+    <div class="row">
+    <!-- first section -->
+    <div class="col-xs-6 col-md-3">
+        <h6>CORPORATE</h6>
+        <ul class="footer-links">
+            <li><a href="footer/about.php">About Beetriv</a></li>
+            <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
+            <li><a href="footer/termsco.php">Terms and Conditions</a></li>
+        </ul>
+    </div>
+
+    <!-- second section -->
+    <div class="col-xs-6 col-md-3">
+        <h6>DEALS, PAYMENT & DELIVERY</h6>
+        <ul class="footer-links">
+            <li><a href="footer/deals.php">Our Deals</a></li>
+            <li><a href="footer/delivery.php">Delivery Services</a></li>
+            <li><a href="footer/payment.php">Payment</a></li>
+        </ul>
+    </div>
+
+    <!-- third section -->
+    <div class="col-xs-6 col-md-3">
+        <h6>CUSTOMER CARE</h6>
+        <ul class="footer-links">
+            <li><a href="footer/be-seller.php">Become Our Seller</a></li>
+            <li><a href="footer/faq.php">FAQ</a></li>
+            <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
+            <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
+            <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
+            <li><a href="footer/customer-protection.php">Customer Protection</a></li>
+        </ul>
+    </div>
+
+    <!-- fourth section -->
+    <div class="col-xs-6 col-md-3">
+        <h6>CONTACT US</h6>
+        <p>Phone: 257 3663</p>
+        <p>Email: beetrivteam@gmail.com</p>
+        <p>Instagram: @beetriv</p>
+        <p>Facebook: @beetriv</p>
+    </div>
+  </div>
+</div>
+</footer>
   
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 
 
    
