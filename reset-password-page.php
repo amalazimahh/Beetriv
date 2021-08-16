@@ -1,9 +1,12 @@
 <?php
 session_start();
 require 'connection.php';
-$select =$conn->query("SELECT * FROM REGISTRATION WHERE email=$email");
 
 $email = $_POST['email'];
+
+$select =$conn->query("SELECT * FROM REGISTRATION WHERE email=$email");
+
+
 $password = $_POST['pwd'];
 $passwordRepeat = $_POST["pwd-repeat"];
 
@@ -16,9 +19,6 @@ $passwordRepeat = $_POST["pwd-repeat"];
     //  mysqli_stmt_execute($stmt);
 
     // if(isset($_POST["reset-new-password-sumbit"])){
- 
-
-
     if(empty($password) || ($passwordRepeat)) {
             header("Location: create-new-password.php?pwd=empty");
               exit();
@@ -28,7 +28,7 @@ $passwordRepeat = $_POST["pwd-repeat"];
               exit();
           } 
     
-        $select=mysql_query("UPDATE registration set password='$password' WHERE email='$email'");
+        $sql=$conn->query("UPDATE registration set password='$password' WHERE email='$email'");
         // mysqli_query($dbconfig,"UPDATE REGISTRATION set password='$password' where email='$email'");
         // $sql =("UPDATE REGISTRATION SET password=$password WHERE email=$email");
         // $pdo->prepare($sql)->execute([$password, $email]);

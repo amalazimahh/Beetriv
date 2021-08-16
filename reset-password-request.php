@@ -20,71 +20,35 @@ if(isset($_POST['reset-password-submit'])){
 
     $email = $_POST["email"];
     $url = "http://localhost/Beetriv/create-new-password.php?email=" . $email;
-
     $mail = new PHPMailer(true);
 
-    try{
-
-
-      //Enable debug output
-      $mail->SMTPDebug = 0;
-
-      //Send using SMTP
-       $mail->isSMTP();
-
-      //Set the SMTP server 
-       $mail->Host = 'smtp.gmail.com';
-
-       //Enable SMTP authentication
-       $mail->SMTPAuth = true;
-
-       //SMTP username
-       $mail->Username = 'ayamketupat02@gmail.com';
-
-       //SMTP password
-       $mail->Password = 'k4k5dpkk';
-
-       //SMTP username
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-
-        //SMTP PORT
-         $mail->Port = 587;
-
-        //Recipients
-         $mail->setFrom('ayamketupat02@gmail.com','beetriv.com');
-
-        //add recipient
-         $mail->addAddress($email);
-
-        //Set email format to HTML
-         $mail->isHTML(true);
-
-
-
-    $mail->Subject = "Reset your Password";
-
-    $message = '<p> The link to reset your password is below.';
-
-    $message .= 'Here is your password link: ';
-
-    $message .=  $url ;
-
-
-    $headers = "From: beetrive.com <yusnadi247@gmail.com> \r\n";
-
-    $headers .= "Reply-to: yusnadi247@gmail.com\r\n";
-
-    $headers .= "Content-type: text/html; \r\n";
-
-    mail->send();
+    try {
+        //Server settings
+        $mail->SMTPDebug = 0;                                   //Enable verbose debug output
+        $mail->isSMTP();                                        //Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                   //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                               //Enable SMTP authentication
+        $mail->Username   = 'ayamketupat02@gmail.com';          //SMTP username
+        $mail->Password   = 'k4k5dpkk';                         //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     //Enable implicit TLS encryption
+        $mail->Port       = 587;                                //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     
-    header("Location: forgot-password.php?reset=success");
-
-
-    header("Location: login.php");
-
-
-    }catch(Exception $e){
-        echo "Message cannot send, error mail: {mail->ErrorInfo}";
+        //Recipients
+        $mail->setFrom('ayamketupat02@gmail.com', 'beetriv.com');
+        $mail->addAddress($email);     //Add a recipient
+    
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Here is the Link to reset password';
+        $mail->Body    = 'This is your link to reset your password on beetriv website <b>Click the link to reset your password</b>' . $url;
+        
+    
+        $mail->send();
+        echo 'Message has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
+
+}else{
+    header("Location: login.php");
 }
