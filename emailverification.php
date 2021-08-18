@@ -1,6 +1,7 @@
 <?php
 require_once('connection.php');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,7 +42,7 @@ require_once('connection.php');
                             </div>
 
                             <div class="text-center">
-                                <p class="h4 text-gray-900 mb-4">We just sent a confirmation code over to email@email.com</p>
+                                <p class="h4 text-gray-900 mb-4">A 4-digit verification code has been sent to your email for verification. Enter the code below:</p>
                             </div>
 
                             <form class="user">
@@ -57,9 +58,7 @@ require_once('connection.php');
                                     
                                     
                                 </div>
-                                <a href="login.php" class="btn btn-primary btn-user btn-block">
-                                    Log In
-                                </a>
+                                <input type="submit" class="btn btn-primary btn-user btn-block" name="verify" value="Verify Email">
                                 <hr>
                                 
                                 <div class="text-center">
@@ -75,6 +74,24 @@ require_once('connection.php');
         </div>
 
     </div>
+    <?php
+            $msg = '';
+            
+            if (isset($_POST['verify']) && !empty($_POST['vcode'])) {
+				
+               if ($_POST['vcode'] == $vcode)  {
+                  $_SESSION['valid'] = true;
+                  $_SESSION['timeout'] = time();
+                  $_SESSION['vcode'] = $vcode;
+                  
+                  header("location: login.php");
+            exit;
+               }else {
+                  $msg = 'Wrong username or password';
+               }
+            }
+         ?>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
