@@ -4,48 +4,6 @@ session_start();
 require_once "connection.php";
 ?>
 
-<?php
-                   
-                   $msg = '';
-                   //for button
-                   if (isset($_POST['verify']))
-                   {
-                       if (isset($_POST['vcode']) && !empty($_POST['vcode'])) 
-                       $email = trim($_POST['email']);
-                       $vcode = trim($_POST['vcode']);
-                      {
-                           if(filter_var($email, FILTER_VALIDATE_EMAIL))    
-                           { 
-                               $sql = "SELECT * FROM USERS WHERE EMAIL = :email ";
-                               $handle = $pdo->prepare($sql);
-                               $params = ['email'=>$email];
-                               $handle->execute($params);
-                               if($handle->rowCount() > 0)
-                               {
-                               $getRow = $handle->fetch(PDO::FETCH_ASSOC);
-                               if(password_verify($vcode, $getRow['vcode']))
-                               {
-                                   unset($getRow['vcode']);
-                                   $_SESSION = $getRow;
-                                   header('location:login.php');
-                                   exit();
-                               }
-                   
-                           }else {
-                         $msg = 'Wrong username or password';
-                      }
-                   }
-               }
-           }
-               //    if ($_POST['vcode'] == $vcode)  {
-                   //       $_SESSION['valid'] = true;
-                   //       $_SESSION['timeout'] = time();
-                   //       $_SESSION['vcode'] = $vcode;
-                         
-                   //       header("location: login.php");
-                   // exit();
-                ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -89,7 +47,7 @@ require_once "connection.php";
                                 <p class="h4 text-gray-900 mb-4">A 4-digit verification code has been sent to your email for verification. Enter the code below:</p>
                             </div>
 
-                            <form class="user">
+                            <form class="user" method="POST" action="emailverification.php">
                                 <div class="form-group row">
                                     
                                 </div>
@@ -108,6 +66,28 @@ require_once "connection.php";
                                 <div class="text-center">
                                 <a class="small" href="forgot-password.html">Didn't work? Send me another code.</a>
                             </div>
+
+                            <?php
+                            
+                            if(isset($_POST['verify'])){
+                                $vcode = $_POST['vcode'];
+
+                                $sql = "select * from users where vcode = :vcode ";
+
+                                $statement = $conn->prepare($sql);
+                                $params = [':vcode' => $vcode];
+                                $statement->execute($params);
+
+                                $count = $statement->rowCount();
+
+                                if($count > 0){
+                                    header('location: login.php');
+                                } else{
+                                    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                                }
+                            }
+                            $conn= null;
+                            ?>
                             </form>
                             <hr>
                             
