@@ -32,17 +32,6 @@ $result = $conn->query("SELECT * FROM PRODUCT");
         margin: auto;
         }
 
-        /* Caption text */
-        .text {
-        color: #f2f2f2;
-        font-size: 15px;
-        padding: 8px 12px;
-        position: absolute;
-        bottom: 8px;
-        width: 100%;
-        text-align: center;
-        }
-
         /* The dots/bullets/indicators */
         .dot {
         height: 15px;
@@ -238,17 +227,14 @@ $result = $conn->query("SELECT * FROM PRODUCT");
 
         <div class="mySlides fade">
         <img src="img/store/delivery.png" style="width:100%">
-        <div class="text">Caption Text</div>
         </div>
 
         <div class="mySlides fade">
         <img src="img/store/summer.png" style="width:100%">
-        <div class="text">Caption Two</div>
         </div>
 
         <div class="mySlides fade">
         <img src="img/store/collab.png" style="width:100%">
-        <div class="text">Caption Three</div>
         </div>
 
         </div>
