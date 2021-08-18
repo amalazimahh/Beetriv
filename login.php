@@ -4,7 +4,6 @@ session_start();
 require_once "connection.php";
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,7 +47,7 @@ require_once "connection.php";
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Log In to Beetriv</h1>
                                     </div>
-                                    <form class="user">
+                                    <form class="user" method="POST" action="login.php">
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user" name="email"
                                                 id="exampleInputEmail" aria-describedby="emailHelp" 
@@ -93,31 +92,27 @@ require_once "connection.php";
 
     </div>
     <?php
-        //user login
-        if(isset($_POST["login"])){ 
+                            
+    if(isset($_POST['login'])){
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-             $sql = $conn->query("SELECT * FROM LOGIN WHERE email = :email AND password = :password");  
-             $statement = $conn->prepare($query);  
-             $statement->execute(  
-                  array(  
-                       'email'     =>     $_POST["email"],  
-                       'password'  =>     $_POST["[password]"]  
-                  )  
-             );  
-   
-             $count = $statement->rowCount();  
-   
-                  if($count > 0)  
-                  {  
-                       $_SESSION["email"] = $_POST["email"];  
-                       header("location:store.php");  
-                  }  
-                  else  
-                  {  
-                       $message = '<label>Wrong Data</label>';  
-                  }  
-            
+        $sql = "select * from users where email = :email AND password = :password ";
+
+        $statement = $conn->prepare($sql);
+        $params = [':email' => $email,
+                   ':password' => $password];
+        $statement->execute($params);
+
+        $count = $statement->rowCount();
+
+        if($count > 0){
+         header('location: store.php');
+        } else{
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
+        $conn= null;
+    }
     ?>
 
     <!-- Bootstrap core JavaScript-->

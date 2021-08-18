@@ -162,10 +162,10 @@ require 'vendor/autoload.php';
                 $mail->SMTPAuth = true;
 
                 //SMTP username
-                $mail->Username = 'email';
+                $mail->Username = 'ayamketupat02@gmail.com';
 
                 //SMTP password
-                $mail->Password = 'password';
+                $mail->Password = 'k4k5dpkk';
 
                 //SMTP username
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
