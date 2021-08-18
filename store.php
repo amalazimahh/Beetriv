@@ -43,15 +43,6 @@ $result = $conn->query("SELECT * FROM PRODUCT");
         text-align: center;
         }
 
-        /* Number text (1/3 etc) */
-        .numbertext {
-        color: #f2f2f2;
-        font-size: 12px;
-        padding: 8px 12px;
-        position: absolute;
-        top: 0;
-        }
-
         /* The dots/bullets/indicators */
         .dot {
         height: 15px;
@@ -215,7 +206,7 @@ $result = $conn->query("SELECT * FROM PRODUCT");
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="#!">Beetriv</a>
+                <a class="navbar-brand" href="store.php">Beetriv</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -246,19 +237,16 @@ $result = $conn->query("SELECT * FROM PRODUCT");
         <div class="slideshow-container">
 
         <div class="mySlides fade">
-        <div class="numbertext">1 / 3</div>
         <img src="img/store/delivery.png" style="width:100%">
         <div class="text">Caption Text</div>
         </div>
 
         <div class="mySlides fade">
-        <div class="numbertext">2 / 3</div>
         <img src="img/store/summer.png" style="width:100%">
         <div class="text">Caption Two</div>
         </div>
 
         <div class="mySlides fade">
-        <div class="numbertext">3 / 3</div>
         <img src="img/store/collab.png" style="width:100%">
         <div class="text">Caption Three</div>
         </div>
@@ -313,7 +301,7 @@ $result = $conn->query("SELECT * FROM PRODUCT");
                     </ul>
                 </div>
                 <input type="hidden" name="search_param" value="all" id="search_param">         
-                <input type="text" class="form-control" name="x" placeholder="Search term...">
+                <input type="text" class="form-control" name="x" placeholder="Search item...">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
