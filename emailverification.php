@@ -1,6 +1,50 @@
 <?php
-require_once('connection.php');
+ob_start();
+session_start();
+require_once "connection.php";
 ?>
+
+<?php
+                   
+                   $msg = '';
+                   //for button
+                   if (isset($_POST['verify']))
+                   {
+                       if (isset($_POST['vcode']) && !empty($_POST['vcode'])) 
+                       $email = trim($_POST['email']);
+                       $vcode = trim($_POST['vcode']);
+                      {
+                           if(filter_var($email, FILTER_VALIDATE_EMAIL))    
+                           { 
+                               $sql = "SELECT * FROM USERS WHERE EMAIL = :email ";
+                               $handle = $pdo->prepare($sql);
+                               $params = ['email'=>$email];
+                               $handle->execute($params);
+                               if($handle->rowCount() > 0)
+                               {
+                               $getRow = $handle->fetch(PDO::FETCH_ASSOC);
+                               if(password_verify($vcode, $getRow['vcode']))
+                               {
+                                   unset($getRow['vcode']);
+                                   $_SESSION = $getRow;
+                                   header('location:login.php');
+                                   exit();
+                               }
+                   
+                           }else {
+                         $msg = 'Wrong username or password';
+                      }
+                   }
+               }
+           }
+               //    if ($_POST['vcode'] == $vcode)  {
+                   //       $_SESSION['valid'] = true;
+                   //       $_SESSION['timeout'] = time();
+                   //       $_SESSION['vcode'] = $vcode;
+                         
+                   //       header("location: login.php");
+                   // exit();
+                ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +95,7 @@ require_once('connection.php');
                                 </div>
                                 
                                 <div class="text-center">
-                                        <input type="text" class="form-control form-control-user" id="vcode" placeholder="Verification Code" >
+                                        <input type="text" class="form-control form-control-user" id="vcode" placeholder="Verification Code" name="vcode" required/>
                                     </div>
                                 
                                 <div class="form-group row">
@@ -74,23 +118,7 @@ require_once('connection.php');
         </div>
 
     </div>
-    <?php
-            $msg = '';
-            
-            if (isset($_POST['verify']) && !empty($_POST['vcode'])) {
-				
-               if ($_POST['vcode'] == $vcode)  {
-                  $_SESSION['valid'] = true;
-                  $_SESSION['timeout'] = time();
-                  $_SESSION['vcode'] = $vcode;
-                  
-                  header("location: login.php");
-            exit;
-               }else {
-                  $msg = 'Wrong username or password';
-               }
-            }
-         ?>
+   
 
 
     <!-- Bootstrap core JavaScript-->

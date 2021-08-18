@@ -1,3 +1,10 @@
+<?php
+ob_start();
+session_start();
+require_once "connection.php";
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,16 +46,16 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Log In to Beetriv</h1>
                                     </div>
                                     <form class="user">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                            <input type="email" class="form-control form-control-user" name="email"
+                                                id="exampleInputEmail" aria-describedby="emailHelp" 
                                                 placeholder="Enter Email Address...">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
+                                            <input type="password" class="form-control form-control-user" name= "password"
                                                 id="exampleInputPassword" placeholder="Password">
                                         </div>
                                         <div class="form-group">
@@ -58,9 +65,7 @@
                                                     Me</label>
                                             </div>
                                         </div>
-                                        <a href="store.php" class="btn btn-primary btn-user btn-block">
-                                            Login
-                                        </a>
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" name="login" value="Log In">
                                         <!-- <hr> -->
                                         <!-- <a href="index.html" class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i> Login with Google
@@ -87,6 +92,33 @@
         </div>
 
     </div>
+    <?php
+        //user login
+        if(isset($_POST["login"])){ 
+
+             $sql = $conn->query("SELECT * FROM LOGIN WHERE email = :email AND password = :password");  
+             $statement = $conn->prepare($query);  
+             $statement->execute(  
+                  array(  
+                       'email'     =>     $_POST["email"],  
+                       'password'  =>     $_POST["[password]"]  
+                  )  
+             );  
+   
+             $count = $statement->rowCount();  
+   
+                  if($count > 0)  
+                  {  
+                       $_SESSION["email"] = $_POST["email"];  
+                       header("location:store.php");  
+                  }  
+                  else  
+                  {  
+                       $message = '<label>Wrong Data</label>';  
+                  }  
+            
+        }
+    ?>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
