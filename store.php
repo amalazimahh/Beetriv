@@ -274,14 +274,14 @@ $result = $conn->query("SELECT * FROM PRODUCT ORDER BY prd_id DESC");
                             <div class="card-body p-4">
                                 <div class="text-center">
                                     <!-- Product name-->
-                                    <h5 class="fw-bolder"><?php printf( $row['prd_name']);?></h5>
+                                    <h5 class="fw-bolder"><?php echo $row['prd_name'];?></h5>
                                     <!-- Product price-->
-                                    <h5 class="fw-bolder"><?php printf ($row['prd_price']);?></h5>
+                                    <h5 class="fw-bolder">$<?php echo $row['prd_price'];?></h5>
                                 </div>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="product-details.php?product=<?php echo $product['prd_id']?>">View</a></div>
                             </div>
                         </div>
                     </div>
