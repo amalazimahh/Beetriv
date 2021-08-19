@@ -188,23 +188,6 @@ $sql = "SELECT p.*,pdi.img from product p
         <div class="slideshow-container">
 
         <div class="mySlides fade">
-<<<<<<< HEAD
-        <div class="numbertext">1 / 3</div>
-        <img src="img/store/bucketlist.jpeg" style="width:100%">
-        <div class="text">Caption Text</div>
-        </div>
-
-        <div class="mySlides fade">
-        <div class="numbertext">2 / 3</div>
-        <img src="img/store/summer.jpeg" style="width:100%">
-        <div class="text">Caption Two</div>
-        </div>
-
-        <div class="mySlides fade">
-        <div class="numbertext">3 / 3</div>
-        <img src="img/store/white.jpeg" style="width:100%">
-        <div class="text">Caption Three</div>
-=======
         <img src="img/store/delivery.png" style="width:100%">
         </div>
 
@@ -214,7 +197,6 @@ $sql = "SELECT p.*,pdi.img from product p
 
         <div class="mySlides fade">
         <img src="img/store/collab.png" style="width:100%">
->>>>>>> ead2815834c05dedfdf77a91316c5c643404efc4
         </div>
 
         </div>
@@ -248,15 +230,6 @@ $sql = "SELECT p.*,pdi.img from product p
         }
         </script>
 
-<<<<<<< HEAD
-<div class="topnav">
-   <div class="search-container">
-    <form action="store.php">
-      <input type="text" placeholder="Search.." name="search">
-      <button type="submit"><i class="fa fa-search"></i></button>
-    </form>
-  </div>
-=======
         <div class="container">
     <div class="row">    
         <div class="col-xs-8 col-xs-offset-2">
@@ -282,7 +255,6 @@ $sql = "SELECT p.*,pdi.img from product p
             </div>
         </div>
 	</div>
->>>>>>> ead2815834c05dedfdf77a91316c5c643404efc4
 </div>
 
                 
