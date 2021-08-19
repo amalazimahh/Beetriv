@@ -1,6 +1,9 @@
 <?php
-require_once('connection.php');
+ob_start();
+session_start();
+require_once "connection.php";
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +36,7 @@ require_once('connection.php');
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                    <div class="col-lg-5 d-none d-lg-block bg-verification-image"></div>
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
@@ -41,30 +44,50 @@ require_once('connection.php');
                             </div>
 
                             <div class="text-center">
-                                <p class="h4 text-gray-900 mb-4">We just sent a confirmation code over to email@email.com</p>
+                                <p class="h4 text-gray-900 mb-4">A 4-digit verification code has been sent to your email for verification. Enter the code below:</p>
                             </div>
 
-                            <form class="user">
+                            <form class="user" method="POST" action="emailverification.php">
                                 <div class="form-group row">
                                     
                                 </div>
                                 
                                 <div class="text-center">
-                                        <input type="text" class="form-control form-control-user" id="vcode" placeholder="Verification Code" >
+                                        <input type="text" class="form-control form-control-user" id="vcode" placeholder="Verification Code" name="vcode" required/>
                                     </div>
                                 
                                 <div class="form-group row">
                                     
                                     
                                 </div>
-                                <a href="login.php" class="btn btn-primary btn-user btn-block">
-                                    Log In
-                                </a>
+                                <input type="submit" class="btn btn-primary btn-user btn-block" name="verify" value="Verify Email">
                                 <hr>
                                 
                                 <div class="text-center">
                                 <a class="small" href="forgot-password.html">Didn't work? Send me another code.</a>
                             </div>
+
+                            <?php
+                            
+                            if(isset($_POST['verify'])){
+                                $vcode = $_POST['vcode'];
+
+                                $sql = "select * from users where vcode = :vcode ";
+
+                                $statement = $conn->prepare($sql);
+                                $params = [':vcode' => $vcode];
+                                $statement->execute($params);
+
+                                $count = $statement->rowCount();
+
+                                if($count > 0){
+                                    header('location: login.php');
+                                } else{
+                                    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                                }
+                            }
+                            $conn= null;
+                            ?>
                             </form>
                             <hr>
                             
@@ -75,6 +98,8 @@ require_once('connection.php');
         </div>
 
     </div>
+   
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>

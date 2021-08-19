@@ -131,7 +131,7 @@ require 'vendor/autoload.php';
     
     <?php
         //select from which database table
-        $select = "SELECT * FROM USER WHERE 1";
+        $select = "SELECT * FROM USERS WHERE 1";
 
         //variable to be insert into database
         if(isset($_POST['submit'])){
@@ -142,9 +142,9 @@ require 'vendor/autoload.php';
             $phone           = ($_POST['phone']);
             $password        = ($_POST['password']);
             $rpassword       = ($_POST['rpassword']);
-            
-            $sql = $conn->query ("INSERT INTO user (Email, Username, Ic_no, Ic_color, Phone_Number, Password) VALUES ('$email','$username','$ic','$ic2','$phone','$password')");
 
+
+            //Mail Set up
             $mail= new PHPMailer(true);
 
             try {
@@ -162,10 +162,10 @@ require 'vendor/autoload.php';
                 $mail->SMTPAuth = true;
 
                 //SMTP username
-                $mail->Username = 'email';
+                $mail->Username = 'ayamketupat02@gmail.com';
 
                 //SMTP password
-                $mail->Password = 'password';
+                $mail->Password = 'k4k5dpkk';
 
                 //SMTP username
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
@@ -196,7 +196,8 @@ require 'vendor/autoload.php';
 
                 $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
 
-                $sql = "INSERT INTO users(name, email, password, vcode, email_verified) VALUES ('" . $username . "', '" . $password . "', '" . $email . "', '" . $vcode . "', NULL)";
+                $sql = $conn->query ("INSERT INTO users (Email, Username, Ic_no, Ic_color, Phone_Number, Password, vcode, verified) VALUES ('$email','$username','$ic','$ic2','$phone'
+                ,'$password','$vcode','$verified')");
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
 
