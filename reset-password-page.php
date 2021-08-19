@@ -2,9 +2,10 @@
 session_start();
 require 'connection.php';
 
-$email = $_POST['email'];
+$email = $_GET['email'];
 
-$select =$conn->query("SELECT * FROM REGISTRATION WHERE email=$email");
+$stmt =$pdo->prepare("SELECT * FROM REGISTRATION WHERE email=$email");
+$stmt->execute();
 
 
 $password = $_POST['pwd'];

@@ -26,7 +26,7 @@ if(isset($_POST['reset-password-submit'])){
         //Server settings
         $mail->SMTPDebug = 0;                                   //Enable verbose debug output
         $mail->isSMTP();                                        //Send using SMTP
-        $mail->Host       = 'smtp.gmail.com';                   //Set the SMTP server to send through
+        $mail->Host       = "smtp.gmail.com";                   //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                               //Enable SMTP authentication
         $mail->Username   = 'ayamketupat02@gmail.com';          //SMTP username
         $mail->Password   = 'k4k5dpkk';                         //SMTP password
@@ -45,6 +45,7 @@ if(isset($_POST['reset-password-submit'])){
     
         $mail->send();
         echo 'Message has been sent';
+	header("Location: login.php");
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
