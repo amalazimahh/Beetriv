@@ -36,26 +36,6 @@ $sql = "SELECT p.*,pdi.img from product p
         margin: auto;
         }
 
-        /* Caption text */
-        .text {
-        color: #f2f2f2;
-        font-size: 15px;
-        padding: 8px 12px;
-        position: absolute;
-        bottom: 8px;
-        width: 100%;
-        text-align: center;
-        }
-
-        /* Number text (1/3 etc) */
-        .numbertext {
-        color: #f2f2f2;
-        font-size: 12px;
-        padding: 8px 12px;
-        position: absolute;
-        top: 0;
-        }
-
         /* The dots/bullets/indicators */
         .dot {
         height: 15px;
@@ -170,7 +150,7 @@ $sql = "SELECT p.*,pdi.img from product p
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="#!">Beetriv</a>
+                <a class="navbar-brand" href="store.php">Beetriv</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -208,6 +188,7 @@ $sql = "SELECT p.*,pdi.img from product p
         <div class="slideshow-container">
 
         <div class="mySlides fade">
+<<<<<<< HEAD
         <div class="numbertext">1 / 3</div>
         <img src="img/store/bucketlist.jpeg" style="width:100%">
         <div class="text">Caption Text</div>
@@ -223,6 +204,17 @@ $sql = "SELECT p.*,pdi.img from product p
         <div class="numbertext">3 / 3</div>
         <img src="img/store/white.jpeg" style="width:100%">
         <div class="text">Caption Three</div>
+=======
+        <img src="img/store/delivery.png" style="width:100%">
+        </div>
+
+        <div class="mySlides fade">
+        <img src="img/store/summer.png" style="width:100%">
+        </div>
+
+        <div class="mySlides fade">
+        <img src="img/store/collab.png" style="width:100%">
+>>>>>>> ead2815834c05dedfdf77a91316c5c643404efc4
         </div>
 
         </div>
@@ -256,6 +248,7 @@ $sql = "SELECT p.*,pdi.img from product p
         }
         </script>
 
+<<<<<<< HEAD
 <div class="topnav">
    <div class="search-container">
     <form action="store.php">
@@ -263,6 +256,33 @@ $sql = "SELECT p.*,pdi.img from product p
       <button type="submit"><i class="fa fa-search"></i></button>
     </form>
   </div>
+=======
+        <div class="container">
+    <div class="row">    
+        <div class="col-xs-8 col-xs-offset-2">
+		    <div class="input-group">
+                <div class="input-group-btn search-panel">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    	<span id="search_concept">Filter by</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#contains">Contains</a></li>
+                      <li><a href="#its_equal">It's equal</a></li>
+                      <li><a href="#greather_than">Greather than ></a></li>
+                      <li><a href="#less_than">Less than < </a></li>
+                      <li class="divider"></li>
+                      <li><a href="#all">Anything</a></li>
+                    </ul>
+                </div>
+                <input type="hidden" name="search_param" value="all" id="search_param">         
+                <input type="text" class="form-control" name="x" placeholder="Search item...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </div>
+        </div>
+	</div>
+>>>>>>> ead2815834c05dedfdf77a91316c5c643404efc4
 </div>
 
                 

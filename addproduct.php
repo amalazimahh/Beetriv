@@ -88,7 +88,7 @@ input[type=submit]:hover {
 }
 
 .add-prd {
-        padding-top: 5px;
+        padding-top: 20px;
         margin-bottom: 20px;
         margin-left: 80px;
         padding-left: 20px;
@@ -101,7 +101,7 @@ input[type=submit]:hover {
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="#!">Beetriv</a>
+                <a class="navbar-brand" href="store.php">Beetriv</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -122,7 +122,7 @@ input[type=submit]:hover {
         </nav>
 
 <div class="prd-container">
-<div class="add-prd"><h3>Add new item</h3></div>
+<div class="add-prd"><h3>New Item Details</h3></div>
 <hr>
   <form action="/action_page.php">
     <div class="row">
@@ -183,7 +183,7 @@ input[type=submit]:hover {
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="rating">Product Rating</label>
+        <label for="rating">Product NumericRating</label>
       </div>
       <div class="col-75">
         <input type="text" name="rating">
@@ -197,25 +197,27 @@ input[type=submit]:hover {
         <input type="text" name="meetup">
       </div>
     </div>
+
+    <!-- bid details -->
+    <div class="add-prd"><h3>Bid Details</h3></div>
+    <hr>
     <div class="row">
       <div class="col-25">
         <label for="bid_stat">Bid Status</label>
       </div>
       <div class="col-75">
-        <input type="radio" name="bid_status" value="Yes">
+    <input type="radio" name="bid_status" id="yes" onkeyup="compare_input();" value="Yes">
     <label for="Yes">Yes</label>
-    <input type="radio" name="bid_status" value="No">
+    <input type="radio" name="bid_status" id="no" onkeyup="compare_input();" value="No">
     <label for="No">No</label>
       </div>
     </div>
-    
-    <!-- bid details -->
     <div class="row">
       <div class="col-25">
         <label for="time_limit">Bid Time Limit</label>
       </div>
       <div class="col-75">
-        <input type="text" name="start_bid">
+        <input type="text" name="time_limit" id="time_limit">
       </div>
     </div>
     <div class="row">
@@ -223,10 +225,14 @@ input[type=submit]:hover {
         <label for="start_bid">Starting Bid</label>
       </div>
       <div class="col-75">
-        <input type="text" name="start_bid">
+        <input type="text" name="start_bid" id="start_bid">
       </div>
     </div>
-
+    
+    <!-- item media and tags -->
+    <div class="add-prd"><h3>Item Media</h3></div>
+    <hr>
+    
 	<div class="row">
       <div class="col-25">
         <label for="image">Select Image File </label>
@@ -250,6 +256,18 @@ input[type=submit]:hover {
     </div>
   </form>
 </div>
+
+    <!-- <script>
+    document.getElementById("time_limit").disabled = true;
+                document.getElementById("start_bid").disabled = true;
+        function compare_input(){
+            if(document.querySelector('input[name="bid_status"]:checked').value === "Yes"){
+                document.getElementById("time_limit").disabled = false;
+                document.getElementById("start_bid").disabled = false;
+        }
+        }
+        
+    </script> -->
 
       <!-- Footer-->
       <footer class="site-footer">
