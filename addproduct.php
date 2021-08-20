@@ -25,13 +25,14 @@ require_once "connection.php";
   box-sizing: border-box;
 }
 
-input[type=text], select, textarea {
+input[type=text], input[type=number], select, textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
 }
+
 
 label {
   padding: 12px 12px 12px 0;
@@ -86,6 +87,12 @@ input[type=submit]:hover {
     margin-top: 0;
   }
 }
+ /* Remove arrows on number field */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 .add-prd {
         padding-top: 20px;
@@ -93,6 +100,12 @@ input[type=submit]:hover {
         margin-left: 80px;
         padding-left: 20px;
       }
+
+.gallery img {
+    height: 300px;
+    width: 300px;
+    margin: 30px 10px;
+}
 </style>
 
     <title>Add Product</title>
@@ -151,7 +164,7 @@ input[type=submit]:hover {
         <label for="price">Product Price</label>
       </div>
       <div class="col-75">
-        <input type="text" name="price">
+        <input type="number" name="price" step="any">
       </div>
     </div>
     <div class="row">
@@ -159,7 +172,7 @@ input[type=submit]:hover {
         <label for="quantity">Product Quantity</label>
       </div>
       <div class="col-75">
-        <input type="text" name="quantity">
+        <input type="number" name="quantity">
       </div>
     </div>
     <div class="row">
@@ -183,10 +196,10 @@ input[type=submit]:hover {
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="rating">Product NumericRating</label>
+        <label for="rating">Product Numeric Rating</label>
       </div>
       <div class="col-75">
-        <input type="text" name="rating">
+        <input type="number" name="rating">
       </div>
     </div>
     <div class="row">
@@ -235,10 +248,39 @@ input[type=submit]:hover {
     
 	<div class="row">
       <div class="col-25">
-        <label for="image">Select Image File </label>
+        <label for="image">Select Image File(s)</label>
       </div>
       <div class="col-75">
-        <input type="file" name="image">
+        <input type="file" name="image" multiple id="gallery-photo-add" multiple><br>
+        <div class="gallery">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+  $(function() {
+    // Multiple images preview in browser
+    var imagesPreview = function(input, placeToInsertImagePreview) {
+
+        if (input.files) {
+            var filesAmount = input.files.length;
+
+            for (i = 0; i < filesAmount; i++) {
+                var reader = new FileReader();
+
+                reader.onload = function(event) {
+                    $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                }
+
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+
+    };
+
+    $('#gallery-photo-add').on('change', function() {
+        imagesPreview(this, 'div.gallery');
+    });
+});
+</script>
+</div>
       </div>
     </div>
 
