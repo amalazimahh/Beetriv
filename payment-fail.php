@@ -55,18 +55,23 @@ require_once "connection.php";
     }
 
     ul li:nth-child(1) .fas, 
-    ul li:nth-child(2) .fas,
-    ul li:nth-child(3) .fas,
-    ul li:nth-child(4) .fas{
+    ul li:nth-child(2) .fas{
       background: #148e14;
     }
 
+    ul li:nth-child(3) .fas,
+    ul li:nth-child(4) .fas{
+        background:#a82e2e;
+    }
+
     ul li:nth-child(1) .fas::after,
-    ul li:nth-child(2) .fas::after,
+    ul li:nth-child(2) .fas::after{
+      background: #148e14;
+    }
+
     ul li:nth-child(3) .fas::after,
     ul li:nth-child(4) .fas::after{
-      background: #148e14;
-      
+        background: #a82e2e;
     }
 
     ul li:first-child .fas::after{
@@ -129,19 +134,19 @@ require_once "connection.php";
           </li>
 
           <li>
-            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-times-circle"></i>
             <p>Pay</p>
           </li>
 
           <li>
-            <i class="fas fa-check-circle"></i>
-            <p><b>Order Completed</b></p>
+            <i class="fas fa-times-circle"></i>
+            <p><b>Order Failed</b></p>
           </li>
         </ul>
       </div>
 
       <div class="text-center">
-          <h3>Your order is not been submitted. Please try again.</h3>
+          <h3>Your order is not submitted. Please try again.</h3>
       </div>
 
           <br><br>
