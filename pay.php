@@ -55,14 +55,12 @@ require_once "connection.php";
     }
 
     ul li:nth-child(1) .fas, 
-    ul li:nth-child(2) .fas,
-    ul li:nth-child(3) .fas{
+    ul li:nth-child(2) .fas{
       background: #148e14;
     }
 
     ul li:nth-child(1) .fas::after,
-    ul li:nth-child(2) .fas::after,
-    ul li:nth-child(3) .fas::after{
+    ul li:nth-child(2) .fas::after{
       background: #148e14;
       
     }
@@ -127,7 +125,7 @@ require_once "connection.php";
           </li>
 
           <li>
-            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-times-circle"></i>
             <p><b>Pay</b></p>
           </li>
 
