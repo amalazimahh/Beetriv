@@ -79,6 +79,12 @@ require_once "connection.php";
       background-color: #f2f2f2;
       padding: 20px;
     }
+
+    .paypal-button{
+      text-align: center;
+      margin: 30px;
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
@@ -136,77 +142,10 @@ require_once "connection.php";
         </ul>
       </div>
 
-      <div class="checkout-form">
-
-        <form class="needs-validation" method="POST">
-            <div class="row">
-              <div class="col-md-5 mb-2">
-                <label for="firstName">First name</label>
-                <input type="text" class="form-control" id="firstName" name="first_name" placeholder="First Name" value="<?php echo (isset($fnameValue) && !empty($fnameValue)) ? $fnameValue:'' ?>" >
-              </div>
-              <div class="col-md-5 mb-2">
-                <label for="lastName">Last name</label>
-                <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Last Name" value="<?php echo (isset($lnameValue) && !empty($lnameValue)) ? $lnameValue:'' ?>" >
-              </div>
-            </div>
-
-            <div class="col-md-5 mb-2">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="<?php echo (isset($emailValue) && !empty($emailValue)) ? $emailValue:'' ?>">
-            </div>
-
-            <div class="col-md-5 mb-2">
-              <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" value="<?php echo (isset($addressValue) && !empty($addressValue)) ? $addressValue:'' ?>">
-            </div>
-
-            <div class="col-md-5 mb-2">
-              <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-              <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment or suite" value="<?php echo (isset($address2Value) && !empty($address2Value)) ? $address2Value:'' ?>">
-            </div>
-
-            <div class="row">
-              <div class="col-md-3 mb-2">
-                <label for="country">Country</label>
-                <select class="custom-select d-block w-100" name="country" id="country" >
-                  <option value="">Choose...</option>
-                  <option value="United States" >United States</option>
-                </select>
-              </div>
-              <div class="col-md-3 mb-2">
-                <label for="state">State</label>
-                <select class="custom-select d-block w-100" name="state" id="state" >
-                  <option value="">Choose...</option>
-                  <option value="California">California</option>
-                </select>
-              </div>
-              <div class="col-md-2 mb-2">
-                <label for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" name="zipcode" placeholder="" value="<?php echo (isset($zipCodeValue) && !empty($zipCodeValue)) ? $zipCodeValue:'' ?>" >
-              </div>
-            </div>
-            <hr class="mb-2">
-
-            <h4 class="mb-2">Payment</h4>
-
-            <div class="d-block my-2">
-              <div class="custom-control custom-radio">
-                <input id="cashOnDelivery" name="cashOnDelivery" type="radio" class="custom-control-input">
-                  <label class="custom-control-label" for="cashOnDelivery">Cash on Delivery</label>
-                <input id="paypal" name="paypal" type="radio" class="custom-control-input">
-                  <label class="custom-control-label" for="paypal">PayPal</label>
-              </div>
-            </div>
-           
-            <hr class="mb-3">
-            <div class="text-center">
-              <button class="btn btn-primary btn-lg btn-block" type="submit" name="submit" value="submit"><a href="order-complete.php">Checkout</a></button>
-            </div>
-          </form>
-
-          </div>
-
-          <br><br>
+      <div class="paypal-button">
+        <div id="paypal-payment-button">
+        </div>
+      </div>
 
         <!-- Footer-->
         <footer class="site-footer">
@@ -259,5 +198,33 @@ require_once "connection.php";
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://www.paypal.com/sdk/js?client-id=AXuQ2h0um_ALgb9wZNHXwi7eEIXRIdnaNXKcfn7GQw7v5SnUuXRpL71Ysjr5h6Y8Ac-5OwDRqLtB975P&disable-funding=credit,card"></script>
+        <script>
+          paypal.Buttons({
+          style: {
+              color:'gold',
+              shape: 'pill',
+              height: 50
+          },
+          createOrder:function(data, actions){
+              return actions.order.create({
+                  purchase_units:[{
+                      amount: {
+                          value: '0.1'
+                      }
+                  }]
+              });
+          },
+          onApprove:function(data, actions){
+              return actions.order.capture().then(function(details){
+                  console.log(details)
+                  window.location.href='order-complete.php';
+              })
+          },
+          onCancel:function(data){
+              window.location.href='payment-fail.php';
+          }
+         }).render('#paypal-payment-button');
+        </script>
 </body>
 </html>
