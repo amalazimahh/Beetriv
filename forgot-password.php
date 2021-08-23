@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Forgot Password</title>
+    <title>Beetriv - Forgot Password</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,19 +38,27 @@
                             <div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
                             <div class="col-lg-6">
                                 <div class="p-5">
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                                        <p class="mb-4">We get it, stuff happens. Just enter your email address below
-                                            and we'll send you a link to reset your password!</p>
+                                    <div class="form-group">
+                                        <!-- <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1> -->
+                                        <p class="mb-4">Please enter your email address below and an email will be sent to reset your password.</p>
                                     </div>
                                     <form action="reset-password-request.php" method="post" class="user">
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
+                                            <input type="text" name="username" class="form-control form-control-user"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter your username....">  
+                                                </div> -->
+
+                                            <!-- Email -->
+                                            <div class="form-group">
                                             <input type="email" name="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Enter Email Address...">
-                                        </div>
+                                                </div>
+                                                
                                         
-                                        <button type="submit" name="reset-password-submit">Send email for password reset...</button>
+                                        <!-- Submit button -->
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" name="submit" value="SEND">
                                         </form>
                                     </form>
                                     <hr>

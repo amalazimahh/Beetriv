@@ -13,6 +13,6 @@ catch(PDOException $e){
     echo "Error: ". $e->getMessage();
 }
 
-
+define('PRODUCT_IMG_URL','resource/product-images/')
 
 ?>

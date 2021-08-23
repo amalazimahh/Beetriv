@@ -48,7 +48,7 @@ echo $email;
                                         <h1 class="h4 text-gray-900 mb-2">Create New Password</h1>
                                         <p class="mb-4">Create your new password here</p>
                                     </div>
-                                    <form action="reset-password-page.php" method="post" class="user">
+                                    <form method="post" class="user">
                                         <div class="form-group">
                                             <input type="password" name="pwd" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
@@ -61,7 +61,7 @@ echo $email;
                                     
                                         </div>
                                         
-                                        <button type="submit" name="reset-new-password-submit">Create new Password</button>
+                                        <a href="reset-password-page.php" class="btn btn-primary btn-user btn-block">Create New Password </a>
                                         </form>
                                     </form>
                                     <hr>

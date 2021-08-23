@@ -109,7 +109,7 @@ require_once "connection.php";
         if($count > 0){
          header('location: store.php');
         } else{
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            echo '<script>alert("Email or Password does not match")</script>';
         }
         $conn= null;
     }
