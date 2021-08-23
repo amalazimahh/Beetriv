@@ -54,13 +54,11 @@ require_once "connection.php";
       z-index: -1;
     }
 
-    ul li:nth-child(1) .fas, 
-    ul li:nth-child(2) .fas{
+    ul li:nth-child(1) .fas{
       background: #148e14;
     }
 
-    ul li:nth-child(1) .fas::after,
-    ul li:nth-child(2) .fas::after{
+    ul li:nth-child(1) .fas::after{
       background: #148e14;
       
     }
@@ -138,7 +136,7 @@ require_once "connection.php";
           </li>
 
           <li>
-            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-times-circle"></i>
             <p><b>Place Order</b></p>
           </li>
 
