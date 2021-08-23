@@ -1,3 +1,9 @@
+<?php
+ob_start();
+session_start();
+require_once "connection.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,14 +66,14 @@
             <div class="container">
                 <div class="row">
 	                <div class="col-md-6 ml-auto mr-auto">
-        	           <div class="profile">
-	                        <div class="avatar">
+        	            <!-- <div class="profile">
+	                         <div class="avatar">
 	                            <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0NjQzOTk4OTQ4OTkyMzQy/ansel-elgort-poses-for-a-portrait-during-the-baby-driver-premiere-2017-sxsw-conference-and-festivals-on-march-11-2017-in-austin-texas-photo-by-matt-winkelmeyer_getty-imagesfor-sxsw-square.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid">
-	                        </div>
-	                        <div class="name">
+	                        </div> 
+	                    </div> -->
+                        <div class="text-center name" >
 	                            <h3 class="title">EDIT PROFILE INFORMATION</h3>
 	                        </div>
-	                    </div>
                         <div class="avatar">
 	                        <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0NjQzOTk4OTQ4OTkyMzQy/ansel-elgort-poses-for-a-portrait-during-the-baby-driver-premiere-2017-sxsw-conference-and-festivals-on-march-11-2017-in-austin-texas-photo-by-matt-winkelmeyer_getty-imagesfor-sxsw-square.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid">
 	                    </div>
@@ -163,42 +169,92 @@
 
                         <br>
 
+                        <div class="text-center">
                         <input type="submit" value="SAVE" name="save" class="btn btn-outline-dark mt-auto">
+                        </div>
+
+                        <?php
+                        if(isset($_POST['save'])){
+                            $fname = $_POST['fname'];
+                            $lname = $_POST['lname'];
+                            $username = $_POST['username'];
+                            $email = $_POST['email'];
+                            $icNum = $_POST['icNum'];
+                            $icCol = $_POST['icCol'];
+                            $phone = $_POST['phone'];
+                            $bio = $_POST['bio'];
+                            $currentPwd = $_POST['currentPwd'];
+                            $newPwd = $_POST['newPwd'];
+                            $confirmPwd = $_POST['confirmPwd'];
+
+                            // $sql = "UPDATE users SET email = :email, username = :usernmae, icNum = :Ic_no, icCol = :Ic_color, phone = :Phone_Number, newPwd = :Password, fname = :Firstname, lname = :Lastname, bio = :Bio WHERE email = :email";
+                            // $stmt= $pdo->prepare($sql);
+                            // $stmt->execute([$email, $username, $icNum, $icCol, $phone, $newPwd, $fname, $lname, $bio]);
+
+                            $sql = $conn->prepare("UPDATE users set email = :email,
+                                        username = :username, 
+                                        icNum = :Ic_no,
+                                        icCol = :Ic_color, 
+                                        phone = :Phone_Number,
+                                        newPwd = :Password, 
+                                        fname = :Firstname,
+                                        lname = :Lastname,
+                                        bio = :Bio");
+                            
+                            $sql->bindParam(':email', $email, PDO::PARAM_STR,25);
+                            $sql->bindParam(':username', $username, PDO::PARAM_STR,25);
+                            $sql->bindParam(':Ic_no', $icNum, PDO::PARAM_STR,25);
+                            $sql->bindParam(':Ic_color', $icCol, PDO::PARAM_STR,25);
+                            $sql->bindParam(':Phone_Number', $phone, PDO::PARAM_STR,25);
+                            $sql->bindParam(':Password', $newPwd, PDO::PARAM_STR,25);
+                            $sql->bindParam(':Firstname', $fname, PDO::PARAM_STR,25);
+                            $sql->bindParam(':Lastname', $lname, PDO::PARAM_STR,25);
+                            $sql->bindParam(':Bio', $bio, PDO::PARAM_STR,25);
+
+                            if($sql->execute()){
+                                echo "Successfully updated Profile";
+                                }// End of if profile is ok 
+                                else{
+                                print_r($sql->errorInfo()); // if any error is there it will be posted
+                                $msg=" Database problem, please contact site admin ";
+                                }
+                        }
+                        
+                        ?>
+                        
                     </form>
 
                     <!-- php- update into database -->
                     <?php
-                        if(isset($_POST["save"])){
-                            if(!empty($_FILES['image']['name'])) {
-                                $fileName = basename($_FILES['image']['name']);
-                                $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+                        // if(isset($_POST["save"])){
+                        //     if(!empty($_FILES['image']['name'])) {
+                        //         $fileName = basename($_FILES['image']['name']);
+                        //         $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
-                                $fname = $_POST['fname'];
-                                $lname = $_POST['lname'];
-                                $username = $_POST['username'];
-                                $email = $_POST['email'];
-                                $icNum = $_POST['icNum'];
-                                $icCol = $_POST['icCol'];
-                                $phone = $_POST['phone'];
-                                $bio = $_POST['bio'];
-                                $bio = $_POST['bio'];
-                                $currentPwd = $_POST['currentPwd'];
-                                $newPwd = $_POST['newPwd'];
-                                $confirmPwd = $_POST['confirmPwd'];
+                        //         $fname = $_POST['fname'];
+                        //         $lname = $_POST['lname'];
+                        //         $username = $_POST['username'];
+                        //         $email = $_POST['email'];
+                        //         $icNum = $_POST['icNum'];
+                        //         $icCol = $_POST['icCol'];
+                        //         $phone = $_POST['phone'];
+                        //         $bio = $_POST['bio'];
+                        //         $currentPwd = $_POST['currentPwd'];
+                        //         $newPwd = $_POST['newPwd'];
+                        //         $confirmPwd = $_POST['confirmPwd'];
 
-                                // allow certain formats
-                                $allowTypes = array('jpg','png','jpeg','gif');
-                                if(in_array($fileType, $allowTypes)){
-                                    $image = $_FILES['image']['tmp_name'];
-                                    $imgContent = addslashes(file_get_contents($image));
+                        //         // allow certain formats
+                        //         $allowTypes = array('jpg','png','jpeg','gif');
+                        //         if(in_array($fileType, $allowTypes)){
+                        //             $image = $_FILES['image']['tmp_name'];
+                        //             $imgContent = addslashes(file_get_contents($image));
 
-                                    //select table from database
-                                    //update & insert data in db 
+                        //             //select table from database
+                        //             //update & insert data in db 
 
-                                }
-                            }
-                        }
-
+                        //         }
+                        //     }
+                        // }
                     ?>
     	    	</div>
             </div>
