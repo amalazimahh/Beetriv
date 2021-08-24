@@ -3,8 +3,11 @@ session_start();
 require_once "connection.php";
 
 // Get image data from database
-$result = $conn->query("SELECT * FROM PRODUCT");
-
+$sql = "SELECT p.*,pdi.img from product p INNER JOIN product_images pdi ON pdi.product_id = p.id
+        WHERE pdi.is_featured = 1";
+    $handle = $conn->prepare($sql);
+    $handle->execute();
+    $getProductData = $handle->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -217,11 +220,12 @@ $result = $conn->query("SELECT * FROM PRODUCT");
                         </li>
                     </ul>
                     <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
+                    <div class="btn btn-outline-dark">
+                        <a href="cart.php">
                             <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>
+                            <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>                     
+                        </a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -314,18 +318,26 @@ $result = $conn->query("SELECT * FROM PRODUCT");
 
         <!-- Section-->
         <section class="py-5">
-        <div class="prd-div"><h3>Latest Added Items</h3></div>
-        <div class="product">
-        <?php while($row = $result->fetch(PDO::FETCH_ASSOC)){ ?>
-      <div class="content">
-        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>">
-        <h3><?php echo htmlspecialchars($row['prd_name']) ?></h3>
-        <h6>$<?php echo htmlspecialchars($row['prd_price']) ?></h6>
-        <a href="product-details.php?product=<?php echo $row['prd_id'];?>">View</a>
-        <button class="buy-prd">Add to cart</button>
-      </div>
-      <?php } ?>
-    </div>
+            <div class="prd-div"><h3>Latest Added Items</h3></div>
+
+                 <div class="product">
+                 <?php
+                              foreach($getProductData as $product)
+                              {
+                               $imgUrl = PRODUCT_IMG_URL.str_replace(' ','-',strtolower($product['product_Name']))."/".$product['img'];
+                            ?>
+                     <div class="content">
+                            <a href="product-details.php?product=<?php echo $product['id']?>">
+                            <img class="card-img-top" src="<?php echo $imgUrl ?>" alt="<?php echo $product['product_Name'] ?>"> </a>
+                            <h3><?php echo $product['product_Name'] ?></h3>
+                            <h6>$<?php echo $product['product_Price'] ?></h6>
+                            <a href="product-details.php?product=<?php echo $product['id']?>">View</a>
+                            <button class="buy-prd">Add to cart</button>
+                            
+                        </div>
+                        <?php  } ?>
+                     </div>
+                              </div>
         </section>
         <!-- Footer-->
         <footer class="site-footer">
