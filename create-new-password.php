@@ -1,3 +1,9 @@
+<?php
+ob_start();
+session_start();
+require_once 'connection.php';
+?>              
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +15,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Forgot Password</title>
+    <title>Beetriv - Create New Password</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,12 +29,6 @@
 </head>
 
 <body class="bg-gradient-primary">
-<?php
-
-require 'connection.php';
-$email = $_GET['email'];
-echo $email;
-?>
 
     <div class="container">
 
@@ -46,30 +46,33 @@ echo $email;
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-2">Create New Password</h1>
-                                        <p class="mb-4">Create your new password here</p>
                                     </div>
                                     <form method="post" class="user">
-                                        <div class="form-group">
-                                            <input type="password" name="pwd" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter New Password...">
-                                            <input type="password" name="pwd-repeat" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHselp"
-                                                placeholder="Repeat New Password...">
 
-                                                <input type="disable" name='email' value="<?php echo ($_GET['email']); ?>">
+                                    <!-- Enter new password -->
+                                        <div class="form-group">
+                                            <input type="password" name="newpassword" class="form-control form-control-user"
+                                                id="pwd"
+                                                placeholder="Enter New Password..." required/>
+
+                                                <!-- repeat new password -->
+                                                <div class="form-group">
+                                                <input type="password" name="pwd-repeat" class="form-control form-control-user"
+                                                id="pwd-repeat" 
+                                                placeholder="Repeat New Password..." required/>
+                                                <!-- <input type="disable" name='email' value="<?php echo ($_GET['email']); ?>"> -->
                                     
                                         </div>
                                         
-                                        <a href="reset-password-page.php" class="btn btn-primary btn-user btn-block">Create New Password </a>
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" name="create-new-password" value="Create New Password">
                                         </form>
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
+                                        <a class="small" href="register.php">Create an Account!</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" href="login.html">Already have an account? Login!</a>
+                                        <a class="small" href="login.php">Already have an account? Login!</a>
                                     </div>
                                 </div>
                             </div>
@@ -80,8 +83,99 @@ echo $email;
             </div>
 
         </div>
+        
 
     </div>
+    <?php
+    // if (!isset($_GET['resetcode'])){
+//     exit("Page not found");
+// }
+
+
+
+
+
+
+// // if ($getEmail->rowCount()) {
+// //     exit("Cant find page");
+// // }
+
+// if(isset($_POST["create-new-password"])){
+//     $newpassword = $_POST["pwd"];
+//     $newpasswordr = $_POST['pwd-repeat'];
+
+//     $getEmail ="SELECT email FROM resetpassword WHERE resetcode = :resetcode LIMIT 1";
+//     //$row = $getEmail->fetch();
+//     $email = $row["email"];
+
+//     $sql=$conn->query("UPDATE users SET password='$_POST[pwd]' WHERE email = '{$_SESSION['email']}'");
+
+//     if ($newpassword == $newpasswordr){
+//             header('location: login.php');
+//             echo '<script>alert("Password Updated")</script>';
+//             } else{
+//                 echo '<script>alert("Password does not match")</script>';
+//             }
+//         }
+
+                        if (!isset($_GET["resetcode"])){
+                            exit("Page not found");
+                        }
+
+                        $resetcode = $_GET["resetcode"];
+
+                        $getEmail = "SELECT email FROM resetpassword where resetcode = :resetcode ";
+                        
+                        $newpassword = $_POST['pwd'] ?? "";
+                        $newpasswordr = $_POST['pwd-repeat'] ?? "";
+                        $email = $_POST['email'] ?? "" ;                        
+                        $statement = $conn->prepare($getEmail);
+                        $params = [':email' => $email,':resetcode' => $resetcode];
+                        //$params = [':email' => $email,];
+                       // $statement->execute($params);
+
+                        $sql = $conn->query ("UPDATE users SET password='$newpassword' WHERE email = '$email");
+                        if(!$sql) {
+                            exit("Error");
+                        }
+
+                        if ($newpassword == $newpasswordr){
+                        //header('location: login.php');
+                        } else{
+                            echo '<script>alert("Password does not match")</script>';
+                        }
+                    
+                        $conn= null;
+                
+            
+
+                
+                    // if(isset($_POST['create-new-password'])){
+                    //     $newpassword = $_POST['pwd'] ?? "";
+                    //     $newpasswordr = $_POST['pwd-repeat'] ?? "";
+                    //     $email = $_POST['email'] ;
+                    //     $sql = "SELECT * FROM users WHERE email = :email";
+
+                    //     $params = [':email' => $email];
+                    //     $statement = $conn->prepare($sql);
+                    //     $params = [':email' => $email,];
+                    //     $statement->execute($params);
+
+                    //     $sql=$conn->query("UPDATE users SET password='$_POST[pwd]' WHERE email = '{$_SESSION['email']}'");
+
+                    //     if ($newpassword == $newpasswordr){
+                    //     header('location: login.php');
+                    //     } else{
+                    //         echo '<script>alert("Password does not match")</script>';
+                    //     }
+                    // }
+                    //     $conn= null;
+
+                    
+                     
+                       ?>
+
+                        
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>

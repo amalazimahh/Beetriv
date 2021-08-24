@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 session_start();
 require 'connection.php';
 
@@ -39,5 +39,5 @@ $passwordRepeat = $_POST["pwd-repeat"];
     
 // }
 
-?>
+?> -->
 

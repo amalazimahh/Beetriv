@@ -17,7 +17,15 @@ require 'vendor/autoload.php';
 
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
+    <style>
+    .iti__flag {background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/img/flags.png");}
 
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .iti__flag {background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/img/flags@2x.png");}
+}
+    
+    </style>
 <head>
 
     <meta charset="utf-8">
@@ -61,14 +69,16 @@ require 'vendor/autoload.php';
                                 </div>
                                 <div class="form-group">
                                 <!-- Username -->
-                                    <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}"
+                                    <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}" title="Username must contain only letters"
                                         placeholder="Username" required/>
                                 </div>
                                 <!-- IC Number -->
                                 <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="ic" name="ic" 
+                                    <input type="text" class="form-control form-control-user" id="ic" name="ic"  
                                         placeholder="IC Number" required/> 
+                                        
+                                
                                 </div>
                                 <!-- IC Colour -->
                                 <div class="col-sm-6 " >
@@ -83,8 +93,34 @@ require 'vendor/autoload.php';
                                     </div>
                                 <!-- Phone number -->
                                 <div class="form-group">
-                                    <input type="tel" class="form-control form-control-user" id="phone" name="phone" 
-                                    placeholder= "Phone Number" required/>
+                                    <input type="tel" class="form-control" id="phone" name="phone" 
+                                    placeholder= "xxx xxxx" required/>
+
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
+                                    <script>
+                                    //format and mask phone number
+                                    var input = document.querySelector("#phone");
+                                    window.intlTelInput(input, {
+                                        onlyCountries: ["bn"],
+                                        utilsScript : 'js/utils'
+                                    });
+
+                                    $(document).ready(function(){
+                                    $('#phone').inputmask('999 9999');
+                                    });
+                                    
+                                    </script>
+                                    <?php 
+                                    if(isset($_POST["submit"])){                   
+                                        if(empty($_POST["phone"])){                
+                                        $message = '<span style="color:#FF0000;"><font color="red">*Required</font></span>';
+                                        echo $message;  
+                                        }
+                                        } ?>
+                                        
+
                                 </div>
                                 <!-- Create Password -->
                                 <div class="form-group">

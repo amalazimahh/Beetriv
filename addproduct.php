@@ -137,10 +137,10 @@ input::-webkit-inner-spin-button {
 <div class="prd-container">
 <div class="add-prd"><h3>New Item Details</h3></div>
 <hr>
-  <form action="/action_page.php">
+  <form action="addproduct.php" method="post" enctype="multipart/form-data">
     <div class="row">
       <div class="col-25">
-        <label for="fname">Product Name</label>
+        <label for="name">Product Name</label>
       </div>
       <div class="col-75">
         <input type="text" name="name">
@@ -251,7 +251,7 @@ input::-webkit-inner-spin-button {
         <label for="image">Select Image File(s)</label>
       </div>
       <div class="col-75">
-        <input type="file" name="files[]" multiple id="gallery-photo-add" multiple><br>
+        <input type="file" name="image"><br>
         <div class="gallery">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
@@ -294,7 +294,7 @@ input::-webkit-inner-spin-button {
     </div>
     
     <div class="row">
-      <input type="submit" value="Submit">
+      <input type="submit" name="submit" value="Submit">
     </div>
   </form>
 </div>
@@ -366,60 +366,104 @@ input::-webkit-inner-spin-button {
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
 
-    <?php
+<?php
+        // $status = $statusMsg = '';
+        // if(isset($_POST["submit"])){
+        //     if(!empty($_FILES['image']['name'])) {
+        //         // Get the file info
+        //         $fileName = basename($_FILES['image']['name']);
+        //         $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+        //         $name = $_POST['name'];
+        //         $category = $_POST['category'];
+        //         $price = $_POST['price'];
+        //         $quantity = $_POST['quantity'];
+        //         $condition = $_POST['condition'];
+        //         $description = $_POST['description'];
+        //         $rating = $_POST['rating'];
+        //         $location = $_POST['location'];
+        //         $bid_status = $_POST['bid_status'];
+        //         $time_limit = $_POST['time_limit'];
+        //         $start_bid = $_POST['start_bid'];
+        //         $status = 'error';
+
+        //         // Allow certain file formats
+        //         $allowTypes = array('jpg','png','jpeg','gif');
+        //         if(in_array($fileType, $allowTypes)){
+        //             $image = $_FILES['image']['tmp_name'];
+        //             $imgContent = addslashes(file_get_contents($image));
+
+        //         //Select from Database
+        //         $select = "SELECT * FROM product WHERE 1";
+        //         // Insert image content into database
+        //         $insert = $conn->query("INSERT into product (prd_name, prd_price, prd_qty, prd_condition, prd_desc, prd_rating, prd_location, bid_status) VALUES ('$name', '$price', '$quantity', '$condition', '$description', '$rating', '$location', '$bid_status')");
+        //         if($insert){
+        //                 $status = 'success';
+        //                 $statusMsg = "File uploaded successfully.";
+        //             } else {
+        //                $statusMsg = "File upload failed. Please try again.";
+        //             }
+        //         } else {
+        //             $statusMsg = "Only JPG, JPEG, PNG, & GIF files are allowed.";
+        //         }
+        //     } else {
+        //         $statusMsg = "Please select a file.";
+        //     }
+        //     echo $statusMsg;
+        //     header("location: store.php");
+        //     exit;
+        // }
+
+        $status = $statusMsg = '';
+        if(isset($_POST["submit"])){
+            if(!empty($_FILES['image']['name'])) {
+                // Get the file info
+                $fileName = basename($_FILES['image']['name']);
+                $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                $name = $_POST['name'];
+                $category = $_POST['category'];
+                $price = $_POST['price'];
+                $quantity = $_POST['quantity'];
+                $condition = $_POST['condition'];
+                $description = $_POST['description'];
+                $rating = $_POST['rating'];
+                $location = $_POST['location'];
+                $bid_status = $_POST['bid_status'];
+                $time_limit = $_POST['time_limit'];
+                $start_bid = $_POST['start_bid'];
+                $status = 'error';
+
+                //Allow certain file formats
+                $allowTypes = array('jpg','png','jpeg','gif');
+                if(in_array($fileType, $allowTypes)){
+                    $image = $_FILES['image']['tmp_name'];
+                    $imgContent = addslashes(file_get_contents($image));
+                    
+
+                //Select from Database 
+                $select = "SELECT * FROM products WHERE 1";
+                //$insert = "INSERT INTO PRODUCT(prd_name, prd_price, prd_img) VALUES (':name', ':price', ':imgContent')";
+
+                // Insert image content into database
+                $insert =$conn->query("INSERT INTO products (prd_name, prd_price, prd_qty, prd_cond, prd_cond, prd_desc, prd_rating, prd_location, bid_status, prd_img) VALUES ('$name', '$price', '$quantity', '$condition', '$description', '$rating', '$location', '$bid_status, '$imgContent')");
+               
+                if($insert){
+                        $status  = 'success';
+                        $statusMsg = "File uploaded successfully.";
+                    } else {
+                       $statusMsg = "File upload failed. Please try again."; 
+                    }
+                } else { 
+                    $statusMsg = "Only JPG, JPEG, PNG, & GIF files are allowed.";
+                }
+            } else {
+                $statusMsg = "Select a file.";
+            }
+
+            echo $statusMsg;
+        }
         
-        if(isset($_POST['submit'])){ 
-            // File upload configuration 
-            $targetDir = "uploads/"; 
-            $allowTypes = array('jpg','png','jpeg','gif'); 
-             
-            $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = ''; 
-            $fileNames = array_filter($_FILES['files']['name']); 
-            if(!empty($fileNames)){ 
-                foreach($_FILES['files']['name'] as $key=>$val){ 
-                    // File upload path 
-                    $fileName = basename($_FILES['files']['name'][$key]); 
-                    $targetFilePath = $targetDir . $fileName; 
-                     
-                    // Check whether file type is valid 
-                    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION); 
-                    if(in_array($fileType, $allowTypes)){ 
-                        // Upload file to server 
-                        if(move_uploaded_file($_FILES["files"]["tmp_name"][$key], $targetFilePath)){ 
-                            // Image db insert sql 
-                            $insertValuesSQL .= "('".$fileName."', NOW()),"; 
-                        }else{ 
-                            $errorUpload .= $_FILES['files']['name'][$key].' | '; 
-                        } 
-                    }else{ 
-                        $errorUploadType .= $_FILES['files']['name'][$key].' | '; 
-                    } 
-                } 
-                 
-                // Error message 
-                $errorUpload = !empty($errorUpload)?'Upload Error: '.trim($errorUpload, ' | '):''; 
-                $errorUploadType = !empty($errorUploadType)?'File Type Error: '.trim($errorUploadType, ' | '):''; 
-                $errorMsg = !empty($errorUpload)?'<br/>'.$errorUpload.'<br/>'.$errorUploadType:'<br/>'.$errorUploadType; 
-                 
-                if(!empty($insertValuesSQL)){ 
-                    //Select from Database 
-                $select = "SELECT * FROM product_images WHERE 1";
-                    $insertValuesSQL = trim($insertValuesSQL, ','); 
-                    // Insert image file name into database 
-                    $insert = $conn->query("INSERT INTO product_images(img) VALUES $insertValuesSQL"); 
-                    if($insert){ 
-                        $statusMsg = "Files are uploaded successfully.".$errorMsg; 
-                    }else{ 
-                        $statusMsg = "Sorry, there was an error uploading your file."; 
-                    } 
-                }else{ 
-                    $statusMsg = "Upload failed! ".$errorMsg; 
-                } 
-            }else{ 
-                $statusMsg = 'Please select a file to upload.'; 
-            } 
-        } 
-         
     ?>
 </body>
 </html>
