@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 18, 2021 at 10:41 AM
--- Server version: 10.4.20-MariaDB
--- PHP Version: 8.0.8
+-- Generation Time: Aug 24, 2021 at 07:58 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,13 +28,50 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `cart` (
-  `product_Id` int(255) DEFAULT NULL,
-  `product_Name` varchar(255) DEFAULT NULL,
-  `product_Price` int(255) DEFAULT NULL,
-  `seller_Id` int(255) DEFAULT NULL,
-  `product_Quantity` int(255) DEFAULT NULL,
-  `total_Items` int(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `cart_id` int(10) NOT NULL,
+  `cart_qty` int(10) NOT NULL,
+  `cart_total` decimal(5,2) NOT NULL,
+  `session_id` int(10) NOT NULL,
+  `prd_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_detail`
+--
+
+CREATE TABLE `order_detail` (
+  `order_id` int(10) NOT NULL,
+  `total` decimal(5,2) NOT NULL,
+  `user_id` int(10) NOT NULL,
+  `payment_detail_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_item`
+--
+
+CREATE TABLE `order_item` (
+  `order_item_id` int(10) NOT NULL,
+  `order_id` int(10) DEFAULT NULL,
+  `prd_id` int(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_detail`
+--
+
+CREATE TABLE `payment_detail` (
+  `payment_detail_id` int(10) NOT NULL,
+  `order_id` int(10) NOT NULL,
+  `payment_amt` decimal(5,2) NOT NULL,
+  `payment_status` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -43,35 +80,80 @@ CREATE TABLE `cart` (
 --
 
 CREATE TABLE `product` (
-  `product_Id` int(255) DEFAULT NULL,
-  `product_Name` varchar(255) DEFAULT NULL,
-  `product_Desc` varchar(255) DEFAULT NULL,
-  `product_Price` int(255) DEFAULT NULL,
-  `product_Category` varchar(255) DEFAULT NULL,
-  `product_Quantity` int(255) DEFAULT NULL,
-  `product_Condition` varchar(255) DEFAULT NULL,
-  `product_Rate` int(255) DEFAULT NULL,
-  `bid_Status` varchar(255) DEFAULT NULL,
-  `meetup_location` varchar(255) DEFAULT NULL,
-  `bid_starting_price` int(255) DEFAULT NULL,
-  `bid_maximum_price` int(255) DEFAULT NULL,
-  `time_limit` time(6) DEFAULT NULL,
-  `seller_Id` int(255) DEFAULT NULL,
-  `user_Id` int(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `prd_id` int(10) NOT NULL,
+  `prd_name` varchar(255) NOT NULL,
+  `prd_price` decimal(5,2) NOT NULL,
+  `prd_qty` int(50) NOT NULL,
+  `prd_condition` varchar(255) NOT NULL,
+  `prd_desc` varchar(255) NOT NULL,
+  `prd_rating` varchar(255) NOT NULL,
+  `prd_location` varchar(255) NOT NULL,
+  `prd_tag` varchar(255) NOT NULL,
+  `bid_status` tinyint(1) DEFAULT NULL,
+  `time_upload` datetime DEFAULT NULL,
+  `is_featured` tinyint(1) NOT NULL,
+  `seller_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `review`
+-- Table structure for table `product_bid`
 --
 
-CREATE TABLE `review` (
-  `Username` varchar(255) DEFAULT NULL,
-  `seller_Rate` int(255) DEFAULT NULL,
-  `review_Description` varchar(255) DEFAULT NULL,
-  `review_Type` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `product_bid` (
+  `bid_id` int(10) NOT NULL,
+  `prd_id` int(10) NOT NULL,
+  `user_id` int(10) NOT NULL,
+  `bid_start` datetime DEFAULT NULL,
+  `bid_end` datetime DEFAULT NULL,
+  `starting_bid` decimal(5,2) NOT NULL,
+  `current_bid` decimal(5,2) NOT NULL,
+  `bid_result` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_category`
+--
+
+CREATE TABLE `product_category` (
+  `category_id` int(10) NOT NULL,
+  `prd_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_discount`
+--
+
+CREATE TABLE `product_discount` (
+  `discount_id` int(10) NOT NULL,
+  `prd_id` int(10) NOT NULL,
+  `disc_desc` varchar(255) NOT NULL,
+  `disc_percentage` decimal(2,1) NOT NULL,
+  `disc_status` tinyint(1) DEFAULT NULL,
+  `disc_start` datetime DEFAULT NULL,
+  `disc_end` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_image`
+--
+
+CREATE TABLE `product_image` (
+  `img_id` int(10) NOT NULL,
+  `prd_id` int(10) NOT NULL,
+  `img_file` longblob DEFAULT NULL,
+  `img_name` varchar(255) NOT NULL,
+  `display_order` tinyint(1) NOT NULL,
+  `is_feature` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -80,109 +162,25 @@ CREATE TABLE `review` (
 --
 
 CREATE TABLE `seller` (
-  `seller_Id` int(255) DEFAULT NULL,
-  `Username` varchar(255) DEFAULT NULL,
-  `Email` varchar(255) DEFAULT NULL,
-  `Phone_Number` int(255) DEFAULT NULL,
-  `Password` varchar(255) DEFAULT NULL,
-  `Ic_color` varchar(255) DEFAULT NULL,
-  `Ic_no` int(255) DEFAULT NULL,
-  `Address` varchar(255) DEFAULT NULL,
-  `product_Id` int(255) DEFAULT NULL,
-  `Bio` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `seller_id` int(10) NOT NULL,
+  `prd_id` int(10) NOT NULL,
+  `seller_rating` varchar(255) NOT NULL,
+  `seller_feedback` varchar(255) NOT NULL,
+  `seller_joined` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `seller_meetup` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Table structure for table `shopping_session`
 --
 
-CREATE TABLE `user` (
-  `Email` varchar(255) DEFAULT NULL,
-  `Username` varchar(255) DEFAULT NULL,
-  `Ic_no` int(8) DEFAULT NULL,
-  `Ic_color` text DEFAULT NULL,
-  `Phone_Number` int(7) DEFAULT NULL,
-  `Password` varchar(255) DEFAULT NULL,
-  `vcode` text NOT NULL,
-  `verified` tinyint(4) NOT NULL,
-  `date_created` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `Firstname` text NOT NULL,
-  `Lastname` text NOT NULL,
-  `Bio` varchar(255) DEFAULT NULL,
-  `Address` varchar(255) DEFAULT NULL,
-  `product_id` int(255) DEFAULT NULL,
-  `seller_id` int(255) DEFAULT NULL,
-  `user_type` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `user`
---
-
-INSERT INTO `user` (`Email`, `Username`, `Ic_no`, `Ic_color`, `Phone_Number`, `Password`, `vcode`, `verified`, `date_created`, `Firstname`, `Lastname`, `Bio`, `Address`, `product_id`, `seller_id`, `user_type`) VALUES
-('abc@abc.com', NULL, NULL, NULL, NULL, '12345', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '12345', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '12345', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', NULL, NULL, NULL, NULL, '12345', '', 0, '2021-08-16 21:21:15', 'Haziq', 'Zulhazmi', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', NULL, NULL, NULL, NULL, '12345', '', 0, '2021-08-16 21:21:15', 'aaaa', 'aaaa', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '12345', '', 0, '2021-08-16 21:21:15', 'def', 'def', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '12345', '', 0, '2021-08-16 21:21:15', 'fiqah', 'zimah', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '12345', '', 0, '2021-08-16 21:21:15', 'fiqah', 'zimah', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '12345', '', 0, '2021-08-16 21:21:15', 'fiqah', 'zimah', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', NULL, NULL, NULL, NULL, '123', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', NULL, NULL, NULL, NULL, '123', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', NULL, NULL, NULL, NULL, '123', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '123', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '123', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '123', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '123', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '321', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('abc@abc.com', NULL, NULL, NULL, NULL, '123456789', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', NULL, NULL, NULL, NULL, '12345678', '', 0, '2021-08-16 21:21:15', 'abc', 'abc', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziqzulhazmi', 1, 'Yellow', 7132780, '12345', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '123', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '1111111111111111111111111', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, 'abcabcabc', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, 'qwertyuiop', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '123456789', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', 'nY4W', 0, '2021-08-16 21:21:15', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:24:20', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'asfasfasdasd', 1, 'Yellow', 7132780, '12345678', '', 0, '2021-08-16 21:25:34', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'asfasfasdasd', 1, 'Yellow', 7132780, '12345678', '0oFR', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'jkasdhjkasd', 1, 'Yellow', 7132780, '12345678', 'LHbM', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, 'asdfghjkl', 'pm7L', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', 'ozGN', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', '5SER', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'gsgdkfgsjkjdgs', 1, 'Yellow', 7132780, '12345678', 'aQNv', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', 'qYfL', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', 'NS1r', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '87654321', 'DZ16', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', 'm1lW', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'haziiq', 1, 'Yellow', 7132780, '12345678', 'RAIv', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', 'aXB4', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL),
-('haziiq@live.com', 'test', 1, 'Yellow', 7132780, '12345678', 'cCYW', 0, '0000-00-00 00:00:00', '', '', NULL, NULL, NULL, NULL, NULL);
+CREATE TABLE `shopping_session` (
+  `session_id` int(10) NOT NULL,
+  `user_id` int(10) NOT NULL,
+  `total` decimal(5,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -191,30 +189,57 @@ INSERT INTO `user` (`Email`, `Username`, `Ic_no`, `Ic_color`, `Phone_Number`, `P
 --
 
 CREATE TABLE `users` (
-  `user_Id` int(11) NOT NULL,
-  `Email` varchar(255) NOT NULL DEFAULT '0',
-  `Username` varchar(255) NOT NULL DEFAULT '0',
-  `Ic_no` varchar(255) NOT NULL DEFAULT '0',
-  `Ic_color` varchar(255) NOT NULL DEFAULT '0',
-  `Phone_Number` int(10) NOT NULL DEFAULT 0,
-  `Password` varchar(255) NOT NULL DEFAULT '0',
-  `vcode` varchar(255) NOT NULL DEFAULT '0',
-  `verified` varchar(255) NOT NULL DEFAULT '0',
-  `Firstname` varchar(255) DEFAULT '0',
-  `Lastname` varchar(255) DEFAULT '0',
-  `Bio` varchar(255) DEFAULT '0',
-  `Address` varchar(255) DEFAULT '0',
-  `product_id` varchar(255) DEFAULT '0',
-  `seller_id` varchar(255) DEFAULT '0',
-  `user_type` varchar(255) NOT NULL DEFAULT '0'
+  `user_id` int(10) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `ic_number` varchar(50) NOT NULL,
+  `ic_color` varchar(6) NOT NULL,
+  `phone_number` int(7) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `vcode` varchar(4) NOT NULL,
+  `verified` tinyint(1) DEFAULT NULL,
+  `fname` varchar(255) DEFAULT NULL,
+  `lname` varchar(255) DEFAULT NULL,
+  `bio` varchar(255) DEFAULT NULL,
+  `img` longblob DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `modified_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_Id`, `Email`, `Username`, `Ic_no`, `Ic_color`, `Phone_Number`, `Password`, `vcode`, `verified`, `Firstname`, `Lastname`, `Bio`, `Address`, `product_id`, `seller_id`, `user_type`) VALUES
-(1, 'haziiq@live.com', 'haziiq', '01-106190', 'Yellow', 7132780, '12345678', 'FoW0', '', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `users` (`user_id`, `email`, `username`, `ic_number`, `ic_color`, `phone_number`, `password`, `vcode`, `verified`, `fname`, `lname`, `bio`, `img`, `created_at`, `modified_at`) VALUES
+(4, 'amalazimahh@gmail.com', 'amalazimah', '01-123663', 'Yellow', 8647864, '12345678', '3rqX', 0, NULL, NULL, NULL, NULL, '2021-08-24 05:56:56', '2021-08-24 05:56:56');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_address`
+--
+
+CREATE TABLE `user_address` (
+  `address_id` int(10) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `address_1` varchar(255) NOT NULL,
+  `address_2` varchar(255) DEFAULT NULL,
+  `city` varchar(255) NOT NULL,
+  `district` varchar(255) NOT NULL,
+  `postal_code` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_payment`
+--
+
+CREATE TABLE `user_payment` (
+  `payment_id` int(10) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `payment_type` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -223,32 +248,315 @@ INSERT INTO `users` (`user_Id`, `Email`, `Username`, `Ic_no`, `Ic_color`, `Phone
 --
 
 CREATE TABLE `wishlist` (
-  `product_ID` int(255) DEFAULT NULL,
-  `product_Name` varchar(255) DEFAULT NULL,
-  `product_Price` int(255) DEFAULT NULL,
-  `seller_Id` int(255) DEFAULT NULL,
-  `total_Price` int(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `wishlist_id` int(10) NOT NULL,
+  `quantity` int(10) NOT NULL,
+  `total` decimal(5,2) NOT NULL,
+  `session_id` int(10) NOT NULL,
+  `prd_id` int(10) NOT NULL,
+  `cart_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
 --
 
 --
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`cart_id`),
+  ADD KEY `FK_CART_SESSION` (`session_id`),
+  ADD KEY `FK_CART_PRD` (`prd_id`);
+
+--
+-- Indexes for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  ADD PRIMARY KEY (`order_id`),
+  ADD KEY `FK_ORDER_DETAIL_USER` (`user_id`),
+  ADD KEY `FK_ORDER_DETAIL_PAYMENT` (`payment_detail_id`);
+
+--
+-- Indexes for table `order_item`
+--
+ALTER TABLE `order_item`
+  ADD PRIMARY KEY (`order_item_id`),
+  ADD KEY `FK_ORDER_ITEM` (`order_id`),
+  ADD KEY `FK_ORDER_ITEM_PRD` (`prd_id`);
+
+--
+-- Indexes for table `payment_detail`
+--
+ALTER TABLE `payment_detail`
+  ADD PRIMARY KEY (`payment_detail_id`),
+  ADD KEY `FK_PAYMENT_DETAIL` (`order_id`);
+
+--
+-- Indexes for table `product`
+--
+ALTER TABLE `product`
+  ADD PRIMARY KEY (`prd_id`),
+  ADD KEY `FK_PRODUCT_SELLER` (`seller_id`);
+
+--
+-- Indexes for table `product_bid`
+--
+ALTER TABLE `product_bid`
+  ADD PRIMARY KEY (`bid_id`),
+  ADD KEY `FK_PRD_ID` (`prd_id`),
+  ADD KEY `FK_USER_ID` (`user_id`);
+
+--
+-- Indexes for table `product_category`
+--
+ALTER TABLE `product_category`
+  ADD PRIMARY KEY (`category_id`),
+  ADD KEY `FK_PRODUCT_CATEGORY` (`prd_id`);
+
+--
+-- Indexes for table `product_discount`
+--
+ALTER TABLE `product_discount`
+  ADD PRIMARY KEY (`discount_id`),
+  ADD KEY `FK_PRODUCT_DISCOUNT` (`prd_id`);
+
+--
+-- Indexes for table `product_image`
+--
+ALTER TABLE `product_image`
+  ADD PRIMARY KEY (`img_id`),
+  ADD KEY `FK_PRODUCT_IMAGE` (`prd_id`);
+
+--
+-- Indexes for table `seller`
+--
+ALTER TABLE `seller`
+  ADD PRIMARY KEY (`seller_id`),
+  ADD KEY `FK_SELLER` (`prd_id`);
+
+--
+-- Indexes for table `shopping_session`
+--
+ALTER TABLE `shopping_session`
+  ADD PRIMARY KEY (`session_id`),
+  ADD KEY `FK_SHOPPING_SESSION` (`user_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_Id`);
+  ADD PRIMARY KEY (`user_id`);
+
+--
+-- Indexes for table `user_address`
+--
+ALTER TABLE `user_address`
+  ADD PRIMARY KEY (`address_id`),
+  ADD KEY `FK_USER_ADDRESS` (`user_id`);
+
+--
+-- Indexes for table `user_payment`
+--
+ALTER TABLE `user_payment`
+  ADD PRIMARY KEY (`payment_id`),
+  ADD KEY `FK_USER_PAYMENT` (`user_id`);
+
+--
+-- Indexes for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD PRIMARY KEY (`wishlist_id`),
+  ADD KEY `FK_WISHLIST_SESSION` (`session_id`),
+  ADD KEY `FK_WISHLIST_PRD` (`prd_id`),
+  ADD KEY `FK_WISHLIST_CART` (`cart_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `cart_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  MODIFY `order_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `order_item`
+--
+ALTER TABLE `order_item`
+  MODIFY `order_item_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payment_detail`
+--
+ALTER TABLE `payment_detail`
+  MODIFY `payment_detail_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product`
+--
+ALTER TABLE `product`
+  MODIFY `prd_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product_bid`
+--
+ALTER TABLE `product_bid`
+  MODIFY `bid_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product_category`
+--
+ALTER TABLE `product_category`
+  MODIFY `category_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product_discount`
+--
+ALTER TABLE `product_discount`
+  MODIFY `discount_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product_image`
+--
+ALTER TABLE `product_image`
+  MODIFY `img_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `seller`
+--
+ALTER TABLE `seller`
+  MODIFY `seller_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `shopping_session`
+--
+ALTER TABLE `shopping_session`
+  MODIFY `session_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `user_address`
+--
+ALTER TABLE `user_address`
+  MODIFY `address_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_payment`
+--
+ALTER TABLE `user_payment`
+  MODIFY `payment_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  MODIFY `wishlist_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `FK_CART_PRD` FOREIGN KEY (`prd_id`) REFERENCES `product` (`prd_id`),
+  ADD CONSTRAINT `FK_CART_SESSION` FOREIGN KEY (`session_id`) REFERENCES `shopping_session` (`session_id`);
+
+--
+-- Constraints for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  ADD CONSTRAINT `FK_ORDER_DETAIL_PAYMENT` FOREIGN KEY (`payment_detail_id`) REFERENCES `payment_detail` (`payment_detail_id`),
+  ADD CONSTRAINT `FK_ORDER_DETAIL_USER` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `order_item`
+--
+ALTER TABLE `order_item`
+  ADD CONSTRAINT `FK_ORDER_ITEM` FOREIGN KEY (`order_id`) REFERENCES `order_detail` (`order_id`),
+  ADD CONSTRAINT `FK_ORDER_ITEM_PRD` FOREIGN KEY (`prd_id`) REFERENCES `product` (`prd_id`);
+
+--
+-- Constraints for table `payment_detail`
+--
+ALTER TABLE `payment_detail`
+  ADD CONSTRAINT `FK_PAYMENT_DETAIL` FOREIGN KEY (`order_id`) REFERENCES `order_detail` (`order_id`);
+
+--
+-- Constraints for table `product`
+--
+ALTER TABLE `product`
+  ADD CONSTRAINT `FK_PRODUCT_SELLER` FOREIGN KEY (`seller_id`) REFERENCES `seller` (`seller_id`);
+
+--
+-- Constraints for table `product_bid`
+--
+ALTER TABLE `product_bid`
+  ADD CONSTRAINT `FK_PRD_ID` FOREIGN KEY (`prd_id`) REFERENCES `product` (`prd_id`),
+  ADD CONSTRAINT `FK_USER_ID` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `product_category`
+--
+ALTER TABLE `product_category`
+  ADD CONSTRAINT `FK_PRODUCT_CATEGORY` FOREIGN KEY (`prd_id`) REFERENCES `product` (`prd_id`);
+
+--
+-- Constraints for table `product_discount`
+--
+ALTER TABLE `product_discount`
+  ADD CONSTRAINT `FK_PRODUCT_DISCOUNT` FOREIGN KEY (`prd_id`) REFERENCES `product` (`prd_id`);
+
+--
+-- Constraints for table `product_image`
+--
+ALTER TABLE `product_image`
+  ADD CONSTRAINT `FK_PRODUCT_IMAGE` FOREIGN KEY (`prd_id`) REFERENCES `product` (`prd_id`);
+
+--
+-- Constraints for table `seller`
+--
+ALTER TABLE `seller`
+  ADD CONSTRAINT `FK_SELLER` FOREIGN KEY (`prd_id`) REFERENCES `product` (`prd_id`);
+
+--
+-- Constraints for table `shopping_session`
+--
+ALTER TABLE `shopping_session`
+  ADD CONSTRAINT `FK_SHOPPING_SESSION` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `user_address`
+--
+ALTER TABLE `user_address`
+  ADD CONSTRAINT `FK_USER_ADDRESS` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `user_payment`
+--
+ALTER TABLE `user_payment`
+  ADD CONSTRAINT `FK_USER_PAYMENT` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD CONSTRAINT `FK_WISHLIST_CART` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`),
+  ADD CONSTRAINT `FK_WISHLIST_PRD` FOREIGN KEY (`prd_id`) REFERENCES `product` (`prd_id`),
+  ADD CONSTRAINT `FK_WISHLIST_SESSION` FOREIGN KEY (`session_id`) REFERENCES `shopping_session` (`session_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
