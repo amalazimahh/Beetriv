@@ -1,93 +1,15 @@
 <?php 
     session_start();
-    require_once "connection.php";    
- 
-    
-    if(isset($_GET['product']) && !empty($_GET['product']) && is_numeric($_GET['product']))
+    require_once('connection.php');
+  
+
+    if(isset($_GET['action'],$_GET['item']) && $_GET['action'] == 'remove')
     {
-        $sql = "SELECT p.*,pdi.img from product p
-            INNER JOIN product_images pdi ON pdi.product_id = p.id WHERE pdi.is_featured =:featured AND p.id =:productID";
-        $handle = $conn->prepare($sql);
-        $params = [
-                ':featured'=>1,
-                ':productID' =>$_GET['product'],
-            ];
-        $handle->execute($params);
-        if($handle->rowCount() == 1 )
-        {
-            $getProductData = $handle->fetch(PDO::FETCH_ASSOC);
-            $imgUrl = PRODUCT_IMG_URL.str_replace(' ','-',strtolower($getProductData ['product_Name']))."/".$getProductData ['img'];
-        }
-        else
-        {
-            $error = '404! No record found';
-        }
-
+        unset($_SESSION['cart_items'][$_GET['item']]);
+        header('location:cart.php');
+        exit();
     }
-    else
-    {
-        $error = '404! No record found';
-    }
-
-    if(isset($_POST['add_to_cart']) && $_POST['add_to_cart'] == 'add to cart')
-    {
-        $productID = intval($_POST['product_id']);
-        $productQty = intval($_POST['product_qty']);
-        
-        $sql = "SELECT p.*,pdi.img from product p
-            INNER JOIN product_images pdi ON pdi.product_id = p.id WHERE pdi.is_featured =:featured AND p.id =:productID";
-
-        $prepare = $conn->prepare($sql);
-        
-        $params = [
-                ':featured'=>1,
-                ':productID' =>$productID,
-            ];
-        
-        $prepare->execute($params);
-        $fetchProduct = $prepare->fetch(PDO::FETCH_ASSOC);
-
-        $calculateTotalPrice = number_format($productQty * $fetchProduct['product_Price'],2);
-        
-        $cartArray = [
-            'product_id' =>$productID,
-            'qty' => $productQty,
-            'product_name' =>$fetchProduct['product_Name'],
-            'product_price' => $fetchProduct['product_Price'],
-            'total_price' => $calculateTotalPrice,
-            'product_img' =>$fetchProduct['img']
-        ];
-        
-        if(isset($_SESSION['cart_items']) && !empty($_SESSION['cart_items']))
-        {
-            $productIDs = [];
-            foreach($_SESSION['cart_items'] as $cartKey => $cartItem)
-            {
-                $productIDs[] = $cartItem['product_id'];
-                if($cartItem['product_id'] == $productID)
-                {
-                    $_SESSION['cart_items'][$cartKey]['qty'] = $productQty;
-                    $_SESSION['cart_items'][$cartKey]['total_price'] = $calculateTotalPrice;
-                    break;
-                }
-            }
-
-            if(!in_array($productID,$productIDs))
-            {
-                $_SESSION['cart_items'][]= $cartArray;
-            }
-
-            $successMsg = true;
-            
-        }
-        else
-        {
-            $_SESSION['cart_items'][]= $cartArray;
-            $successMsg = true;
-        }
-
-    }
-
+	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -127,57 +49,96 @@
                         </li>
                     </ul>
                     <form class="d-flex">
-                    <div class="btn btn-outline-dark">
-                        <a href="cart.php">
-                            <i class="bi-cart-fill me-1"></i>
-                            <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>                     
-                        </a>
-                        </div>
+                    <a href="cart.php">
+                        
+                        <i class="bi-cart-fill me-1"></i>
+                        <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>                
+                    </a>
                     </form>
                 </div>
             </div>
         </nav>
         <!-- Product section-->
-
-        <?php if(isset($getProductData) && is_array($getProductData)){?>
-        <?php if(isset($successMsg) && $successMsg == true){?>
-            <div class="row mt-3">
-                <div class="col-md-12">
-                    <div class="alert alert-success alert-dismissible">
-                         <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <img src="<?php echo $imgUrl ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $getProductData['product_Name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
-                    </div>
-                </div>
-            </div>
-         <?php }?>
-
-        <section class="py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="<?php echo $imgUrl; ?>" alt="..." /></div>
-                    <div class="col-md-6">
-                        <div class="small mb-1">SKU: BST-498</div>
-                        <h1 class="display-5 fw-bolder"><?php echo $getProductData['product_Name']?></h1>
-                        <div class="fs-5 mb-5">
-                            <span class="text-decoration-line-through">$45.00</span>
-                            <span>$<?php echo $getProductData['product_Price']?></span>
-                        </div>
-                        <h9 class="lead"><?php echo $getProductData['product_Desc']?></h9>
-                        <form method="POST">
-                        <div class="d-flex" >
-                            <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
-                            <input type="hidden" name="product_id" value="<?php echo $getProductData['id']?>">
-                            <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
-                                <i class="bi-cart-fill me-1"></i>
-                                Add to cart
-                            </button>
-                        </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="row mt-3">
+     <div class="col-md-12">
+         <section class="container px-4 px-lg-5 my-5" >
+        <?php if(empty($_SESSION['cart_items'])){?>
+        <table class="table">
+            <tr>
+                <td>
+                    <p>Your cart is emty</p>
+                </td>
+            </tr>
+        </table>
         <?php }?>
+        <?php if(isset($_SESSION['cart_items']) && count($_SESSION['cart_items']) > 0){?>
+        <table class="table">
+           <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                    $totalCounter = 0;
+                    $itemCounter = 0;
+                    foreach($_SESSION['cart_items'] as $key => $item){
+
+                     $imgUrl = PRODUCT_IMG_URL.str_replace(' ','-',strtolower($item['product_name']))."/".$item['product_img'];   
+                    
+                    $total = $item['product_price'] * $item['qty'];
+                    $totalCounter+= $total;
+                    $itemCounter+=$item['qty'];
+                    ?>
+                    <tr>
+                        <td>
+                            <img src="<?php echo $imgUrl; ?>" class="rounded img-thumbnail mr-2" style="width:60px;"><?php echo $item['product_name'];?>
+                            
+                            <a href="cart.php?action=remove&item=<?php echo $key?>" class="text-danger">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+
+                        </td>
+                        <td>
+                            $<?php echo $item['product_price'];?>
+                        </td>
+                        <td>
+                            <?php echo $item['qty'];?>
+                        </td>
+                        <td>
+                            <?php echo $total;?>
+                        </td>
+                    </tr>
+                <?php }?>
+                <tr class="border-top border-bottom">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <strong>
+                            <?php 
+                                echo ($itemCounter==1)?$itemCounter.' item':$itemCounter.' items'; ?>
+                        </strong>
+                    </td>
+                    <td><strong>$<?php echo $totalCounter;?></strong></td>
+                </tr> 
+                </tr>
+            </tbody> 
+        </table>
+        <div class="row">
+            <div class="col-md-11">
+				<a href="checkout.php">
+					<button class="btn btn-primary btn-lg float-right">Checkout</button>
+				</a>
+            </div>
+        </div>
+        
+            <?php }?>
+        </section>
+
+     
         <!-- Related items section-->
         <section class="py-5 bg-light">
             <div class="container px-4 px-lg-5 mt-5">

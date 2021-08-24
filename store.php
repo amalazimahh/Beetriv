@@ -173,11 +173,15 @@ $sql = "SELECT p.*,pdi.img from product p
                         <button>
                             <img src="img/wishlist.jpeg" alt="" width="20">
                         </button>
-                        <button class="btn btn-outline-dark" type="submit">
+                        <div class="btn btn-outline-dark">
+                        <a href="cart.php">
+                        
                             <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>                       
+                            <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>
+                            <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
+                                            
+                        </a>
+                        </div>
                     </form>
                 </div>
             </div>
