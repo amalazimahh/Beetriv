@@ -196,7 +196,7 @@ require 'vendor/autoload.php';
 
                 $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
 
-                $sql = $conn->query ("INSERT INTO users (Email, Username, Ic_no, Ic_color, Phone_Number, Password, vcode, verified) VALUES ('$email','$username','$ic','$ic2','$phone'
+                $sql = $conn->query ("INSERT INTO users (email, username, ic_number, ic_color, phone_number, password, vcode, verified) VALUES ('$email','$username','$ic','$ic2','$phone'
                 ,'$password','$vcode','$verified')");
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);

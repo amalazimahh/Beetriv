@@ -2,15 +2,9 @@
 session_start();
 require_once "connection.php";
 
-
-$sql = "SELECT p.*,pdi.img from product p
-        INNER JOIN product_images pdi ON pdi.product_id = p.id
-        WHERE pdi.is_featured = 1";
-    $handle = $conn->prepare($sql);
-    $handle->execute();
-    $getAllProducts = $handle->fetchAll(PDO::FETCH_ASSOC);
 // Get image data from database
-// $result = $conn->query("SELECT * FROM PRODUCT ORDER BY prd_id DESC");
+$result = $conn->query("SELECT * FROM PRODUCT");
+
 ?>
 
 <!DOCTYPE html>
@@ -23,6 +17,9 @@ $sql = "SELECT p.*,pdi.img from product p
         <!-- Core theme CSS (includes Bootstrap)-->
         <link rel="stylesheet" href="css/styles.css">
         <link rel="stylesheet" href="css/footer.css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300i,400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <style>
         * {box-sizing: border-box;}
         body {font-family: Verdana, sans-serif;}
@@ -45,6 +42,7 @@ $sql = "SELECT p.*,pdi.img from product p
         border-radius: 50%;
         display: inline-block;
         transition: background-color 0.6s ease;
+        margin-bottom: 50px;
         }
 
         .active {
@@ -60,12 +58,12 @@ $sql = "SELECT p.*,pdi.img from product p
         }
 
         @-webkit-keyframes fade {
-        from {opacity: .4} 
+        from {opacity: .4}
         to {opacity: 1}
         }
 
         @keyframes fade {
-        from {opacity: .4} 
+        from {opacity: .4}
         to {opacity: 1}
         }
 
@@ -74,67 +72,119 @@ $sql = "SELECT p.*,pdi.img from product p
         .text {font-size: 11px}
         }
 
-        /* Search bar css */
-        
+        /* Product Display */
 
-        .topnav a {
-        float: left;
-        display: block;
-        color: black;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-        }
+        body{
+      margin: 0;
+      font-family:Nunito Sans;
+      }
+      h3{
+      text-align: left;
+      font-size: 30px;
+      margin: 0;
+      padding-top: 10px;
+      padding-left: 20px;
+      }
+      a{
+      text-decoration: none;
+      }
+      .product{
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+      }
+      .content{
+      width: 15%;
+      margin: 10px;
+      box-sizing: border-box;
+      float: left;
+      text-align: center;
+      border-radius:10px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      padding-top: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: .4s;
+      }
+      .content:hover{
+      box-shadow: 0 0 11px rgba(33,33,33,.2);
+      transform: translate(0px, -8px);
+      transition: .6s;
+      }
+      img{
+      width: 150px;
+      height: 150px;
+      text-align: center;
+      margin: 0 auto;
+      display: block;
+      }
+      h6{
+      font-size: 26px;
+      text-align: left;
+      color: #222f3e;
+      margin: 0;
+      padding-left: 20px;
+      }
+      ul{
+      list-style-type: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+      }
+      li{
+      padding: 5px;
+      }
+      .fa{
+      color: #ff9f43;
+      font-size: 26px;
+      transition: .4s;
+      }
+      .fa:hover{
+      transform: scale(1.3);
+      transition: .6s;
+      }
+      button{
+      text-align: center;
+      font-size: 24px;
+      color: #000000;
+      width: 100%;
+      padding: 15px;
+      border:0px;
+      outline: none;
+      cursor: pointer;
+      margin-top: 5px;
+      border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+      }
+      .buy-prd{
+      background-color: #ead3d7;
+      font-size: 20px;
+      }
 
-        .topnav a:hover {
-        background-color: #ddd;
-        color: black;
-        }
+      .prd-div {
+        margin-top: 10px;
+        margin-left: 80px;
+        padding-left: 20px;
+      }
 
-        .topnav .search-container {
-            position: absolute;
-            left: 42%;
-        }
+      @media(max-width: 1000px){
+      .content{
+      width: 46%;
+      }
+      }
+      @media(max-width: 750px){
+      .content{
+      width: 100%;
+      }
+      }
 
-        .topnav input[type=text] {
-        padding: 6px;
-        margin-top: 8px;
-        font-size: 17px;
-        border: none;
-        }
-
-        .topnav .search-container button {
-        float: right;
-        padding: 6px 10px;
-        margin-top: 8px;
-        margin-right: 16px;
-        background: #ddd;
-        font-size: 17px;
-        border: none;
-        cursor: pointer;
-        }
-
-        .topnav .search-container button:hover {
-        background: #ccc;
-        }
-
-        @media screen and (max-width: 600px) {
-        .topnav .search-container {
-            float: none;
-        }
-        .topnav a, .topnav input[type=text], .topnav .search-container button {
-            float: none;
-            display: block;
-            text-align: left;
-            width: 100%;
-            margin: 0;
-            padding: 14px;
-        }
-        .topnav input[type=text] {
-            border: 1px solid #ccc;  
-        }
-        }
+      .product a{
+          color: #915f6d;
+      }
         </style>
         <title>Beetriv</title>
         <!-- Favicon-->
@@ -144,7 +194,7 @@ $sql = "SELECT p.*,pdi.img from product p
         <!-- Search bar -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/user-profile.css">
-        
+
     </head>
     <body>
         <!-- Navigation-->
@@ -154,7 +204,7 @@ $sql = "SELECT p.*,pdi.img from product p
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" aria-current="page" href="store.php">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
@@ -167,28 +217,17 @@ $sql = "SELECT p.*,pdi.img from product p
                         </li>
                     </ul>
                     <form class="d-flex">
-                        <button>
-                            <img src="img/profile.png" alt="" width="20">
-                        </button>
-                        <button>
-                            <img src="img/wishlist.jpeg" alt="" width="20">
-                        </button>
-                        <div class="btn btn-outline-dark">
-                        <a href="cart.php">
-                        
+                        <button class="btn btn-outline-dark" type="submit">
                             <i class="bi-cart-fill me-1"></i>
-                            <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>
-                            <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
-                                            
-                        </a>
-                        </div>
+                            Cart
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                        </button>
                     </form>
                 </div>
             </div>
         </nav>
-        <!-- Header-->
-        <header class="bg-dark py-5">
-            
+
+
         <div class="slideshow-container">
 
         <div class="mySlides fade">
@@ -207,9 +246,9 @@ $sql = "SELECT p.*,pdi.img from product p
         <br>
 
         <div style="text-align:center">
-        <span class="dot"></span> 
-        <span class="dot"></span> 
-        <span class="dot"></span> 
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
         </div>
 
         <script>
@@ -221,21 +260,22 @@ $sql = "SELECT p.*,pdi.img from product p
         var slides = document.getElementsByClassName("mySlides");
         var dots = document.getElementsByClassName("dot");
         for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";  
+            slides[i].style.display = "none";
         }
         slideIndex++;
-        if (slideIndex > slides.length) {slideIndex = 1}    
+        if (slideIndex > slides.length) {slideIndex = 1}
         for (i = 0; i < dots.length; i++) {
             dots[i].className = dots[i].className.replace(" active", "");
         }
-        slides[slideIndex-1].style.display = "block";  
+        slides[slideIndex-1].style.display = "block";
         dots[slideIndex-1].className += " active";
-        setTimeout(showSlides, 10000); // Change image every 2 seconds
+        setTimeout(showSlides, 2000); // Change image every 2 seconds
         }
         </script>
 
+
         <div class="container">
-    <div class="row">    
+    <div class="row">
         <div class="col-xs-8 col-xs-offset-2">
 		    <div class="input-group">
                 <div class="input-group-btn search-panel">
@@ -251,7 +291,7 @@ $sql = "SELECT p.*,pdi.img from product p
                       <li><a href="#all">Anything</a></li>
                     </ul>
                 </div>
-                <input type="hidden" name="search_param" value="all" id="search_param">         
+                <input type="hidden" name="search_param" value="all" id="search_param">
                 <input type="text" class="form-control" name="x" placeholder="Search item...">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
@@ -260,49 +300,32 @@ $sql = "SELECT p.*,pdi.img from product p
         </div>
 	</div>
 </div>
+        <script>
+        $(document).ready(function(e){
+    $('.search-panel .dropdown-menu').find('a').click(function(e) {
+		e.preventDefault();
+		var param = $(this).attr("href").replace("#","");
+		var concept = $(this).text();
+		$('.search-panel span#search_concept').text(concept);
+		$('.input-group #search_param').val(param);
+	});
+});
+        </script>
 
-                
-        </header>
         <!-- Section-->
         <section class="py-5">
-            <div class="container px-4 px-lg-5 mt-5">
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                      <?php
-                        foreach($getAllProducts as $product)
-                        {
-                            $imgUrl = PRODUCT_IMG_URL.str_replace(' ','-',strtolower($product['product_Name']))."/".$product['img'];
-                        ?>
-                        <div class="col mb-5">
-
-                            <div class="card h-100">
-                                <!-- Product  id -->
-                                <a href="product-details.php?product=<?php echo $product['id']?>">
-                                <!-- Product image--> 
-                                <img class="card-img-top" src="<?php echo $imgUrl ?>" alt="<?php echo $product['product_Name'] ?>">
-                                </a>
-                                <!-- Product details-->
-                                <div class="card-body p-4">
-                                    <div class="text-center">
-                                        <!-- Product name-->
-                                        <h5 class="fw-bolder"><?php echo $product['product_Name'];?></h5>
-                                        <!-- Product short Description -->
-                                        <p class="lead"><?php echo $product['product_Desc'];?></p>
-                                        <!-- Product price-->
-                                        <h5 class="fw-bolder">------Price-------</h5>
-                                        <h5 class="fw-bolder">$<?php echo $product['product_Price'];?></h5>
-                                    </div>
-                                </div>
-                                <!-- Product actions-->
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="product-details.php?product=<?php echo $product['id']?>">View</a></div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php  } ?>
-                    </div>
-                    
-                </div>
-            </div>                   
+        <div class="prd-div"><h3>Latest Added Items</h3></div>
+        <div class="product">
+        <?php while($row = $result->fetch(PDO::FETCH_ASSOC)){ ?>
+      <div class="content">
+        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>">
+        <h3><?php echo htmlspecialchars($row['prd_name']) ?></h3>
+        <h6>$<?php echo htmlspecialchars($row['prd_price']) ?></h6>
+        <a href="product-details.php?product=<?php echo $row['prd_id'];?>">View</a>
+        <button class="buy-prd">Add to cart</button>
+      </div>
+      <?php } ?>
+    </div>
         </section>
         <!-- Footer-->
         <footer class="site-footer">
@@ -334,11 +357,11 @@ $sql = "SELECT p.*,pdi.img from product p
                     <h6>CUSTOMER CARE</h6>
                     <ul class="footer-links">
                         <li><a href="footer/be-seller.php">Become Our Seller</a></li>
-                        <li><a href="footer/faq.php">FAQ</a></li>
                         <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
                         <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
                         <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
                         <li><a href="footer/customer-protection.php">Customer Protection</a></li>
+                        <li><a href="footer/faq.php">FAQ</a></li>
                     </ul>
                 </div>
 

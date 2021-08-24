@@ -25,13 +25,14 @@ require_once "connection.php";
   box-sizing: border-box;
 }
 
-input[type=text], select, textarea {
+input[type=text], input[type=number], select, textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
 }
+
 
 label {
   padding: 12px 12px 12px 0;
@@ -86,6 +87,12 @@ input[type=submit]:hover {
     margin-top: 0;
   }
 }
+ /* Remove arrows on number field */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 .add-prd {
         padding-top: 20px;
@@ -93,6 +100,12 @@ input[type=submit]:hover {
         margin-left: 80px;
         padding-left: 20px;
       }
+
+.gallery img {
+    height: 300px;
+    width: 300px;
+    margin: 30px 10px;
+}
 </style>
 
     <title>Add Product</title>
@@ -151,7 +164,7 @@ input[type=submit]:hover {
         <label for="price">Product Price</label>
       </div>
       <div class="col-75">
-        <input type="text" name="price">
+        <input type="number" name="price" step="any">
       </div>
     </div>
     <div class="row">
@@ -159,7 +172,7 @@ input[type=submit]:hover {
         <label for="quantity">Product Quantity</label>
       </div>
       <div class="col-75">
-        <input type="text" name="quantity">
+        <input type="number" name="quantity">
       </div>
     </div>
     <div class="row">
@@ -183,18 +196,18 @@ input[type=submit]:hover {
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="rating">Product NumericRating</label>
+        <label for="rating">Product Numeric Rating</label>
       </div>
       <div class="col-75">
-        <input type="text" name="rating">
+        <input type="number" name="rating">
       </div>
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="meetup">Meet-up Location</label>
+        <label for="location">Meet-up Location</label>
       </div>
       <div class="col-75">
-        <input type="text" name="meetup">
+        <input type="text" name="location">
       </div>
     </div>
 
@@ -235,10 +248,39 @@ input[type=submit]:hover {
     
 	<div class="row">
       <div class="col-25">
-        <label for="image">Select Image File </label>
+        <label for="image">Select Image File(s)</label>
       </div>
       <div class="col-75">
-        <input type="file" name="image">
+        <input type="file" name="files[]" multiple id="gallery-photo-add" multiple><br>
+        <div class="gallery">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+  $(function() {
+    // Multiple images preview in browser
+    var imagesPreview = function(input, placeToInsertImagePreview) {
+
+        if (input.files) {
+            var filesAmount = input.files.length;
+
+            for (i = 0; i < filesAmount; i++) {
+                var reader = new FileReader();
+
+                reader.onload = function(event) {
+                    $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                }
+
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+
+    };
+
+    $('#gallery-photo-add').on('change', function() {
+        imagesPreview(this, 'div.gallery');
+    });
+});
+</script>
+</div>
       </div>
     </div>
 
@@ -325,54 +367,59 @@ input[type=submit]:hover {
 <script src="js/scripts.js"></script>
 
     <?php
-        $status = $statusMsg = '';
-        if(isset($_POST["submit"])){
-            if(!empty($_FILES['image']['name'])) {
-                // Get the file info
-                $fileName = basename($_FILES['image']['name']);
-                $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                $name = $_POST['name'];
-                $category = $_POST['category'];
-                $price = $_POST['price'];
-                $quantity = $_POST['quantity'];
-                $description = $_POST['description'];
-                $rating = $_POST['rating'];
-                $meetup = $_POST['meetup'];
-                $bid_status = $_POST['bid_status'];
-                $condition = $_POST['condition'];
-                $time_limit = $_POST['time_limit'];
-                $start_bid = $_POST['start_bid'];
-                $status = 'error';
-
-                // Allow certain file formats
-                $allowTypes = array('jpg','png','jpeg','gif');
-                if(in_array($fileType, $allowTypes)){
-                    $image = $_FILES['image']['tmp_name'];
-                    $imgContent = addslashes(file_get_contents($image));
-
-                //Select from Database 
-                $select = "SELECT * FROM NEW_PRODUCT WHERE 1";
-                // Insert image content into database
-                $insert = $conn->query("INSERT into NEW_PRODUCT(prd_name,prd_category, prd_price, prd_qty, prd_desc, prd_rate, prd_meetup, prd_bidstat, prd_img) VALUES ('$name', '$category', '$price', '$quantity', '$description', '$rating', '$meetup', '$bid_status', '$imgContent')");
-                if($insert){
-                        $status = 'success';
-                        $statusMsg = "File uploaded successfully.";
-                    } else {
-                       $statusMsg = "File upload failed. Please try again."; 
-                    }
-                } else { 
-                    $statusMsg = "Only JPG, JPEG, PNG, & GIF files are allowed.";
-                }
-            } else {
-                $statusMsg = "Please select a file.";
-            }
-            echo $statusMsg;
-            header("location: store.php");
-            exit;
-        }
-
         
+        if(isset($_POST['submit'])){ 
+            // File upload configuration 
+            $targetDir = "uploads/"; 
+            $allowTypes = array('jpg','png','jpeg','gif'); 
+             
+            $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = ''; 
+            $fileNames = array_filter($_FILES['files']['name']); 
+            if(!empty($fileNames)){ 
+                foreach($_FILES['files']['name'] as $key=>$val){ 
+                    // File upload path 
+                    $fileName = basename($_FILES['files']['name'][$key]); 
+                    $targetFilePath = $targetDir . $fileName; 
+                     
+                    // Check whether file type is valid 
+                    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION); 
+                    if(in_array($fileType, $allowTypes)){ 
+                        // Upload file to server 
+                        if(move_uploaded_file($_FILES["files"]["tmp_name"][$key], $targetFilePath)){ 
+                            // Image db insert sql 
+                            $insertValuesSQL .= "('".$fileName."', NOW()),"; 
+                        }else{ 
+                            $errorUpload .= $_FILES['files']['name'][$key].' | '; 
+                        } 
+                    }else{ 
+                        $errorUploadType .= $_FILES['files']['name'][$key].' | '; 
+                    } 
+                } 
+                 
+                // Error message 
+                $errorUpload = !empty($errorUpload)?'Upload Error: '.trim($errorUpload, ' | '):''; 
+                $errorUploadType = !empty($errorUploadType)?'File Type Error: '.trim($errorUploadType, ' | '):''; 
+                $errorMsg = !empty($errorUpload)?'<br/>'.$errorUpload.'<br/>'.$errorUploadType:'<br/>'.$errorUploadType; 
+                 
+                if(!empty($insertValuesSQL)){ 
+                    //Select from Database 
+                $select = "SELECT * FROM product_images WHERE 1";
+                    $insertValuesSQL = trim($insertValuesSQL, ','); 
+                    // Insert image file name into database 
+                    $insert = $conn->query("INSERT INTO product_images(img) VALUES $insertValuesSQL"); 
+                    if($insert){ 
+                        $statusMsg = "Files are uploaded successfully.".$errorMsg; 
+                    }else{ 
+                        $statusMsg = "Sorry, there was an error uploading your file."; 
+                    } 
+                }else{ 
+                    $statusMsg = "Upload failed! ".$errorMsg; 
+                } 
+            }else{ 
+                $statusMsg = 'Please select a file to upload.'; 
+            } 
+        } 
+         
     ?>
 </body>
 </html>
