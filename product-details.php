@@ -4,7 +4,7 @@
 
     $id = $_GET['product'];
 
-    $result = $conn->query("SELECT * FROM PRODUCT WHERE id = '$id'");
+    $result = $conn->query("SELECT * FROM PRODUCT WHERE prd_id = '$id'");
     $row = $result->fetch(PDO::FETCH_ASSOC);
 
 
@@ -13,16 +13,16 @@
         $productID = intval($_POST['product_id']);
         $productQty = intval($_POST['product_qty']);
         
-        $result = $conn->query("SELECT * FROM PRODUCT WHERE id = '$id'");
+        $result = $conn->query("SELECT * FROM PRODUCT WHERE prd_id = '$id'");
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        $calculateTotalPrice = number_format($productQty * $row['product_Price'],2);
+        $calculateTotalPrice = number_format($productQty * $row['prd_price'],2);
         
         $cartArray = [
             'product_id' =>$productID,
             'qty' => $productQty,
-            'product_name' =>$row['product_Name'],
-            'product_price' => $row['product_Price'],
+            'product_name' =>$row['prd_name'],
+            'product_price' => $row['prd_price'],
             'total_price' => $calculateTotalPrice,
             'product_img' =>$row['img']
         ];
@@ -101,7 +101,7 @@
                         <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>                
                     </a>
                     </form>
-                    
+
                 </div>
             </div>
         </nav>
@@ -111,7 +111,7 @@
                 <div class="col-md-12">
                     <div class="alert alert-success alert-dismissible">
                          <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['product_Name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
+                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['prd_name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
                     </div>
                 </div>
             </div>
@@ -123,16 +123,16 @@
                     <div class="col-md-6"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['img']); ?>"></div>
                     <div class="col-md-6">
                         <div class="small mb-1">SKU: BST-498</div>
-                        <h1 class="display-5 fw-bolder"><?php echo $row['product_Name']?></h1>
+                        <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
                             <span class="text-decoration-line-through">$45.00</span>
-                            <span>$<?php echo $row['product_Price']?></span>
+                            <span>$<?php echo $row['prd_price']?></span>
                         </div>
-                        <h9 class="lead"><?php echo $row['product_Desc']?></h9>
+                        <h9 class="lead"><?php echo $row['prd_desc']?></h9>
                         <form method="POST">
                         <div class="d-flex" >
                             <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
-                            <input type="hidden" name="product_id" value="<?php echo $row['id']?>">
+                            <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
                             <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
                                 <i class="bi-cart-fill me-1"></i>
                                 Add to cart
