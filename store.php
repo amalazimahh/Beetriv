@@ -321,10 +321,10 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
               <div class="content">
                   <form method="POST"></form>
               <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['img']); ?>">
-              <input type="hidden" name="ide" value=<?php echo $product['id'];?> >
-               <h3><?php echo $product['product_Name']; ?></h3>
-              <h6>$<?php echo $product['product_Price']; ?></h6>
-              <a href="product-details.php?product=<?php echo $product['id'];?>">View</a>
+              <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
+               <h3><?php echo $product['prd_name']; ?></h3>
+              <h6>$<?php echo $product['prd_price']; ?></h6>
+              <a href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
                    <button class="buy-prd">Add to cart</button>
                </form>  
                  </div>
