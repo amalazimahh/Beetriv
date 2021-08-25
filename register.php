@@ -47,7 +47,7 @@ require 'vendor/autoload.php';
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-warning">
 
     <div class="container">
 
@@ -86,8 +86,9 @@ require 'vendor/autoload.php';
                                              placeholder="IC Colour" required/>
                                             <datalist id="ic2">
                                                 <option value = "Yellow">
-                                                <option value = "Purple">
+                                                <option value = "Red">
                                                 <option value = "Green">
+                                                <option value = "Purple">   
                                             </datalist>
                                     </div>
                                     </div>
@@ -136,10 +137,10 @@ require 'vendor/autoload.php';
                                 <!-- checkbox -->
                                 <input id="checkbox" type="checkbox" style="float: left; margin-top: 5px;>" required/>
                                 <div style="margin-left: 25px; margin-top: 15px; margin-bottom: 15px;">
-                                I agree to Beetriv Terms and Conditions
+                                I agree to <a class="text-warning" href="#">Beetriv Terms and Conditions</a>
                                 </div>
                                 <!-- Register Account -->
-                                <input type="submit" class="btn btn-primary btn-user btn-block" name="submit" value="Register Account">
+                                <input type="submit" class="btn btn-secondary btn-user btn-block" name="submit" value="Register Account">
                                    
                                 
                                 <!-- <hr>
@@ -155,7 +156,7 @@ require 'vendor/autoload.php';
                                 <a class="small" href="forgot-password.html">Forgot Password?</a>
                             </div> -->
                             <div class="text-center">
-                                <a class="small" href="login.php">Already have an account? Login!</a>
+                                <a class="small text-secondary" href="login.php">Already have an account? Login!</a>
                             </div>
                         </div>
                     </div>
