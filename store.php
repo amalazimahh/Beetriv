@@ -320,7 +320,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                <?php foreach($row as $product){ ?>
               <div class="content">
                   <form method="POST"></form>
-              <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['img']); ?>">
+              <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
               <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
                <h3><?php echo $product['prd_name']; ?></h3>
               <h6>$<?php echo $product['prd_price']; ?></h6>
