@@ -1,8 +1,10 @@
 <?php 
     session_start();
     require_once "connection.php";
-    
-    $result =$conn->query("SELECT * FROM PRODUCT");
+
+    $id = $_GET['product'];
+
+    $result = $conn->query("SELECT * FROM PRODUCT WHERE id = '$id'");
     $row = $result->fetch(PDO::FETCH_ASSOC);
 
 
@@ -141,7 +143,7 @@
                         <form method="POST">
                         <div class="d-flex" >
                             <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
-                            <input type="hidden" name="product_id" value="<?php echo $getProductData['id']?>">
+                            <input type="hidden" name="product_id" value="<?php echo $row['id']?>">
                             <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
                                 <i class="bi-cart-fill me-1"></i>
                                 Add to cart
