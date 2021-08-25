@@ -50,7 +50,6 @@
                     </ul>
                     <form class="d-flex">
                     <a href="cart.php">
-                        
                         <i class="bi-cart-fill me-1"></i>
                         <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>                
                     </a>
@@ -85,9 +84,9 @@
                 <?php 
                     $totalCounter = 0;
                     $itemCounter = 0;
-                    foreach($_SESSION['cart_items'] as $key => $item){
+                    foreach($_SESSION['cart_items'] as $key => $item){ 
 
-                     $imgUrl = PRODUCT_IMG_URL.str_replace(' ','-',strtolower($item['product_name']))."/".$item['product_img'];   
+                    $img = $item['product_img'];
                     
                     $total = $item['product_price'] * $item['qty'];
                     $totalCounter+= $total;
@@ -95,7 +94,8 @@
                     ?>
                     <tr>
                         <td>
-                            <img src="<?php echo $imgUrl; ?>" class="rounded img-thumbnail mr-2" style="width:60px;"><?php echo $item['product_name'];?>
+                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
+                            <?php echo $item['product_name'];?>
                             
                             <a href="cart.php?action=remove&item=<?php echo $key?>" class="text-danger">
                                 <i class="bi bi-trash-fill"></i>
