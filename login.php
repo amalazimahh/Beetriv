@@ -28,7 +28,7 @@ require_once "connection.php";
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-warning">
 
     <div class="container">
 
@@ -51,7 +51,7 @@ require_once "connection.php";
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user" name="email"
                                                 id="exampleInputEmail" aria-describedby="emailHelp" 
-                                                placeholder="Enter Email Address...">
+                                                placeholder="Email Address">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user" name= "password"
@@ -64,7 +64,7 @@ require_once "connection.php";
                                                     Me</label>
                                             </div>
                                         </div>
-                                        <input type="submit" class="btn btn-primary btn-user btn-block" name="login" value="Log In">
+                                        <input type="submit" class="btn btn-secondary btn-user btn-block" name="login" value="Log In">
                                         <!-- <hr> -->
                                         <!-- <a href="index.html" class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i> Login with Google
@@ -75,10 +75,10 @@ require_once "connection.php";
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="forgot-password.php">Forgot Password?</a>
+                                        <a class="small text-primary" href="forgot-password.php">Forgot Password?</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" href="register.php">Create an Account!</a>
+                                        <a class="small text-primary" href="register.php">Create an Account!</a>
                                     </div>
                                 </div>
                             </div>

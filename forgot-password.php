@@ -84,7 +84,7 @@ if(isset($_POST['email'])){
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-warning">
 
     <div class="container">
 
@@ -121,7 +121,7 @@ if(isset($_POST['email'])){
                                                 
                                         
                                         <!-- Submit button -->
-                                        <input type="submit" class="btn btn-primary btn-user btn-block" name="reset-password-submit" value="SEND">
+                                        <input type="submit" class="btn btn-secondary btn-user btn-block" name="reset-password-submit" value="SEND">
                                         </form>
                                     </form>
                                     <hr>
