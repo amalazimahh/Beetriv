@@ -13,28 +13,18 @@
         $productID = intval($_POST['product_id']);
         $productQty = intval($_POST['product_qty']);
         
-        $sql = "SELECT p.*,pdi.img from product p
-            INNER JOIN product_images pdi ON pdi.product_id = p.id WHERE pdi.is_featured =:featured AND p.id =:productID";
+        $result = $conn->query("SELECT * FROM PRODUCT WHERE id = '$id'");
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        $prepare = $conn->prepare($sql);
-        
-        $params = [
-                ':featured'=>1,
-                ':productID' =>$productID,
-            ];
-        
-        $prepare->execute($params);
-        $fetchProduct = $prepare->fetch(PDO::FETCH_ASSOC);
-
-        $calculateTotalPrice = number_format($productQty * $fetchProduct['product_Price'],2);
+        $calculateTotalPrice = number_format($productQty * $row['product_Price'],2);
         
         $cartArray = [
             'product_id' =>$productID,
             'qty' => $productQty,
-            'product_name' =>$fetchProduct['product_Name'],
-            'product_price' => $fetchProduct['product_Price'],
+            'product_name' =>$row['product_Name'],
+            'product_price' => $row['product_Price'],
             'total_price' => $calculateTotalPrice,
-            'product_img' =>$fetchProduct['img']
+            'product_img' =>$row['img']
         ];
         
         if(isset($_SESSION['cart_items']) && !empty($_SESSION['cart_items']))
@@ -106,13 +96,12 @@
                         </li>
                     </ul>
                     <form class="d-flex">
-                    <div class="btn btn-outline-dark">
-                        <a href="cart.php">
-                            <i class="bi-cart-fill me-1"></i>
-                            <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>                     
-                        </a>
-                        </div>
+                    <a href="cart.php">
+                        <i class="bi-cart-fill me-1"></i>
+                        <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>                
+                    </a>
                     </form>
+                    
                 </div>
             </div>
         </nav>
@@ -122,7 +111,7 @@
                 <div class="col-md-12">
                     <div class="alert alert-success alert-dismissible">
                          <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <img src="<?php echo $imgUrl ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['product_Name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
+                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['product_Name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
                     </div>
                 </div>
             </div>
