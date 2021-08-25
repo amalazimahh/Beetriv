@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once "connection.php";
 ?>
@@ -137,13 +138,13 @@ input::-webkit-inner-spin-button {
 <div class="prd-container">
 <div class="add-prd"><h3>New Item Details</h3></div>
 <hr>
-  <form action="addproduct.php" method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data">
     <div class="row">
       <div class="col-25">
         <label for="name">Product Name</label>
       </div>
       <div class="col-75">
-        <input type="text" name="name">
+        <input type="text" name="prd_name">
       </div>
     </div>
     <div class="row">
@@ -164,7 +165,7 @@ input::-webkit-inner-spin-button {
         <label for="price">Product Price</label>
       </div>
       <div class="col-75">
-        <input type="number" name="price" step="any">
+        <input type="number" name="prd_price" step="any">
       </div>
     </div>
     <div class="row">
@@ -172,7 +173,7 @@ input::-webkit-inner-spin-button {
         <label for="quantity">Product Quantity</label>
       </div>
       <div class="col-75">
-        <input type="number" name="quantity">
+        <input type="number" name="prd_qty">
       </div>
     </div>
     <div class="row">
@@ -180,9 +181,9 @@ input::-webkit-inner-spin-button {
         <label for="condition">Product Condition</label>
       </div>
       <div class="col-75">
-        <input type="radio" name="condition" value="New">
+        <input type="radio" name="prd_condition" value="New"/>
     <label for="New">New</label>
-    <input type="radio" name="condition" value="Used">
+    <input type="radio" name="prd_condition" value="Used">
     <label for="Used">Used</label>
       </div>
     </div>
@@ -191,23 +192,23 @@ input::-webkit-inner-spin-button {
         <label for="description">Product Description</label>
       </div>
       <div class="col-75">
-        <textarea name="description" placeholder="Write something.." style="height:200px"></textarea>
+        <textarea name="prd_desc" placeholder="Write something.." style="height:200px"></textarea>
       </div>
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="rating">Product Numeric Rating</label>
+        <label for="prd_rating">Product Numeric Rating</label>
       </div>
       <div class="col-75">
-        <input type="number" name="rating">
+        <input type="number" name="prd_rating">
       </div>
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="location">Meet-up Location</label>
+        <label for="prd_location">Meet-up Location</label>
       </div>
       <div class="col-75">
-        <input type="text" name="location">
+        <input type="text" name="prd_location">
       </div>
     </div>
 
@@ -227,10 +228,10 @@ input::-webkit-inner-spin-button {
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="time_limit">Bid Time Limit</label>
+        <label for="time_upload">Bid Time Limit</label>
       </div>
       <div class="col-75">
-        <input type="text" name="time_limit" id="time_limit">
+        <input type="text" name="time_upload" id="time_limit">
       </div>
     </div>
     <div class="row">
@@ -251,7 +252,7 @@ input::-webkit-inner-spin-button {
         <label for="image">Select Image File(s)</label>
       </div>
       <div class="col-75">
-        <input type="file" name="image"><br>
+        <input type="file" name="prd_img"><br>
         <div class="gallery">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
@@ -294,7 +295,7 @@ input::-webkit-inner-spin-button {
     </div>
     
     <div class="row">
-      <input type="submit" name="submit" value="Submit">
+      <input type="submit" name="add_product" value="Submit">
     </div>
   </form>
 </div>
@@ -415,44 +416,53 @@ input::-webkit-inner-spin-button {
         // }
 
         $status = $statusMsg = '';
-        if(isset($_POST["submit"])){
-            if(!empty($_FILES['image']['name'])) {
+        if(isset($_POST["add_product"])){
+            if(!empty($_FILES['prd_img']['name'])) {
                 // Get the file info
-                $fileName = basename($_FILES['image']['name']);
+                $fileName = basename($_FILES['prd_img']['name']);
                 $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
-                $name = $_POST['name'];
-                $category = $_POST['category'];
-                $price = $_POST['price'];
-                $quantity = $_POST['quantity'];
-                $condition = $_POST['condition'];
-                $description = $_POST['description'];
-                $rating = $_POST['rating'];
-                $location = $_POST['location'];
-                $bid_status = $_POST['bid_status'];
-                $time_limit = $_POST['time_limit'];
-                $start_bid = $_POST['start_bid'];
-                $status = 'error';
+                $name         = $_POST['prd_name'];
+                $price        = $_POST['prd_price'];
+                $qty          = $_POST['prd_qty'];
+                $condition    = $_POST['prd_condition'];
+                $desc         = $_POST['prd_desc'];
+                $rating       = $_POST['prd_rating'];
+                $location     = $_POST['prd_location'];
+                $bid_status   = $_POST['bid_status'];
+                $time_upload  = $_POST['time_upload'];
 
-                //Allow certain file formats
+                // Allow certain file formats
                 $allowTypes = array('jpg','png','jpeg','gif');
                 if(in_array($fileType, $allowTypes)){
-                    $image = $_FILES['image']['tmp_name'];
+                    $image = $_FILES['prd_img']['tmp_name'];
                     $imgContent = addslashes(file_get_contents($image));
                     
 
                 //Select from Database 
-                $select = "SELECT * FROM products WHERE 1";
-                //$insert = "INSERT INTO PRODUCT(prd_name, prd_price, prd_img) VALUES (':name', ':price', ':imgContent')";
+                $select = "SELECT * FROM PRODUCT WHERE 1";
+                //$insert = "INSERT INTO PRODUCT(prd_name, prd_price, prd_img) VALUES (':name', ':price', ':imgContent')"
 
                 // Insert image content into database
-                $insert =$conn->query("INSERT INTO products (prd_name, prd_price, prd_qty, prd_cond, prd_cond, prd_desc, prd_rating, prd_location, bid_status, prd_img) VALUES ('$name', '$price', '$quantity', '$condition', '$description', '$rating', '$location', '$bid_status, '$imgContent')");
+                $insert = $conn->query ("INSERT INTO product (prd_name,prd_price,prd_qty,prd_condition,prd_desc,prd_rating,prd_location,bid_status,time_upload,prd_img) 
+                VALUES ('$name','$price','$qty','$condition','$desc','$rating','$location','$bid_status','$time_upload', '$imgContent')");
+
+                //$insertimage = $conn->query("INSERT INTO product_image (prd_imgfile)VALUES ('$image')");
+
+
+                // $insert =$conn->query("INSERT INTO product (product_Name, product_Desc,product_Price, product_Category, product_Quantity,product_Condition, product_Rate, bid_Status, meetup_location, bid_starting_price, bid_maximum_price, time_limit) 
+                // VALUES ('$name', '$description', '$price', '$category', '$quantity', '$condition', '$rating', '$bid_status, '$location', '$start_bid', '$time_limit')");
+                // , '$imgContent'
                
                 if($insert){
-                        $status  = 'success';
-                        $statusMsg = "File uploaded successfully.";
+                  echo '<script>updated</script>';
+                }else{
+                  echo '<script>failed</script>';
+                }
+                        $status  = '<script>updated</script>';
+                        $statusMsg = "<script>updated</script>";
                     } else {
-                       $statusMsg = "File upload failed. Please try again."; 
+                       $statusMsg = "<script>failed</script>"; 
                     }
                 } else { 
                     $statusMsg = "Only JPG, JPEG, PNG, & GIF files are allowed.";
@@ -462,7 +472,7 @@ input::-webkit-inner-spin-button {
             }
 
             echo $statusMsg;
-        }
+          
         
     ?>
 </body>
