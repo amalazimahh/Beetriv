@@ -219,11 +219,10 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                         </li>
                     </ul>
                     <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>
+                    <a href="cart.php">
+                        <i class="bi-cart-fill me-1"></i>
+                        <?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?>                
+                    </a>
                     </form>
                 </div>
             </div>
