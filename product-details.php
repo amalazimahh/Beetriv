@@ -13,7 +13,7 @@
         $productID = intval($_POST['product_id']);
         $productQty = intval($_POST['product_qty']);
         
-        $result = $conn->query("SELECT * FROM PRODUCT WHERE prd_id = '$id'");
+        $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
         $calculateTotalPrice = number_format($productQty * $row['prd_price'],2);
@@ -24,7 +24,7 @@
             'product_name' =>$row['prd_name'],
             'product_price' => $row['prd_price'],
             'total_price' => $calculateTotalPrice,
-            'product_img' =>$row['img']
+            'product_img' =>$row['prd_img']
         ];
         
         if(isset($_SESSION['cart_items']) && !empty($_SESSION['cart_items']))
@@ -111,7 +111,7 @@
                 <div class="col-md-12">
                     <div class="alert alert-success alert-dismissible">
                          <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['prd_name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
+                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['prd_name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
                     </div>
                 </div>
             </div>
