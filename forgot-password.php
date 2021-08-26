@@ -15,49 +15,73 @@ require 'vendor/autoload.php';
 
 
 <?php
-if(isset($_POST['email'])){
+
+if(isset($_POST['reset-password-submit'])){
+    // if(isset($_POST['email'])){
     
-    $emailTo = $_POST["email"];
-
-    $resetcode = uniqid(true);                                 // generate a unique 
-    $sql = $conn->query ("INSERT INTO resetpassword (resetcode, email) VALUES ('$resetcode','$emailTo')");
-    if(!$sql) {
-        exit("Error");
-    }
-
-    $mail = new PHPMailer(true);
-
-    try {
-        //Server settings
-        $mail->SMTPDebug = 0;                                   //Enable verbose debug output
-        $mail->isSMTP();                                        //Send using SMTP
-        $mail->Host       = "smtp.gmail.com";                   //Set the SMTP server to send through
-        $mail->SMTPAuth   = true;                               //Enable SMTP authentication
-        $mail->Username   = 'ayamketupat02@gmail.com';          //SMTP username
-        $mail->Password   = 'k4k5dpkk';                         //SMTP password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     //Enable implicit TLS encryption
-        $mail->Port       = 587;                                //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-        
-
-        //Recipients
-        $mail->setFrom('ayamketupat02@gmail.com', 'beetriv.com');
-        $mail->addAddress("$emailTo");                                             //Add a recipient 
+        $emailTo = $_POST['email'];
     
-        //Content
-        $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/create-new-password.php?resetcode=$resetcode"; //array containing info such as headers,paths and script locations, to create the link for specific email
-        $mail->isHTML(true);                                                       //Set email format to HTML
-        $mail->Subject = 'Here is the Link to reset password';
-        $mail->Body    = "This link is to reset your password on Beetriv website <a href='$url'>Click here to reset your password</a>";
-        
-        
-        $mail->send();
-        echo '<script>alert("Reset Password link sent to your email")</script>';
-	// header("Location: login.php");
-    } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    }
+        $resetcode = uniqid(true);                                 // generate a unique 
+        // $insert_code = 'INSERT INTO users resetcode VALUES :resetcode';
+        // $insertStmt = $conn->prepare($insert_code);
+        // $insertStmt->execute();
 
-    exit();
+        $update_code = "UPDATE users SET resetcode = '$resetcode' where email = '$emailTo' ";
+        $statement = $conn->prepare($update_code);
+        $statement->execute();
+
+        $check_email = "SELECT * FROM users WHERE email = '$emailTo' ";
+        $run = $conn->prepare($check_email);
+        $run->execute(); 
+        
+        $count = $run->rowCount();
+
+        if($count > 0){
+            $update_code = "UPDATE users SET resetcode = '$resetcode' where email = '$emailTo' ";
+            $statement = $conn->prepare($update_code);
+            $statement->execute();
+        } else {
+            echo "Failed";
+        }
+        // if(!$sql) {
+        //     exit("Error");
+        // }
+    
+        $mail = new PHPMailer(true);
+    
+        try {
+            //Server settings
+            $mail->SMTPDebug = 0;                                   //Enable verbose debug output
+            $mail->isSMTP();                                        //Send using SMTP
+            $mail->Host       = "smtp.gmail.com";                   //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                               //Enable SMTP authentication
+            $mail->Username   = 'ayamketupat02@gmail.com';          //SMTP username
+            $mail->Password   = 'k4k5dpkk';                         //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     //Enable implicit TLS encryption
+            $mail->Port       = 587;                                //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+            
+    
+            //Recipients
+            $mail->setFrom('ayamketupat02@gmail.com', 'beetriv.com');
+            $mail->addAddress("$emailTo");                                             //Add a recipient 
+        
+            //Content
+            $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/create-new-password.php?resetcode=$resetcode"; //array containing info such as headers,paths and script locations, to create the link for specific email
+            $mail->isHTML(true);                                                       //Set email format to  HTML
+            $mail->Subject = 'Here is the Link to reset password';
+            $mail->Body    = "This link is to reset your password on Beetriv website <a href='$url'>Click here to reset your password</a>";
+            
+            
+            $mail->send();
+            echo '<script>alert("Reset Password link sent to your email")</script>';
+
+        // header("Location: login.php");
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+    
+        exit();
+    //}
 }
 ?>
 <!DOCTYPE html>
@@ -104,14 +128,7 @@ if(isset($_POST['email'])){
                                         <!-- <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1> -->
                                         <p class="mb-4">Please enter your email address below and an email will be sent to reset your password.</p>
                                     </div>
-                                    <form method="post" class="user">
-                                        <!-- <div class="form-group">
-                                            <input type="text" name="username" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter your username....">  
-                                                </div> -->
-
-                                            <!-- Email -->
+                                    <form method="post" action="forgot-password.php" class="user">
                                             <div class="form-group">
                                             <input type="email" name="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
