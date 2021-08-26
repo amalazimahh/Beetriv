@@ -3,7 +3,7 @@ session_start();
 require_once "connection.php";
 
 // Get image data from database
-$result = "SELECT * FROM PRODUCT";
+$result = "SELECT * FROM product";
 $handle = $conn->prepare($result);
 $handle->execute();
 $row = $handle->fetchAll(PDO::FETCH_ASSOC);

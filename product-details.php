@@ -4,7 +4,7 @@
 
     $id = $_GET['product'];
 
-    $result = $conn->query("SELECT * FROM PRODUCT WHERE prd_id = '$id'");
+    $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
     $row = $result->fetch(PDO::FETCH_ASSOC);
 
 
