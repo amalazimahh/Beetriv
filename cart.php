@@ -143,7 +143,7 @@
         <div class="row">
             <div class="col-md-11">
 				<a href="checkout.php">
-					<button class="btn btn-primary btn-lg float-right">Checkout</button>
+					<button class="btn btn-warning btn-lg float-right">Checkout</button>
 				</a>
             </div>
         </div>

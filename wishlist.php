@@ -139,7 +139,7 @@
         </table>
         <div class="row">
             <div class="col-md-11">
-					<button class="btn btn-primary btn-lg float-right" name="wish_to_cart">Add to cart</button>
+					<button class="btn btn-warning btn-lg float-right" name="wish_to_cart">Add to cart</button>
 				</a>
             </div>
         </div>
