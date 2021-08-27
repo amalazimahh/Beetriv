@@ -57,6 +57,52 @@
 
     }
 
+else
+    if(isset($_POST['add_to_wishlist']) && $_POST['add_to_wishlist'] == 'add to wishlist')
+    {
+        $productID = intval($_POST['product_id']);
+        
+        $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        
+        $cartArray = [
+            'product_id'    =>$productID,
+            'product_name'  =>$row['prd_name'],
+            'product_price' =>$row['prd_price'],
+            'product_img'   =>$row['prd_img']
+        ];
+        
+        if(isset($_SESSION['wish_items']) && !empty($_SESSION['wish_items']))
+        {
+            $productIDs = [];
+            foreach($_SESSION['wish_items'] as $cartKey => $cartItem)
+            {
+                $productIDs[] = $cartItem['product_id'];
+                if($cartItem['product_id'] == $productID)
+                {
+                    // $_SESSION['wish_items'][$cartKey]['qty'] = $productQty;
+                    // $_SESSION['wish_items'][$cartKey]['total_price'] = $calculateTotalPrice;
+                    // break;
+                }
+            }
+
+            if(!in_array($productID,$productIDs))
+            {
+                $_SESSION['wish_items'][]= $cartArray;
+            }
+
+            $successMsgW = true;
+            
+        }
+        else
+        {
+            $_SESSION['wish_items'][]= $cartArray;
+            $successMsgW = true;
+        }
+
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -105,7 +151,8 @@
                         </li>
                     </ul>
                     <ul class="nav justify-content-end">
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php"><i class="bi bi-heart"></i></a></li>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
+                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
                         <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
@@ -116,12 +163,24 @@
         </nav>
         
         <!-- Product section-->
+        <!-- to cart -->
         <?php if(isset($successMsg) && $successMsg == true){?>
             <div class="row mt-3">
                 <div class="col-md-12">
                     <div class="alert alert-success alert-dismissible">
                          <button type="button" class="close" data-dismiss="alert">&times;</button>
                         <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['prd_name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
+                    </div>
+                </div>
+            </div>
+         <?php }?>
+            <!-- wishlist msg -->
+            <?php if(isset($successMsgW) && $successMsgW == true){?>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="alert alert-success alert-dismissible">
+                         <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <prd_img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>" class="rounded prd_img-thumbnail mr-2" style="width:40px;"><?php echo $row['prd_name']?> is added to wishlist. <a href="wishlist.php" class="alert-link">View Wishlist</a>
                     </div>
                 </div>
             </div>
@@ -146,6 +205,10 @@
                             <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
                                 <i class="bi-cart-fill me-1"></i>
                                 Add to cart
+                            </button>
+                            <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_wishlist" value="add to wishlist">
+                                <i class="bi-bookmark-heart-fill"></i>
+                                Wishlist
                             </button>
                         </div>
                         </form>
