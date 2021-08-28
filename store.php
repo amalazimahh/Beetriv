@@ -203,7 +203,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link" aria-current="page" href="store.php">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -349,7 +349,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-xs-6 col-md-3">
                     <h6>CORPORATE</h6>
                     <ul class="footer-links">
-                        <li><a href="footer/about.php">About Beetriv</a></li>
+                        <li><a href="about.php">About Beetriv</a></li>
                         <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
                         <li><a href="footer/termsco.php">Terms and Conditions</a></li>
                     </ul>
