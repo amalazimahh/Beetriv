@@ -163,7 +163,6 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
       border-bottom-left-radius: 10px;
       }
       .buy-prd{
-      background-color: #fae29c;
       font-size: 20px;
       }
 
@@ -184,9 +183,6 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
       }
       }
 
-      .product a{
-          color: #bda55a;
-      }
         </style>
         <title>Beetriv</title>
         <!-- Favicon-->
@@ -230,9 +226,10 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                     <ul class="nav justify-content-end">
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
                     <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
                     <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
                     </a></li>
                     </ul>
                 </div>
@@ -335,8 +332,8 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
               <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
                <h3><?php echo $product['prd_name']; ?></h3>
               <h6>$<?php echo $product['prd_price']; ?></h6>
-              <a href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
-                   <button class="buy-prd">Add to cart</button>
+              <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
+                   <button class="buy-prd btn-warning">Add to cart</button>
                </form>  
                  </div>
                 <?php } ?>

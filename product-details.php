@@ -153,9 +153,10 @@ else
                     <ul class="nav justify-content-end">
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
                     <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
-                        <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
+                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
                     </a></li>
                     </ul>
                 </div>
@@ -194,12 +195,12 @@ else
                         <div class="small mb-1">SKU: BST-498</div>
                         <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
-                            <span class="text-decoration-line-through">$45.00</span>
                             <span>$<?php echo $row['prd_price']?></span>
                         </div>
                         <h9 class="lead"><?php echo $row['prd_desc']?></h9>
                         <form method="POST">
                         <div class="d-flex" >
+                        <div class="large col-2">Quantity</div>
                             <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
                             <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
                             <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
