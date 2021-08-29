@@ -163,6 +163,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
       border-bottom-left-radius: 10px;
       }
       .buy-prd{
+      background-color: #fae29c;
       font-size: 20px;
       }
 
@@ -183,6 +184,10 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
       }
       }
 
+      .product a{
+          color: #bda55a;
+      }
+
         </style>
         <title>Beetriv</title>
         <!-- Favicon-->
@@ -192,6 +197,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         <!-- Search bar -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <link rel="stylesheet" href="css/about.css">
 
     </head>
     <body>
@@ -226,9 +232,9 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                     <ul class="nav justify-content-end">
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
                     <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
                     <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
                     </a></li>
                     </ul>
@@ -236,110 +242,97 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </nav>
 
-
-        <div class="slideshow-container">
-
-        <div class="mySlides fade">
-        <img src="img/store/delivery.png" style="width:100%">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="img/store/summer.png" style="width:100%">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="img/store/collab.png" style="width:100%">
-        </div>
-
-        </div>
-        <br>
-
-        <div style="text-align:center">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        </div>
-
-        <script>
-        var slideIndex = 0;
-        showSlides();
-
-        function showSlides() {
-        var i;
-        var slides = document.getElementsByClassName("mySlides");
-        var dots = document.getElementsByClassName("dot");
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-        }
-        slideIndex++;
-        if (slideIndex > slides.length) {slideIndex = 1}
-        for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-        slides[slideIndex-1].style.display = "block";
-        dots[slideIndex-1].className += " active";
-        setTimeout(showSlides, 2000); // Change image every 2 seconds
-        }
-        </script>
-
-
-        <div class="container">
-    <div class="row">
-        <div class="col-xs-8 col-xs-offset-2">
-		    <div class="input-group">
-                <div class="input-group-btn search-panel">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    	<span id="search_concept">Filter by</span> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#contains">Contains</a></li>
-                      <li><a href="#its_equal">It's equal</a></li>
-                      <li><a href="#greather_than">Greather than ></a></li>
-                      <li><a href="#less_than">Less than < </a></li>
-                      <li class="divider"></li>
-                      <li><a href="#all">Anything</a></li>
-                    </ul>
+        <!-- header -->
+        <div class="page-header">
+            <div class="container">
+                    <div class="col-12">
+                        <h2>About Us</h2>
+                    </div>
+                    <div class="col-12">
+                        <a href="store.php">Home</a>
+                        <a href="about.php">About Us</a>
+                        <div class="about">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-lg-5 col-md-6">
+                                    <div class="about-img">
+                                        <img src="img/about.jpg" alt="Image">
+                                        </div>
+                                        </div>
+                                            <!-- Content -->
+                                            <div class="col-lg-5 col-md-5">
+                                            <div class="section-header text-left">
+                                            <h2>Beetriv</h2>
+                                            </div>
+                                            <div class="about-text">
+                                            <p>Beetriv is a marketplace in Brunei Darussalam that allows users to sell and buy as easy as taking a photo and as simple as chatting.</p>
+                                            <p>Beetriv has a diverse range of products across a variety of categories such as fashion, home and living,cars,gadgets as well as lifestyle.</p>
+                                            <a class="btn" href="">Learn More</a>
+                                        </div>               
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
                 </div>
-                <input type="hidden" name="search_param" value="all" id="search_param">
-                <input type="text" class="form-control" name="x" placeholder="Search item...">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-                </span>
             </div>
-        </div>
-	</div>
-</div>
-        <script>
-        $(document).ready(function(e){
-    $('.search-panel .dropdown-menu').find('a').click(function(e) {
-		e.preventDefault();
-		var param = $(this).attr("href").replace("#","");
-		var concept = $(this).text();
-		$('.search-panel span#search_concept').text(concept);
-		$('.input-group #search_param').val(param);
-	});
-});
-        </script>
 
-        <!-- Section-->
-        <section class="py-5">
-        <div class="prd-div"><h3>Latest Added Items</h3></div>
-           <div class="product">
-               <?php foreach($row as $product){ ?>
-              <div class="content">
-                  <form method="POST"></form>
-              <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
-              <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
-               <h3><?php echo $product['prd_name']; ?></h3>
-              <h6>$<?php echo $product['prd_price']; ?></h6>
-              <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
-                   <button class="buy-prd btn-warning">Add to cart</button>
-               </form>  
-                 </div>
-                <?php } ?>
-               </div>
+            <!-- Beetriv Member -->
+            <div class="team">
+                        <div class="container">
+                            <div class="section-header text-center">
+                                <p>Introducing</p>
+                                <h2>Beetriv Member</h2>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="team-item">
+                                        <div class="team-img">
+                                            <img src="img/team-1.jpg" alt="Team Image">
+                                        </div>
+                                        <div class="team-text">
+                                            <h2>Azimah</h2>
+                                            <p>Leader</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="team-item">
+                                        <div class="team-img ">
+                                            <img src="img/team-2.jpg" alt="Team Image">
+                                        </div>
+                                        <div class="team-text">
+                                            <h2>Afiqah</h2>
+                                            <p>Master Web Developer</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="team-item">
+                                        <div class="team-img">
+                                            <img src="img/team-3.jpg" alt="Team Image">
+                                        </div>
+                                        <div class="team-text">
+                                            <h2>Yusnadi</h2>
+                                            <p>Expert Web Developer</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="team-item">
+                                        <div class="team-img">
+                                            <img src="img/team-4.jpg" alt="Team Image">
+                                        </div>
+                                        <div class="team-text">
+                                            <h2>Haziq</h2>
+                                            <p>Professional Web Developer</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
     </div>
-        </section>
         <!-- Footer-->
         <footer class="site-footer">
 

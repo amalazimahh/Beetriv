@@ -1,108 +1,15 @@
 <?php 
     session_start();
-    require_once "connection.php";
+    require_once('connection.php');
+  
 
-    $id = $_GET['product'];
-
-    $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-
-
-    if(isset($_POST['add_to_cart']) && $_POST['add_to_cart'] == 'add to cart')
+    if(isset($_GET['action'],$_GET['item']) && $_GET['action'] == 'remove')
     {
-        $productID = intval($_POST['product_id']);
-        $productQty = intval($_POST['product_qty']);
-        
-        $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-
-        $calculateTotalPrice = number_format($productQty * $row['prd_price'],2);
-        
-        $cartArray = [
-            'product_id' =>$productID,
-            'qty' => $productQty,
-            'product_name' =>$row['prd_name'],
-            'product_price' => $row['prd_price'],
-            'total_price' => $calculateTotalPrice,
-            'product_img' =>$row['prd_img']
-        ];
-        
-        if(isset($_SESSION['cart_items']) && !empty($_SESSION['cart_items']))
-        {
-            $productIDs = [];
-            foreach($_SESSION['cart_items'] as $cartKey => $cartItem)
-            {
-                $productIDs[] = $cartItem['product_id'];
-                if($cartItem['product_id'] == $productID)
-                {
-                    $_SESSION['cart_items'][$cartKey]['qty'] = $productQty;
-                    $_SESSION['cart_items'][$cartKey]['total_price'] = $calculateTotalPrice;
-                    break;
-                }
-            }
-
-            if(!in_array($productID,$productIDs))
-            {
-                $_SESSION['cart_items'][]= $cartArray;
-            }
-
-            $successMsg = true;
-            
-        }
-        else
-        {
-            $_SESSION['cart_items'][]= $cartArray;
-            $successMsg = true;
-        }
-
+        unset($_SESSION['wish_items'][$_GET['item']]);
+        header('location:wishlist.php');
+        exit();
     }
-
-else
-    if(isset($_POST['add_to_wishlist']) && $_POST['add_to_wishlist'] == 'add to wishlist')
-    {
-        $productID = intval($_POST['product_id']);
-        
-        $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-
-        
-        $cartArray = [
-            'product_id'    =>$productID,
-            'product_name'  =>$row['prd_name'],
-            'product_price' =>$row['prd_price'],
-            'product_img'   =>$row['prd_img']
-        ];
-        
-        if(isset($_SESSION['wish_items']) && !empty($_SESSION['wish_items']))
-        {
-            $productIDs = [];
-            foreach($_SESSION['wish_items'] as $cartKey => $cartItem)
-            {
-                $productIDs[] = $cartItem['product_id'];
-                if($cartItem['product_id'] == $productID)
-                {
-                    // $_SESSION['wish_items'][$cartKey]['qty'] = $productQty;
-                    // $_SESSION['wish_items'][$cartKey]['total_price'] = $calculateTotalPrice;
-                    // break;
-                }
-            }
-
-            if(!in_array($productID,$productIDs))
-            {
-                $_SESSION['wish_items'][]= $cartArray;
-            }
-
-            $successMsgW = true;
-            
-        }
-        else
-        {
-            $_SESSION['wish_items'][]= $cartArray;
-            $successMsgW = true;
-        }
-
-    }
-
+	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -164,59 +71,90 @@ else
         </nav>
         
         <!-- Product section-->
-        <!-- to cart -->
-        <?php if(isset($successMsg) && $successMsg == true){?>
-            <div class="row mt-3">
-                <div class="col-md-12">
-                    <div class="alert alert-success alert-dismissible">
-                         <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['prd_name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
-                    </div>
-                </div>
-            </div>
-         <?php }?>
-            <!-- wishlist msg -->
-            <?php if(isset($successMsgW) && $successMsgW == true){?>
-            <div class="row mt-3">
-                <div class="col-md-12">
-                    <div class="alert alert-success alert-dismissible">
-                         <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <prd_img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>" class="rounded prd_img-thumbnail mr-2" style="width:40px;"><?php echo $row['prd_name']?> is added to wishlist. <a href="wishlist.php" class="alert-link">View Wishlist</a>
-                    </div>
-                </div>
-            </div>
-         <?php }?>
+    <div class="row mt-3">
+     <div class="col-md-12">
+         <section class="container px-4 px-lg-5 my-5" >
+        <?php if(empty($_SESSION['wish_items'])){?>
+        <table class="table">
+            <tr>
+                <td>
+                    <p>Your wishlist is empty</p>
+                </td>
+            </tr>
+        </table>
+        <?php }?>
+        <?php if(isset($_SESSION['wish_items']) && count($_SESSION['wish_items']) > 0){?>
+        <table class="table">
+           <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <!-- <th>Quantity</th> -->
+                    <!-- <th>Total</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                    $totalCounter = 0;
+                    $itemCounter = 0;
+                    foreach($_SESSION['wish_items'] as $key => $item){ 
 
-        <section class="py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="col-md-6"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>"></div>
-                    <div class="col-md-6">
-                        <div class="small mb-1">SKU: BST-498</div>
-                        <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
-                        <div class="fs-5 mb-5">
-                            <span>$<?php echo $row['prd_price']?></span>
-                        </div>
-                        <h9 class="lead"><?php echo $row['prd_desc']?></h9>
-                        <form method="POST">
-                        <div class="d-flex" >
-                        <div class="large col-2">Quantity</div>
-                            <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
-                            <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
-                            <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
-                                <i class="bi-cart-fill me-1"></i>
-                                Add to cart
-                            </button>
-                            <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_wishlist" value="add to wishlist">
-                                <i class="bi-bookmark-heart-fill"></i>
-                                Wishlist
-                            </button>
-                        </div>
-                        </form>
-                    </div>
-                </div>
+                    $img = $item['product_img'];
+                    // $total = $item['product_price'] * $item['qty'];
+                    // $totalCounter+= $total;
+                    // $itemCounter+=$item['qty'];
+                    ?>
+                    <tr>
+                        <td>
+                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
+                            <?php echo $item['product_name'];?>
+                            
+                            <a href="wishlist.php?action=remove&item=<?php echo $key?>" class="text-danger">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+
+                        </td>
+                        <td>
+                            $<?php echo $item['product_price'];?>
+                        </td>
+                        <td>
+                            <!-- <?php echo $item['qty'];?> -->
+                        </td>
+                        <td>
+                            <!-- <?php echo $total;?> -->
+                        </td>
+                    </tr>
+                <?php }?>
+                <tr class="border-top border-bottom">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <strong>
+                            <?php 
+                                // echo ($itemCounter==1)?$itemCounter.' item':$itemCounter.' items'; ?>
+                        </strong>
+                    </td>
+                    <!-- <td><strong>$<?php echo $totalCounter;?></strong></td> -->
+            </tbody> 
+        </table>
+        <!-- <div class="row">
+            <div class="col-md-11">
+					<button class="btn btn-warning btn-lg float-right" name="wish_to_cart">Add to cart</button>
+				</a>
             </div>
+        </div> -->
+        
+            <?php }?>
         </section>
+
+        <!-- Add wish item to cart -->
+        <?php
+        if (isset($_POST['wish_to_cart'])){
+            
+
+        }
+?>
+     
         <!-- Related items section-->
         <section class="py-5 bg-light">
             <div class="container px-4 px-lg-5 mt-5">
