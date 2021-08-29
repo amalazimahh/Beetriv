@@ -69,21 +69,17 @@
         <div class="card mb-5 mb-lg-0">
           <div class="card-body">
             <h5 class="card-title text-muted text-uppercase text-center">Runner</h5>
-            <h6 class="card-price text-center">$0<span class="period">/month</span></h6>
+            <h2 class="card-price text-center">$0<span class="period">/month</span></h2>
             <hr>
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Single User</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>5GB Storage</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited Public Projects</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Community Access</li>
-              <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Unlimited
-                Private Projects</li>
-              <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Dedicated
-                Phone Support</li>
-              <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Free Subdomain
-              </li>
-              <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Monthly Status
-                Reports</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Deliver Product(s)</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>5 Delivery Per Day</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Weekly Commission</li>
+                <p class="text-uppercase text-left"><strong>Requirements</strong></p>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Minimum Age of 18</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>A Valid Class 3 Driver's License</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Legal Related Documentation</li>
             </ul>
             <div class="d-grid">
               <a href="#" class="btn btn-warning text-uppercase">Upgrade</a>
@@ -97,19 +93,17 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title text-muted text-uppercase text-center">Vendor</h5>
-            <h6 class="card-price text-center">$49<span class="period">/month</span></h6>
+            <h2 class="card-price text-center">$10<span class="period">/month</span></h2>
             <hr>
             <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span><strong>Unlimited Users</strong>
-              </li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>150GB Storage</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited Public Projects</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Community Access</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited Private Projects</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Dedicated Phone Support</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span><strong>Unlimited</strong> Free
-                Subdomains</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Monthly Status Reports</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Single User</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Sell Product(s)</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Put Product(s) on Auction</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Monthly Statistical Reports</li>
+              <p class="text-uppercase text-left"><strong>Requirements</strong></p>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Minimum Age of 18</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Have a PayPal Account</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Legal Related Documentation</li>
             </ul>
             <div class="d-grid">
               <a href="#" class="btn btn-warning text-uppercase">Upgrade</a>
