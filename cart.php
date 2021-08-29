@@ -142,7 +142,7 @@
         </table>
         <div class="row">
             <div class="col-md-11">
-				<a href="checkout.php">
+				<a href="place-order.php">
 					<button class="btn btn-warning btn-lg float-right">Checkout</button>
 				</a>
             </div>
