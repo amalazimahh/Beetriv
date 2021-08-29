@@ -89,7 +89,7 @@
                 <tr>
                     <th>Product</th>
                     <th>Price</th>
-                    <th>Quantity</th>
+                    <!-- <th>Quantity</th> -->
                     <!-- <th>Total</th> -->
                 </tr>
             </thead>
@@ -137,12 +137,12 @@
                     <!-- <td><strong>$<?php echo $totalCounter;?></strong></td> -->
             </tbody> 
         </table>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-11">
 					<button class="btn btn-warning btn-lg float-right" name="wish_to_cart">Add to cart</button>
 				</a>
             </div>
-        </div>
+        </div> -->
         
             <?php }?>
         </section>

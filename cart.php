@@ -78,7 +78,7 @@
         <table class="table">
             <tr>
                 <td>
-                    <p>Your cart is emty</p>
+                    <p>Your cart is empty</p>
                 </td>
             </tr>
         </table>

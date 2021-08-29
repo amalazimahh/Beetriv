@@ -1,7 +1,40 @@
 <?php
 ob_start();
 session_start();
-require_once 'connection.php';
+require_once "connection.php";
+
+    //fetch email entered by user on forgot-pwd.php 
+    $email = $_SESSION['email'];
+    //echo $email;
+
+    if(isset($_POST['create-new-password'])){
+
+        $newpwd = $_POST['newpwd'];
+        $repeatpwd = $_POST['repeatpwd'];
+                                        
+        if ($newpwd === $repeatpwd){
+
+        //select all from users based from the email user entered
+        $check_code = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
+        $run = $conn->prepare($check_code);
+        $run->fetch(PDO::FETCH_ASSOC);
+                                        
+        if($run){
+        
+        //update user password based from the selection
+        $pdoQuery = "UPDATE users SET password='$newpwd' WHERE email='$email' ";
+        $pdoQuery_run = $conn->prepare($pdoQuery);
+        $pdoQuery_run->bindParam(':password', $newpwd);
+        $pdoQuery_run->bindParam(':email', $email);
+        $pdoQuery_run->execute();
+        header('location: login.php');
+        exit();
+
+        } else {
+        echo 'Error';
+        }
+    }
+}
 ?>              
 
 <!DOCTYPE html>
@@ -47,25 +80,27 @@ require_once 'connection.php';
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-2">Create New Password</h1>
                                     </div>
-                                    <form method="post" class="user">
+                                    <form action="create-new-password.php" method="post" class="user">
 
                                     <!-- Enter new password -->
                                         <div class="form-group">
-                                            <input type="password" name="newpassword" class="form-control form-control-user"
-                                                id="pwd"
+                                            <input type="password" name="newpwd" class="form-control form-control-user"
+                                                id="newpwd"
                                                 placeholder="Enter New Password..." required/>
 
                                                 <!-- repeat new password -->
                                                 <div class="form-group">
-                                                <input type="password" name="pwd-repeat" class="form-control form-control-user"
-                                                id="pwd-repeat" 
+                                                <input type="password" name="repeatpwd" class="form-control form-control-user"
+                                                id="repeatpwd" 
                                                 placeholder="Repeat New Password..." required/>
-                                                <!-- <input type="disable" name='email' value="<?php echo ($_GET['email']); ?>"> -->
+                                                <!-- <input type="disable" name='email' value="<?php echo ($_GET['resetcode']); ?>"> -->
                                     
                                         </div>
                                         
-                                        <input type="submit" class="btn btn-primary btn-user btn-block" name="create-new-password" value="Create New Password">
-                                        </form>
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" name="create-new-password" value="Create New Password">\
+
+                                        <?php
+                                        ?>
                                     </form>
                                     <hr>
                                     <div class="text-center">
@@ -86,96 +121,6 @@ require_once 'connection.php';
         
 
     </div>
-    <?php
-    // if (!isset($_GET['resetcode'])){
-//     exit("Page not found");
-// }
-
-
-
-
-
-
-// // if ($getEmail->rowCount()) {
-// //     exit("Cant find page");
-// // }
-
-// if(isset($_POST["create-new-password"])){
-//     $newpassword = $_POST["pwd"];
-//     $newpasswordr = $_POST['pwd-repeat'];
-
-//     $getEmail ="SELECT email FROM resetpassword WHERE resetcode = :resetcode LIMIT 1";
-//     //$row = $getEmail->fetch();
-//     $email = $row["email"];
-
-//     $sql=$conn->query("UPDATE users SET password='$_POST[pwd]' WHERE email = '{$_SESSION['email']}'");
-
-//     if ($newpassword == $newpasswordr){
-//             header('location: login.php');
-//             echo '<script>alert("Password Updated")</script>';
-//             } else{
-//                 echo '<script>alert("Password does not match")</script>';
-//             }
-//         }
-
-                        if (!isset($_GET["resetcode"])){
-                            exit("Page not found");
-                        }
-
-                        $resetcode = $_GET["resetcode"];
-
-                        $getEmail = "SELECT email FROM resetpassword where resetcode = :resetcode ";
-                        
-                        $newpassword = $_POST['pwd'] ?? "";
-                        $newpasswordr = $_POST['pwd-repeat'] ?? "";
-                        $email = $_POST['email'] ?? "" ;                        
-                        $statement = $conn->prepare($getEmail);
-                        $params = [':email' => $email,':resetcode' => $resetcode];
-                        //$params = [':email' => $email,];
-                       // $statement->execute($params);
-
-                        $sql = $conn->query ("UPDATE users SET password='$newpassword' WHERE email = '$email");
-                        if(!$sql) {
-                            exit("Error");
-                        }
-
-                        if ($newpassword == $newpasswordr){
-                        //header('location: login.php');
-                        } else{
-                            echo '<script>alert("Password does not match")</script>';
-                        }
-                    
-                        $conn= null;
-                
-            
-
-                
-                    // if(isset($_POST['create-new-password'])){
-                    //     $newpassword = $_POST['pwd'] ?? "";
-                    //     $newpasswordr = $_POST['pwd-repeat'] ?? "";
-                    //     $email = $_POST['email'] ;
-                    //     $sql = "SELECT * FROM users WHERE email = :email";
-
-                    //     $params = [':email' => $email];
-                    //     $statement = $conn->prepare($sql);
-                    //     $params = [':email' => $email,];
-                    //     $statement->execute($params);
-
-                    //     $sql=$conn->query("UPDATE users SET password='$_POST[pwd]' WHERE email = '{$_SESSION['email']}'");
-
-                    //     if ($newpassword == $newpasswordr){
-                    //     header('location: login.php');
-                    //     } else{
-                    //         echo '<script>alert("Password does not match")</script>';
-                    //     }
-                    // }
-                    //     $conn= null;
-
-                    
-                     
-                       ?>
-
-                        
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
