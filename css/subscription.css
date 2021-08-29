@@ -1,8 +1,3 @@
-section.pricing {
-  background: #007bff;
-  background: linear-gradient(to right, #0062E6, #33AEFF);
-}
-
 .pricing .card {
   border: none;
   border-radius: 1rem;

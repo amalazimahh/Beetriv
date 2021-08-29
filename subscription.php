@@ -86,7 +86,7 @@
                 Reports</li>
             </ul>
             <div class="d-grid">
-              <a href="#" class="btn btn-primary text-uppercase">Button</a>
+              <a href="#" class="btn btn-warning text-uppercase">Upgrade</a>
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@
                 Reports</li>
             </ul>
             <div class="d-grid">
-              <a href="#" class="btn btn-primary text-uppercase">Button</a>
+              <a href="#" class="btn btn-warning text-uppercase">Upgrade</a>
             </div>
           </div>
         </div>
@@ -135,7 +135,7 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Monthly Status Reports</li>
             </ul>
             <div class="d-grid">
-              <a href="#" class="btn btn-primary text-uppercase">Button</a>
+              <a href="#" class="btn btn-warning text-uppercase">Upgrade</a>
             </div>
           </div>
         </div>
