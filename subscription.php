@@ -16,6 +16,12 @@
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <style>
+            .paypal-button{
+            text-align: center;
+            margin: 5px;
+            }
+        </style>
 </head>
 <body>
         <!-- Navigation-->
@@ -61,9 +67,10 @@
 
     <!-- This snippet uses Font Awesome 5 Free as a dependency. You can download it at fontawesome.io! -->
 
-<section class="pricing py-5">
+<section class="pricing py-3">
   <div class="container">
-    <div class="row justify-content-center">
+      <div><h2 class="text-center">Join Our Team!</h2></div>
+    <div class="row justify-content-center p-5">
       <!-- Free Tier -->
       <div class="col-lg-4">
         <div class="card mb-5 mb-lg-0">
@@ -74,12 +81,12 @@
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Single User</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Deliver Product(s)</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>5 Delivery Per Day</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Maximum of 5 Deliveries Per Day</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Weekly Commission</li>
                 <p class="text-uppercase text-left"><strong>Requirements</strong></p>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Minimum Age of 18</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>A Valid Class 3 Driver's License</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Legal Related Documentation</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Have a Valid Class 3 Driver's License</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Have All Legal Related Documentation</li>
             </ul>
             <div class="d-grid">
               <a href="#" class="btn btn-warning text-uppercase">Upgrade</a>
@@ -103,10 +110,10 @@
               <p class="text-uppercase text-left"><strong>Requirements</strong></p>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Minimum Age of 18</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Have a PayPal Account</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Legal Related Documentation</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Have All Legal Related Documentation</li>
             </ul>
             <div class="d-grid">
-              <a href="#" class="btn btn-warning text-uppercase">Upgrade</a>
+              <a type="button" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalForm">Upgrade</a>
             </div>
           </div>
         </div>
@@ -114,6 +121,39 @@
     </div>
   </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Upgrade Your Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            
+                            <div class="mb-3 form-check">
+                                <form action="subscription">
+                                <input type="checkbox" class="form-check-input" id="check" required/>
+                                <label class="form-check-label" for="check">I have read, understood and agreed with <a class="text-warning" href="#">Beetriv Terms and Conditions</a> in becoming one of the vendors.</label>
+                                </form>
+                            </div>
+                            <div class="modal-footer d-block">
+                            <div class="paypal-button">
+                                <div id="paypal-payment-button">
+                                </div>
+                                <p>Note: You will be directed to PayPal Login Page to proceed with your payment.</p>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
 
 <!-- Footer-->
 <footer class="site-footer">
@@ -165,6 +205,37 @@
 </div>
 
 </footer>
+
+<!-- PayPal Payment -->
+<script src="https://cdn.jsdelivr.net/gh/cosmogicofficial/quantumalert@latest/minfile/quantumalert.js" charset="utf-8"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AXuQ2h0um_ALgb9wZNHXwi7eEIXRIdnaNXKcfn7GQw7v5SnUuXRpL71Ysjr5h6Y8Ac-5OwDRqLtB975P&disable-funding=credit,card"></script>
+        <script>
+          paypal.Buttons({
+          style: {
+              color:'gold',
+              shape: 'pill',
+              height: 50
+          },
+          createOrder:function(data, actions){
+              return actions.order.create({
+                  purchase_units:[{
+                      amount: {
+                          value: '0.1'
+                      }
+                  }]
+              });
+          },
+          onApprove:function(data, actions){
+              return actions.order.capture().then(function(details){
+                  console.log(details)
+                  Qual.success("Successful Payment","Welcome and thank you for joining us!");
+              })
+          },
+          onCancel:function(data){
+            Qual.error("Unsuccessful Payment","Something wrong happened. Please try again later.");;
+          }
+         }).render('#paypal-payment-button');
+        </script>
 
 </body>
 </html>
