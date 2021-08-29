@@ -17,7 +17,6 @@ require 'vendor/autoload.php';
 <?php
 
 if(isset($_POST['reset-password-submit'])){
-    // if(isset($_POST['email'])){
     
         $emailTo = $_POST['email'];
     
@@ -66,10 +65,11 @@ if(isset($_POST['reset-password-submit'])){
             $mail->addAddress("$emailTo");                                             //Add a recipient 
         
             //Content
-            $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/create-new-password.php?resetcode=$resetcode"; //array containing info such as headers,paths and script locations, to create the link for specific email
+            $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/create-new-password.php?email=$emailTo"; //array containing info such as headers,paths and script locations, to create the link for specific email
             $mail->isHTML(true);                                                       //Set email format to  HTML
-            $mail->Subject = 'Here is the Link to reset password';
-            $mail->Body    = "This link is to reset your password on Beetriv website <a href='$url'>Click here to reset your password</a>";
+            $mail->Subject = 'Reset your password';
+            $mail->Body    = "Need to reset your password? No problem ! Just click the link below and you are set to create new password for your account. <br>
+                             <a href='$url'>Click on this link to reset your password</a>";
             
             
             $mail->send();
