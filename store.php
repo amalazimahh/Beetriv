@@ -284,7 +284,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         }
         </script>
 
-
+<form method = "POST" action="search.php" class="input-group">
         <div class="container">
     <div class="row">
         <div class="col-xs-8 col-xs-offset-2">
@@ -303,10 +303,12 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </div>
                 <input type="hidden" name="search_param" value="all" id="search_param">
-                <input type="text" class="form-control" name="x" placeholder="Search item...">
+                <input type="text" class="form-control" name="search" placeholder="Search item...">
+                <input type="submit" class="btn btn-default" name="search_item" placeholder="Search" value="Search">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
+    </form>
             </div>
         </div>
 	</div>
