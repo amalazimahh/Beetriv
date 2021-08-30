@@ -106,7 +106,8 @@ require_once "connection.php";
 
         $count = $statement->rowCount();
 
-        if($count > 0){
+        if($count > 0){     
+            $_SESSION['email'] = $email;      
          header('location: store.php');
         } else{
             echo '<script>alert("Email or Password does not match")</script>';
