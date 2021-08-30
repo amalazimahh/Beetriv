@@ -2,6 +2,9 @@
 session_start();
 require_once "connection.php";
 
+$email = $_SESSION['email'];
+//echo $email;
+
 // Get image data from database
 $result = "SELECT * FROM product";
 $handle = $conn->prepare($result);
@@ -235,7 +238,6 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </nav>
-
 
         <div class="slideshow-container">
 
