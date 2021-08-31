@@ -61,7 +61,7 @@ require_once "connection.php";
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-warning">
 
     <div class="container">
 
@@ -97,7 +97,7 @@ require_once "connection.php";
                                     
                                         </div>
                                         
-                                        <input type="submit" class="btn btn-primary btn-user btn-block" name="create-new-password" value="Create New Password">\
+                                        <input type="submit" class="btn btn-secondary btn-user btn-block" name="create-new-password" value="Create New Password">
 
                                         <?php
                                         ?>

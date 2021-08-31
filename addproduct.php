@@ -312,7 +312,7 @@ input::-webkit-inner-spin-button {
         <label for="tags">Add Tags</label>
       </div>
       <div class="col-75">
-        <input type="text" name="tags" placeholder="vintage, summer, red..">
+        <input type="text" name="prd_tag" placeholder="vintage, summer, red..">
       </div>
     </div>
     
@@ -451,6 +451,7 @@ input::-webkit-inner-spin-button {
                 $desc         = $_POST['prd_desc'];
                 $rating       = $_POST['prd_rating'];
                 $location     = $_POST['prd_location'];
+                $tag          = $_POST['prd_tag'];
                 $bid_status   = $_POST['bid_status'];
                 $time_upload  = $_POST['time_upload'];
 
@@ -466,8 +467,8 @@ input::-webkit-inner-spin-button {
                 //$insert = "INSERT INTO PRODUCT(prd_name, prd_price, prd_img) VALUES (':name', ':price', ':imgContent')"
 
                 // Insert image content into database
-                $insert = $conn->query ("INSERT INTO product (prd_name,prd_price,prd_qty,prd_condition,prd_desc,prd_rating,prd_location,bid_status,time_upload,prd_img) 
-                VALUES ('$name','$price','$qty','$condition','$desc','$rating','$location','$bid_status','$time_upload', '$imgContent')");
+                $insert = $conn->query ("INSERT INTO product (prd_name,prd_price,prd_qty,prd_condition,prd_desc,prd_rating,prd_location,prd_tag,bid_status,time_upload,prd_img) 
+                VALUES ('$name','$price','$qty','$condition','$desc','$rating','$location','$tag','$bid_status','$time_upload', '$imgContent')");
 
                 //$insertimage = $conn->query("INSERT INTO product_image (prd_imgfile)VALUES ('$image')");
 
