@@ -2,14 +2,19 @@
 session_start();
 require_once "connection.php";
 
-$email = $_SESSION['email'];
-//echo $email;
 
-// Get image data from database
-$result = "SELECT * FROM product";
-$handle = $conn->prepare($result);
-$handle->execute();
-$row = $handle->fetchAll(PDO::FETCH_ASSOC);
+
+if (isset($_POST['search_item'])){
+    $search = $_POST["search"];
+
+    // Get image data from database
+    $result = "SELECT * FROM product";
+    $handle = $conn->prepare($result);
+    $handle->execute();
+    $row = $handle->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -239,6 +244,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </nav>
 
+
         <div class="slideshow-container">
 
         <div class="mySlides fade">
@@ -284,7 +290,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         }
         </script>
 
-<form method = "POST" action="search.php" class="input-group">
+    <form method = "POST" action="search.php" class="input-group">
         <div class="container">
     <div class="row">
         <div class="col-xs-8 col-xs-offset-2">
@@ -302,13 +308,14 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                       <li><a href="#all">Anything</a></li>
                     </ul>
                 </div>
+                
                 <input type="hidden" name="search_param" value="all" id="search_param">
                 <input type="text" class="form-control" name="search" placeholder="Search item...">
-                <input type="submit" class="btn btn-default" name="search_item" placeholder="Search" value="Search">
+                <input type="submit" class="btn btn-default " name="search_item" placeholder="Submit" value="search">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
-    </form>
+                </form>
             </div>
         </div>
 	</div>
@@ -327,16 +334,24 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
 
         <!-- Section-->
         <section class="py-5">
-        <div class="prd-div"><h3>Latest Added Items</h3></div>
+        <div class="prd-div"><h3>Searched <?php echo $search;?></h3></div>
            <div class="product">
-               <?php foreach($row as $product){ ?>
+               
+           <!-- Search Function -->
+               <?php 
+                
+                $searchs = $conn->query("SELECT * FROM product WHERE prd_name='$search' || prd_tag='$search'");
+                $rows = $searchs->fetchAll(PDO::FETCH_ASSOC);
+                $searchs->execute();
+                 
+               while($rows = $searchs->fetch()){ ?>
               <div class="content">
-                  <form method="POST"></form>
-              <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
-              <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
-               <h3><?php echo $product['prd_name']; ?></h3>
-              <h6>$<?php echo $product['prd_price']; ?></h6>
-              <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
+              <form method="POST"></form>
+              <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($rows['prd_img']); ?>">
+              <input type="hidden" name="ide" value=<?php echo $rows['prd_id'];?> >
+               <h3><?php echo $rows['prd_name']; ?></h3>
+              <h6>$<?php echo $rows['prd_price']; ?></h6>
+              <a class="text-warning" href="product-details.php?product=<?php echo $rows['prd_id'];?>">View</a>
                    <button class="buy-prd btn-warning">Add to cart</button>
                </form>  
                  </div>

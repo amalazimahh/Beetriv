@@ -2,6 +2,63 @@
 ob_start();
 session_start();
 require_once "connection.php";
+
+//make sure login first, so that can fetch email, echo email to see if you logged in
+$email = $_SESSION['email'];
+//echo $email;
+
+if(isset($_POST['save'])){
+    $fname = $_POST['fname'];
+    $lname = $_POST['lname'];
+    $username = $_POST['username'];
+    $emailEdit = $_POST['email'];
+    $icNum = $_POST['icNum'];
+    $icCol = $_POST['icCol'];
+    $phone = $_POST['phone'];
+    $bio = $_POST['bio'];
+    $currentPwd = $_POST['currentPwd'];
+    $newPwd = $_POST['newPwd'];
+    $confirmPwd = $_POST['confirmPwd'];
+
+    //select all details from the table based on current user logged in
+    $select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
+    $statement = $conn->prepare($select);
+    $statement->fetch(PDO::FETCH_ASSOC);
+
+    //if user exist, then update the details based on data entered
+    if($statement){
+        $update = $conn->prepare("UPDATE users SET email = '$emailEdit',
+                                            username = '$username', 
+                                            ic_number = '$icNum',
+                                            ic_color = '$icCol', 
+                                            phone_number = '$phone',
+                                            password = '$newPwd', 
+                                            fname = '$fname',
+                                            lname = '$lname',
+                                            bio = '$bio' 
+                                            WHERE email = '$email' ");
+    
+        $update->bindParam(':email', $email);
+        $update->bindParam(':username', $username);
+        $update->bindParam(':ic_number', $icNum);
+        $update->bindParam(':ic_color', $icCol);
+        $update->bindParam(':phone_number', $phone);
+        $update->bindParam(':password', $newPwd);
+        $update->bindParam(':fname', $fname);
+        $update->bindParam(':lname', $lname);
+        $update->bindParam(':bio', $bio);
+        $update->bindParam(':email', $email);
+        $update->execute();
+
+        header('location: user-profile.php');
+        echo "Successfully updated Profile";
+        }// End of if profile is ok 
+        else{
+        print_r($sql->errorInfo()); // if any error is there it will be posted
+        $msg=" Database problem, please contact site admin ";
+        }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -20,45 +77,50 @@ require_once "connection.php";
     <link rel="stylesgeet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
     <link rel="stylesheet" href="css/user-profile.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 </head>
 
 <body class="profile-page">
-    <nav class="navbar navbar-color-on-scroll navbar-transparent fixed-top  navbar-expand-lg "  color-on-scroll="100"  id="sectionsNav">
-        <div class="container">
-            <div class="navbar-translate">
-                <a class="navbar-brand" href="https://demos.creative-tim.com/material-kit/index.html" target="_blank">Material Kit </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    <span class="navbar-toggler-icon"></span>
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <!-- Navigation-->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="store.php">Beetriv</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link" aria-current="page" href="store.php">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bid</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Active Bid</a></li>
+                                <li><a class="dropdown-item" href="#!">Ending Soon</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav justify-content-end">
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
+                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
+                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    </a></li>
+                    </ul>
+                </div>
             </div>
-        
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <li class="dropdown nav-item">
-                      <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
-                          <i class="material-icons">apps</i> Components
-                      </a>
-                      <div class="dropdown-menu dropdown-with-icons">
-                        <a href="../index.html" class="dropdown-item">
-                            <i class="material-icons">layers</i> All Components
-                        </a>
-                        
-                        <a href="https://demos.creative-tim.com/material-kit/docs/2.0/getting-started/introduction.html" class="dropdown-item">
-                            <i class="material-icons">content_paste</i> Documentation
-                        </a>
-                      </div>
-                    </li>
-      				<li class="nav-item">
-      					<a class="nav-link" href="javascript:void(0)">
-      						<i class="material-icons">cloud_download</i> Download
-      					</a>
-      				</li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+        </nav>
     
     <div class="page-header header-filter" data-parallax="true" style="background-image:url('http://wallpapere.org/wp-content/uploads/2012/02/black-and-white-city-night.png');"></div>
     <div class="main main-raised">
@@ -174,51 +236,51 @@ require_once "connection.php";
                         </div>
 
                         <?php
-                        if(isset($_POST['save'])){
-                            $fname = $_POST['fname'];
-                            $lname = $_POST['lname'];
-                            $username = $_POST['username'];
-                            $email = $_POST['email'];
-                            $icNum = $_POST['icNum'];
-                            $icCol = $_POST['icCol'];
-                            $phone = $_POST['phone'];
-                            $bio = $_POST['bio'];
-                            $currentPwd = $_POST['currentPwd'];
-                            $newPwd = $_POST['newPwd'];
-                            $confirmPwd = $_POST['confirmPwd'];
+                        // if(isset($_POST['save'])){
+                        //     $fname = $_POST['fname'];
+                        //     $lname = $_POST['lname'];
+                        //     $username = $_POST['username'];
+                        //     $email = $_POST['email'];
+                        //     $icNum = $_POST['icNum'];
+                        //     $icCol = $_POST['icCol'];
+                        //     $phone = $_POST['phone'];
+                        //     $bio = $_POST['bio'];
+                        //     $currentPwd = $_POST['currentPwd'];
+                        //     $newPwd = $_POST['newPwd'];
+                        //     $confirmPwd = $_POST['confirmPwd'];
 
-                            // $sql = "UPDATE users SET email = :email, username = :usernmae, icNum = :Ic_no, icCol = :Ic_color, phone = :Phone_Number, newPwd = :Password, fname = :Firstname, lname = :Lastname, bio = :Bio WHERE email = :email";
-                            // $stmt= $pdo->prepare($sql);
-                            // $stmt->execute([$email, $username, $icNum, $icCol, $phone, $newPwd, $fname, $lname, $bio]);
+                        //     // $sql = "UPDATE users SET email = :email, username = :usernmae, icNum = :Ic_no, icCol = :Ic_color, phone = :Phone_Number, newPwd = :Password, fname = :Firstname, lname = :Lastname, bio = :Bio WHERE email = :email";
+                        //     // $stmt= $pdo->prepare($sql);
+                        //     // $stmt->execute([$email, $username, $icNum, $icCol, $phone, $newPwd, $fname, $lname, $bio]);
 
-                            $sql = $conn->prepare("UPDATE users set email = :email,
-                                        username = :username, 
-                                        icNum = :Ic_no,
-                                        icCol = :Ic_color, 
-                                        phone = :Phone_Number,
-                                        newPwd = :Password, 
-                                        fname = :Firstname,
-                                        lname = :Lastname,
-                                        bio = :Bio");
+                        //     $sql = $conn->prepare("UPDATE users set email = :email,
+                        //                 username = :username, 
+                        //                 icNum = :Ic_no,
+                        //                 icCol = :Ic_color, 
+                        //                 phone = :Phone_Number,
+                        //                 newPwd = :Password, 
+                        //                 fname = :Firstname,
+                        //                 lname = :Lastname,
+                        //                 bio = :Bio");
                             
-                            $sql->bindParam(':email', $email, PDO::PARAM_STR,25);
-                            $sql->bindParam(':username', $username, PDO::PARAM_STR,25);
-                            $sql->bindParam(':Ic_no', $icNum, PDO::PARAM_STR,25);
-                            $sql->bindParam(':Ic_color', $icCol, PDO::PARAM_STR,25);
-                            $sql->bindParam(':Phone_Number', $phone, PDO::PARAM_STR,25);
-                            $sql->bindParam(':Password', $newPwd, PDO::PARAM_STR,25);
-                            $sql->bindParam(':Firstname', $fname, PDO::PARAM_STR,25);
-                            $sql->bindParam(':Lastname', $lname, PDO::PARAM_STR,25);
-                            $sql->bindParam(':Bio', $bio, PDO::PARAM_STR,25);
+                        //     $sql->bindParam(':email', $email, PDO::PARAM_STR,25);
+                        //     $sql->bindParam(':username', $username, PDO::PARAM_STR,25);
+                        //     $sql->bindParam(':Ic_no', $icNum, PDO::PARAM_STR,25);
+                        //     $sql->bindParam(':Ic_color', $icCol, PDO::PARAM_STR,25);
+                        //     $sql->bindParam(':Phone_Number', $phone, PDO::PARAM_STR,25);
+                        //     $sql->bindParam(':Password', $newPwd, PDO::PARAM_STR,25);
+                        //     $sql->bindParam(':Firstname', $fname, PDO::PARAM_STR,25);
+                        //     $sql->bindParam(':Lastname', $lname, PDO::PARAM_STR,25);
+                        //     $sql->bindParam(':Bio', $bio, PDO::PARAM_STR,25);
 
-                            if($sql->execute()){
-                                echo "Successfully updated Profile";
-                                }// End of if profile is ok 
-                                else{
-                                print_r($sql->errorInfo()); // if any error is there it will be posted
-                                $msg=" Database problem, please contact site admin ";
-                                }
-                        }
+                        //     if($sql->execute()){
+                        //         echo "Successfully updated Profile";
+                        //         }// End of if profile is ok 
+                        //         else{
+                        //         print_r($sql->errorInfo()); // if any error is there it will be posted
+                        //         $msg=" Database problem, please contact site admin ";
+                        //         }
+                        // }
                         
                         ?>
                         

@@ -1,3 +1,12 @@
+<?php
+session_start();
+require_once "connection.php";
+
+$email = $_SESSION['email'];
+//echo $email;
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,47 +21,53 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
     <link rel="stylesgeet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/user-profile.css">
     <link rel="stylesheet" href="css/footer.css">
 </head>
 
 <body class="profile-page">
-    <nav class="navbar navbar-color-on-scroll navbar-transparent    fixed-top  navbar-expand-lg "  color-on-scroll="100"  id="sectionsNav">
-        <div class="container">
-            <div class="navbar-translate">
-                <a class="navbar-brand" href="https://demos.creative-tim.com/material-kit/index.html" target="_blank">Material Kit </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    <span class="navbar-toggler-icon"></span>
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <!-- Navigation-->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="store.php">Beetriv</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link" aria-current="page" href="store.php">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bid</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Active Bid</a></li>
+                                <li><a class="dropdown-item" href="#!">Ending Soon</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav justify-content-end">
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
+                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
+                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    </a></li>
+                    </ul>
+                </div>
             </div>
-        
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <li class="dropdown nav-item">
-                      <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
-                          <i class="material-icons">apps</i> Components
-                      </a>
-                      <div class="dropdown-menu dropdown-with-icons">
-                        <a href="../index.html" class="dropdown-item">
-                            <i class="material-icons">layers</i> All Components
-                        </a>
-                        
-                        <a href="https://demos.creative-tim.com/material-kit/docs/2.0/getting-started/introduction.html" class="dropdown-item">
-                            <i class="material-icons">content_paste</i> Documentation
-                        </a>
-                      </div>
-                    </li>
-      				<li class="nav-item">
-      					<a class="nav-link" href="javascript:void(0)">
-      						<i class="material-icons">cloud_download</i> Download
-      					</a>
-      				</li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+        </nav>
     
     <div class="page-header header-filter" data-parallax="true" style="background-image:url('http://wallpapere.org/wp-content/uploads/2012/02/black-and-white-city-night.png');"></div>
     <div class="main main-raised">
