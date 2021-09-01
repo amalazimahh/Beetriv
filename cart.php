@@ -1,7 +1,8 @@
 <?php 
     session_start();
     require_once('connection.php');
-  
+    $email = $_SESSION['email'];
+    echo $email;
 
     if(isset($_GET['action'],$_GET['item']) && $_GET['action'] == 'remove')
     {
