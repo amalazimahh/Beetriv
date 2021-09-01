@@ -1,7 +1,16 @@
 <?php
 ob_start();
 session_start();
+
 require_once "connection.php";
+$email = $_SESSION['email'];
+//echo $email;
+
+$select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
+$statement = $conn->prepare($select);
+$statement->execute();
+$row = $statement->fetchAll(PDO::FETCH_ASSOC);
+
 $first_name_error= $last_name_error = $email_error = $address_error = $country_error = $state_error = $zipcode_error = "";
 if($_SERVER["REQUEST_METHOD"] == "POST")
   {
@@ -246,31 +255,30 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
               <div class="col-md-5 mb-2">
                 <label for="firstName">First name</label>
-                <input type="text" class="form-control" id="firstName" name="first_name" placeholder="First Name" value="<?php echo (isset($fnameValue) && !empty($fnameValue)) ? $fnameValue:'' ?>" >
+                <input type="text" class="form-control" id="firstName" name="first_name" placeholder="First Name" value="<?php echo $fname ?>" disabled>
                 <span class = "error"> <?php echo $first_name_error; ?></span>
               </div>
               <div class="col-md-5 mb-2">
                 <label for="lastName">Last name</label>
-                <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Last Name" value="<?php echo (isset($lnameValue) && !empty($lnameValue)) ? $lnameValue:'' ?>" >
+                <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Last Name" value="<?php echo (isset($lnameValue) && !empty($lnameValue)) ? $lnameValue:'' ?>" disabled>
                 <span class = "error"> <?php echo $last_name_error; ?></span>
               </div>
             </div>
 
             <div class="col-md-5 mb-2">
               <label for="email">Email</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="<?php echo (isset($emailValue) && !empty($emailValue)) ? $emailValue:'' ?>">
+              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="<?php echo $email ?>" disabled>
               <span class = "error"> <?php echo $email_error; ?></span>
             </div>
 
             <div class="col-md-5 mb-2">
               <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" value="<?php echo (isset($addressValue) && !empty($addressValue)) ? $addressValue:'' ?>">
+              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" value="<?php echo (isset($addressValue) && !empty($addressValue)) ? $addressValue:'' ?>"disabled>
               <span class = "error"> <?php echo $address_error; ?></span>
             </div>
 
             <div class="col-md-5 mb-2">
               <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-              <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment or suite" value="<?php echo (isset($address2Value) && !empty($address2Value)) ? $address2Value:'' ?>">
             </div>
 
             <div class="row">
