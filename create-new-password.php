@@ -24,8 +24,8 @@ require_once "connection.php";
         //update user password based from the selection
         $pdoQuery = "UPDATE users SET password='$newpwd' WHERE email='$email' ";
         $pdoQuery_run = $conn->prepare($pdoQuery);
-        $pdoQuery_run->bindParam(':password', $newpwd);
-        $pdoQuery_run->bindParam(':email', $email);
+        // $pdoQuery_run->bindParam(':password', $newpwd);
+        // $pdoQuery_run->bindParam(':email', $email);
         $pdoQuery_run->execute();
         header('location: login.php');
         exit();
