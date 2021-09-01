@@ -3,7 +3,7 @@ session_start();
 require_once "connection.php";
 
 $email = $_SESSION['email'];
-//echo $email;
+echo $email;
 
 // Get image data from database
 $result = "SELECT * FROM product";
