@@ -179,7 +179,6 @@ require 'vendor/autoload.php';
             $phone           = ($_POST['phone']);
             $password        = ($_POST['password']);
             $rpassword       = ($_POST['rpassword']);
-            $now             = date('Y-m-d');
 
 
             //Mail Set up
@@ -234,10 +233,8 @@ require 'vendor/autoload.php';
 
                 $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
 
-                $sql = $conn->prepare("INSERT INTO users (email, username, ic_number, ic_color, phone_number, password, vcode, verified, created_at) VALUES ('$email','$username','$ic','$ic2','$phone'
-                ,'$password','$vcode','$verified', '$now')");
-                $sql->execute(['email'=>$email, 'username'=>$username, 'ic_number'=>$ic,'ic_color'=>$ic2, 'phone_number'=>$phone, 'password'=>$password, 'vcode'=>$vcode, 'verified'=>$verified, 'created_at'=>$now]);
-
+                $sql = $conn->query ("INSERT INTO users (email, username, ic_number, ic_color, phone_number, password, vcode) VALUES ('$email','$username','$ic','$ic2','$phone'
+                ,'$password','$vcode')");
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
 
