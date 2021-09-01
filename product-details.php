@@ -1,8 +1,10 @@
 <?php 
     session_start();
     require_once "connection.php";
-
+    $email = $_SESSION['email'];
     $id = $_GET['product'];
+    echo $email;
+
 
     $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
     $row = $result->fetch(PDO::FETCH_ASSOC);
