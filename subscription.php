@@ -134,7 +134,7 @@
                         <form>
                             
                             <div class="mb-3 form-check">
-                                <form action="subscription">
+                                <form action="subscription.php" method="post">
                                 <input type="checkbox" class="form-check-input" id="check" required/>
                                 <label class="form-check-label" for="check">I have read, understood and agreed with <a class="text-warning" href="#">Beetriv Terms and Conditions</a> in becoming one of the vendors.</label>
                                 </form>
@@ -232,7 +232,7 @@
               })
           },
           onCancel:function(data){
-            Qual.error("Unsuccessful Payment","Something wrong happened. Please try again later.");;
+            Qual.error("Unsuccessful Payment","Something wrong happened. Please try again later.");
           }
          }).render('#paypal-payment-button');
         </script>

@@ -2,6 +2,10 @@
 ob_start();
 session_start();
 require_once "connection.php";
+
+$email = $_SESSION['email'];
+//echo $email;
+
 ?>
 
 <!DOCTYPE html>

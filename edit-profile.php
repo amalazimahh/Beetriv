@@ -7,7 +7,23 @@ require_once "connection.php";
 $email = $_SESSION['email'];
 //echo $email;
 
+
+$select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
+$statement = $conn->prepare($select);
+$statement->execute();
+$row = $statement->fetchAll(PDO::FETCH_ASSOC);
+
 if(isset($_POST['save'])){
+    // Get the file info
+    $fileName = basename($_FILES['image']['name']);
+    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+    //Allow certain file formats
+    $allowTypes = array('jpg','png','jpeg','gif');
+    if(in_array($fileType, $allowTypes)){
+        $image = $_FILES['image']['tmp_name'];
+        $imgContent = addslashes(file_get_contents($image));
+
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
     $username = $_POST['username'];
@@ -35,7 +51,8 @@ if(isset($_POST['save'])){
                                             password = '$newPwd', 
                                             fname = '$fname',
                                             lname = '$lname',
-                                            bio = '$bio' 
+                                            bio = '$bio',
+                                            img = '$imgContent'
                                             WHERE email = '$email' ");
     
         $update->bindParam(':email', $email);
@@ -47,9 +64,10 @@ if(isset($_POST['save'])){
         $update->bindParam(':fname', $fname);
         $update->bindParam(':lname', $lname);
         $update->bindParam(':bio', $bio);
+        $update->bindParam(':img', $imgContent);
         $update->bindParam(':email', $email);
         $update->execute();
-
+    }
         header('location: user-profile.php');
         echo "Successfully updated Profile";
         }// End of if profile is ok 
@@ -60,36 +78,34 @@ if(isset($_POST['save'])){
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
-</head>
-<head>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
-    <link rel="stylesgeet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
-    <link rel="stylesheet" href="css/user-profile.css">
-    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/edit-profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/footer.css">
 </head>
-
-<body class="profile-page">
-    <!-- Navigation-->
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
+<body>
+<!-- Navigation-->
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="store.php">Beetriv</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link" aria-current="page" href="store.php">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -121,267 +137,118 @@ if(isset($_POST['save'])){
                 </div>
             </div>
         </nav>
-    
-    <div class="page-header header-filter" data-parallax="true" style="background-image:url('http://wallpapere.org/wp-content/uploads/2012/02/black-and-white-city-night.png');"></div>
-    <div class="main main-raised">
-		<div class="profile-content">
-            <div class="container">
-                <div class="row">
-	                <div class="col-md-6 ml-auto mr-auto">
-        	            <!-- <div class="profile">
-	                         <div class="avatar">
-	                            <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0NjQzOTk4OTQ4OTkyMzQy/ansel-elgort-poses-for-a-portrait-during-the-baby-driver-premiere-2017-sxsw-conference-and-festivals-on-march-11-2017-in-austin-texas-photo-by-matt-winkelmeyer_getty-imagesfor-sxsw-square.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid">
-	                        </div> 
-	                    </div> -->
-                        <div class="text-center name" >
-	                            <h3 class="title">EDIT PROFILE INFORMATION</h3>
-	                        </div>
-                        <div class="avatar">
-	                        <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0NjQzOTk4OTQ4OTkyMzQy/ansel-elgort-poses-for-a-portrait-during-the-baby-driver-premiere-2017-sxsw-conference-and-festivals-on-march-11-2017-in-austin-texas-photo-by-matt-winkelmeyer_getty-imagesfor-sxsw-square.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid">
-	                    </div>
 
-                        <form action="edit-profile.php" method="post">
-
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center">
-                                        <label for="image"></label>
-                                        <input type="file" name="image" value="Select Image File">
-                            
-                                    <div class="description text-center">
-                                        <p>Acceptable formats are .jpg, .jpeg and .png only</p>
-                                        <p>Maximum file size is 500kb</p>
-                                    </div>
-                                </div>
-                            </div>
-    	                </div>
-                    </div>
-
-				<div class="row">
-					<div class="col-md-6 ml-auto mr-auto">
-                        
-                    <h5>ACCOUNT INFORMATION</h5>
-
-                        <div class="form-group row">
-                            <!-- First Name -->
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="fname" name="fname" pattern="[a-zA-Z]{1,}" placeholder="First Name" required/>
-                            </div>
-
-                            <!-- Last Name -->
-                            <div class="col-sm-6 ">
-                                <input type="text" class="form-control form-control-user" id="lname" name="lname" pattern="[a-zA-Z]{1,}" placeholder="Last Name" required/>
-                            </div>
-                        </div>
-
-                        <!-- Username -->
-                        <div class="form-group">
-                            <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}" placeholder="Username" required/>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="form-group">
-                            <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email" placeholder="Email Address" required/>
-                        </div>
-
-                        <!-- IC Number -->
-                        <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="ic" name="icNum" placeholder="IC Number" required/> 
-                            </div>
-                                
-                            <!-- IC Colour -->
-                            <div class="col-sm-6 " >
-                                <input type="text" class="form-control form-control-user" name="icCol" list="ic2" placeholder="IC Colour" required/>
-                                    <datalist id="ic2">
+        <!-- Edit Profile -->
+        <?php foreach($row as $user){ ?>
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" id="output" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($user['img']);?>" onerror="this.src='img/profile-img.png';"><br><label for="image">Select Profile Image: </label><input type="file" name="image" accept="image/*" onchange="loadFile(event)" class="form-control"><span> </span></div>
+            <script>
+                var loadFile = function(event) {
+                var output = document.getElementById('output');
+                output.src = URL.createObjectURL(event.target.files[0]);
+                output.onload = function() {
+                URL.revokeObjectURL(output.src) // free memory
+                }
+            };
+            </script>
+        </div>
+        <div class="col-md-9 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Edit Profile</h4>
+                </div>
+                <hr>
+                <form action="edit-profile.php" method="post">
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Firstname</label><input type="text" class="form-control" placeholder="Firstname" id="fname" name="fname" pattern="[a-zA-Z]{1,}" placeholder="First Name" required></div>
+                    <div class="col-md-6"><label class="labels">Lastname</label><input type="text" class="form-control" placeholder="Lastname" id="lname" name="lname" pattern="[a-zA-Z]{1,}" placeholder="Last Name" required></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Username</label><input type="text" class="form-control" placeholder="Username" id="username" name="username" pattern="[a-zA-Z]{1,}" placeholder="Username" required></div>
+                    <div class="col-md-12"><label class="labels">Email Address</label><input type="email" class="form-control" id="exampleInputEmail" name="email" placeholder="<?php echo $email; ?>" disabled></div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">IC Number</label><input type="text" class="form-control" id="ic" name="icNum" placeholder="<?php echo $user['ic_number']; ?>" disabled></div>
+                    <div class="col-md-6"><label class="labels">IC Colour</label><input type="text" class="form-control" list="ic2" name="icCol" list="ic2" placeholder="<?php echo $user['ic_color']; ?>" disabled>
+                    <datalist id="ic2">
                                         <option value = "Yellow">
+                                        <option value = "Red">
                                         <option value = "Purple">
                                         <option value = "Green">
-                                    </datalist>
-                            </div>
-                        </div>
-
-                        <!-- Phone number -->
-                        <div class="form-group">
-                            <input type="tel" class="form-control form-control-user" id="phone" name="phone" placeholder= "Phone Number" required/>
-                        </div>
-
-                        <!-- Bio -->
-                        <div class="form-group">
-                            <input type="textarea" class="form-control form-control-user" id="bio" name="bio" placeholder= "Bio"/>
-                        </div>
-                        
-                        <br>
-
-                    <h5>CHANGE PASSWORD</h5>
-
-                        <!-- Current Password -->
-                        <div class="form-group">
-                            <input type="password" class="form-control form-control-user" id="currentpwd" name="currentPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Current Password" required/>
-                        </div>
-
-                        <!-- New Password -->
-                        <div class="form-group">
-                            <input type="password" class="form-control form-control-user" id="newpwd" name="newPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "New Password" required/>
-                        </div>
-
-                        <!-- Confirm New Password -->
-                        <div class="form-group">
-                            <input type="password" class="form-control form-control-user" id="confirmpwd" name="confirmPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Confirm Password" required/>
-                        </div>
-
-                        <br>
-
-                        <div class="text-center">
-                        <input type="submit" value="SAVE" name="save" class="btn btn-outline-dark mt-auto">
-                        </div>
-
-                        <?php
-                        // if(isset($_POST['save'])){
-                        //     $fname = $_POST['fname'];
-                        //     $lname = $_POST['lname'];
-                        //     $username = $_POST['username'];
-                        //     $email = $_POST['email'];
-                        //     $icNum = $_POST['icNum'];
-                        //     $icCol = $_POST['icCol'];
-                        //     $phone = $_POST['phone'];
-                        //     $bio = $_POST['bio'];
-                        //     $currentPwd = $_POST['currentPwd'];
-                        //     $newPwd = $_POST['newPwd'];
-                        //     $confirmPwd = $_POST['confirmPwd'];
-
-                        //     // $sql = "UPDATE users SET email = :email, username = :usernmae, icNum = :Ic_no, icCol = :Ic_color, phone = :Phone_Number, newPwd = :Password, fname = :Firstname, lname = :Lastname, bio = :Bio WHERE email = :email";
-                        //     // $stmt= $pdo->prepare($sql);
-                        //     // $stmt->execute([$email, $username, $icNum, $icCol, $phone, $newPwd, $fname, $lname, $bio]);
-
-                        //     $sql = $conn->prepare("UPDATE users set email = :email,
-                        //                 username = :username, 
-                        //                 icNum = :Ic_no,
-                        //                 icCol = :Ic_color, 
-                        //                 phone = :Phone_Number,
-                        //                 newPwd = :Password, 
-                        //                 fname = :Firstname,
-                        //                 lname = :Lastname,
-                        //                 bio = :Bio");
-                            
-                        //     $sql->bindParam(':email', $email, PDO::PARAM_STR,25);
-                        //     $sql->bindParam(':username', $username, PDO::PARAM_STR,25);
-                        //     $sql->bindParam(':Ic_no', $icNum, PDO::PARAM_STR,25);
-                        //     $sql->bindParam(':Ic_color', $icCol, PDO::PARAM_STR,25);
-                        //     $sql->bindParam(':Phone_Number', $phone, PDO::PARAM_STR,25);
-                        //     $sql->bindParam(':Password', $newPwd, PDO::PARAM_STR,25);
-                        //     $sql->bindParam(':Firstname', $fname, PDO::PARAM_STR,25);
-                        //     $sql->bindParam(':Lastname', $lname, PDO::PARAM_STR,25);
-                        //     $sql->bindParam(':Bio', $bio, PDO::PARAM_STR,25);
-
-                        //     if($sql->execute()){
-                        //         echo "Successfully updated Profile";
-                        //         }// End of if profile is ok 
-                        //         else{
-                        //         print_r($sql->errorInfo()); // if any error is there it will be posted
-                        //         $msg=" Database problem, please contact site admin ";
-                        //         }
-                        // }
-                        
-                        ?>
-                        
-                    </form>
-
-                    <!-- php- update into database -->
-                    <?php
-                        // if(isset($_POST["save"])){
-                        //     if(!empty($_FILES['image']['name'])) {
-                        //         $fileName = basename($_FILES['image']['name']);
-                        //         $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                        //         $fname = $_POST['fname'];
-                        //         $lname = $_POST['lname'];
-                        //         $username = $_POST['username'];
-                        //         $email = $_POST['email'];
-                        //         $icNum = $_POST['icNum'];
-                        //         $icCol = $_POST['icCol'];
-                        //         $phone = $_POST['phone'];
-                        //         $bio = $_POST['bio'];
-                        //         $currentPwd = $_POST['currentPwd'];
-                        //         $newPwd = $_POST['newPwd'];
-                        //         $confirmPwd = $_POST['confirmPwd'];
-
-                        //         // allow certain formats
-                        //         $allowTypes = array('jpg','png','jpeg','gif');
-                        //         if(in_array($fileType, $allowTypes)){
-                        //             $image = $_FILES['image']['tmp_name'];
-                        //             $imgContent = addslashes(file_get_contents($image));
-
-                        //             //select table from database
-                        //             //update & insert data in db 
-
-                        //         }
-                        //     }
-                        // }
-                    ?>
-    	    	</div>
+                    </datalist>
+                    </div>
+                </div>
+                <div class="row mt-3 pb-3">
+                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" class="form-control" id="phone" name="phone" placeholder="<?php echo $user['phone_number']; ?>" disabled></div>
+                    <div class="col-md-12"><label class="labels">Add Bio</label><input type="textarea" class="form-control form-control-user" placeholder= "Bio" id="bio" name="bio" placeholder= "Bio"/></div><br>
+                </div>
+                <div class="row mt-3">
+                <h4 class="text-right">Change Password</h4><hr>
+                <div class="col-md-12"><label class="labels">Current Password</label><input type="password" class="form-control" placeholder="Current Password" id="currentpwd" name="currentPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Current Password" required></div>
+                    <div class="col-md-12"><label class="labels">New Password</label><input type="password" class="form-control" placeholder="New Password" id="newpwd" name="newPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "New Password" required></div>
+                    <div class="col-md-12"><label class="labels">Confirm Password</label><input type="password" class="form-control" placeholder="Confirm Password" id="confirmpwd" name="confirmPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Confirm Password" required></div>
+                </div>
+                <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="submit" value="Save Profile" name="save"></div>
             </div>
-
-            </div>
+            </form>
         </div>
-	</div>
-	
-	<!-- Footer-->
-    <footer class="site-footer">
+    </div>
+</div>
+</div>
+</div>
+<?php } ?>
 
-        <div class="container">
-            <div class="row">
-                <!-- first section -->
-                <div class="col-xs-6 col-md-3">
-                    <h6>CORPORATE</h6>
-                    <ul class="footer-links">
-                        <li><a href="footer/about.php">About Beetriv</a></li>
-                        <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
-                        <li><a href="footer/termsco.php">Terms and Conditions</a></li>
-                    </ul>
-                </div>
+<!-- Footer-->
+<footer class="site-footer">
 
-                <!-- second section -->
-                <div class="col-xs-6 col-md-3">
-                    <h6>DEALS, PAYMENT & DELIVERY</h6>
-                    <ul class="footer-links">
-                        <li><a href="footer/deals.php">Our Deals</a></li>
-                        <li><a href="footer/delivery.php">Delivery Services</a></li>
-                        <li><a href="footer/payment.php">Payment</a></li>
-                    </ul>
-                </div>
-
-                <!-- third section -->
-                <div class="col-xs-6 col-md-3">
-                    <h6>CUSTOMER CARE</h6>
-                    <ul class="footer-links">
-                        <li><a href="footer/be-seller.php">Become Our Seller</a></li>
-                        <li><a href="footer/faq.php">FAQ</a></li>
-                        <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
-                        <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
-                        <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
-                        <li><a href="footer/customer-protection.php">Customer Protection</a></li>
-                    </ul>
-                </div>
-
-                <!-- fourth section -->
-                <div class="col-xs-6 col-md-3">
-                    <h6>CONTACT US</h6>
-                    <p>Phone: 257 3663</p>
-                    <p>Email: beetrivteam@gmail.com</p>
-                    <p>Instagram: @beetriv</p>
-                    <p>Facebook: @beetriv</p>
-                </div>
-            </div>
+<div class="container">
+    <div class="row">
+        <!-- first section -->
+        <div class="col-xs-6 col-md-3">
+        <h6>CORPORATE</h6>
+        <ul class="footer-links">
+            <li><a href="footer/about.php">About Beetriv</a></li>
+            <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
+            <li><a href="footer/termsco.php">Terms and Conditions</a></li>
+        </ul>
         </div>
-    </footer>
-  
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 
+        <!-- second section -->
+        <div class="col-xs-6 col-md-3">
+        <h6>DEALS, PAYMENT & DELIVERY</h6>
+        <ul class="footer-links">
+            <li><a href="footer/deals.php">Our Deals</a></li>
+            <li><a href="footer/delivery.php">Delivery Services</a></li>
+            <li><a href="footer/payment.php">Payment</a></li>
+        </ul>
+        </div>
 
-   
+        <!-- third section -->
+        <div class="col-xs-6 col-md-3">
+        <h6>CUSTOMER CARE</h6>
+        <ul class="footer-links">
+            <li><a href="footer/be-seller.php">Become Our Seller</a></li>
+            <li><a href="footer/faq.php">FAQ</a></li>
+            <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
+            <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
+            <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
+            <li><a href="footer/customer-protection.php">Customer Protection</a></li>
+        </ul>
+        </div>
 
+        <!-- fourth section -->
+        <div class="col-xs-6 col-md-3">
+        <h6>CONTACT US</h6>
+        <p>Phone: 257 3663</p>
+        <p>Email: beetrivteam@gmail.com</p>
+        <p>Instagram: @beetriv</p>
+        <p>Facebook: @beetriv</p>
+        </div>
+    </div>
+</div>
+
+</footer>
 </body>
 </html>
