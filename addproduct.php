@@ -174,11 +174,11 @@ input::-webkit-inner-spin-button {
         <label for="category">Product Category</label>
       </div>
       <div class="col-75">
-        <select name="category">
+      <select name="prd_category">
         <option value="Select">Select</option>
-          <option value="Clothing">Clothing</option>
-          <option value="Electronics">Electronics</option>
-          <option value="Kitchen Appliances">Kitchen Appliances</option>
+          <option value="Home">Home and Living</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Mobile">Mobile and Electronics</option>
         </select>
       </div>
     </div>
@@ -312,7 +312,7 @@ input::-webkit-inner-spin-button {
         <label for="tags">Add Tags</label>
       </div>
       <div class="col-75">
-        <input type="text" name="prd_tag" placeholder="vintage, summer, red..">
+      <input type="text" id="prd_tag" name="prd_tag">
       </div>
     </div>
     
@@ -321,7 +321,27 @@ input::-webkit-inner-spin-button {
     </div>
   </form>
 </div>
+<!-- tag bootsrap -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/bootstrap-tokenfield.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/bootstrap-tokenfield.js"></script>
+<!-- auto complete tags -->
+<script>
+ $(document).ready(function(){
+ 
+ $('#prd_tag').tokenfield({
+  autocomplete:{
+   source: ['Home','Furniture','Fashion','Mobiles','Electronic','Shirt','t-shirt','Jacket','Hoodie','Socks'],
+   delay:100
+  },
+  showAutocompleteOnFocus: true
 
+ });
+ });</script>
     <!-- <script>
     document.getElementById("time_limit").disabled = true;
                 document.getElementById("start_bid").disabled = true;
@@ -454,6 +474,7 @@ input::-webkit-inner-spin-button {
                 $tag          = $_POST['prd_tag'];
                 $bid_status   = $_POST['bid_status'];
                 $time_upload  = $_POST['time_upload'];
+                $category     = $_POST['prd_category'];
 
                 // Allow certain file formats
                 $allowTypes = array('jpg','png','jpeg','gif');
@@ -467,8 +488,8 @@ input::-webkit-inner-spin-button {
                 //$insert = "INSERT INTO PRODUCT(prd_name, prd_price, prd_img) VALUES (':name', ':price', ':imgContent')"
 
                 // Insert image content into database
-                $insert = $conn->query ("INSERT INTO product (prd_name,prd_price,prd_qty,prd_condition,prd_desc,prd_rating,prd_location,prd_tag,bid_status,time_upload,prd_img) 
-                VALUES ('$name','$price','$qty','$condition','$desc','$rating','$location','$tag','$bid_status','$time_upload', '$imgContent')");
+                $insert = $conn->query ("INSERT INTO product (prd_name,prd_price,prd_qty,prd_condition,prd_desc,prd_rating,prd_location,prd_tag,bid_status,time_upload,prd_img,prd_category) 
+                VALUES ('$name','$price','$qty','$condition','$desc','$rating','$location','$tag','$bid_status','$time_upload', '$imgContent', '$category')");
 
                 //$insertimage = $conn->query("INSERT INTO product_image (prd_imgfile)VALUES ('$image')");
 
