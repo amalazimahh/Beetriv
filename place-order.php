@@ -2,8 +2,32 @@
 ob_start();
 session_start();
 require_once "connection.php";
+$first_name_error= $last_name_error = $email_error = $address_error = $country_error = $state_error = $zipcode_error = "";
+if($_SERVER["REQUEST_METHOD"] == "POST")
+  {
+    if(empty($_POST['first_name'])){
+      $first_name_error = "* First name is Required";
+    }
+    if(empty($_POST['last_name'])){
+      $last_name_error = "* Last name is Required";
+    }
+    if(empty($_POST['email'])){
+      $email_error= "* Email is Required";
+    }
+    if(empty($_POST['address'])){
+      $address_error = "* Addressis Required";
+    }
+    if(empty($_POST['country'])){
+      $country_error = "* Country is Required";
+    }
+    if(empty($_POST['state'])){
+      $state_error = "* State is Required";
+    }
+    if(empty($_POST['zipcode'])){
+      $zipcode_error = "* Zip Code is Required";
+    }
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,13 +141,9 @@ require_once "connection.php";
                             </ul>
                         </li>
                     </ul>
-                    <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>                       
-                    </form>
+                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
+                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
+                    </a>
                 </div>
             </div>
         </nav>
@@ -151,10 +171,74 @@ require_once "connection.php";
           </li>
         </ul>
       </div>
+      <section class="container px-4 px-lg-5 my-5" >
+        <?php if(empty($_SESSION['cart_items'])){?>
+        <table class="table">
+            <tr>
+                <td>
+                    <p>Your cart is empty</p>
+                </td>
+            </tr>
+        </table>
+        <?php }?>
+        <?php if(isset($_SESSION['cart_items']) && count($_SESSION['cart_items']) > 0){?>
+        <table class="table">
+           <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                    $totalCounter = 0;
+                    $itemCounter = 0;
+                    foreach($_SESSION['cart_items'] as $key => $item){ 
+
+                    $img = $item['product_img'];
+                    
+                    $total = $item['product_price'] * $item['qty'];
+                    $totalCounter+= $total;
+                    $itemCounter+=$item['qty'];
+                    ?>
+                    <tr>
+                        <td>
+                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
+                            <?php echo $item['product_name'];?>               
+                        </td>
+                        <td>
+                            $<?php echo $item['product_price'];?>
+                        </td>
+                        <td>
+                            <?php echo $item['qty'];?>
+                        </td>
+                        <td>
+                            <?php echo $total;?>
+                        </td>
+                    </tr>
+                <?php }?>
+                <tr class="border-top border-bottom">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <strong>
+                            <?php 
+                                echo ($itemCounter==1)?$itemCounter.' item':$itemCounter.' items'; ?>
+                        </strong>
+                    </td>
+                    <td><strong>$<?php echo $totalCounter;?></strong></td>
+                </tr> 
+                </tr>
+            </tbody> 
+        </table>
+            <?php }?>
+        </section>
 
       <div class="checkout-form">
 
-        <form class="needs-validation" method="POST">
+        <form class="needs-validation" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="row">
 
             <h4 class="mb-2">Shipping Address</h4>
@@ -163,21 +247,25 @@ require_once "connection.php";
               <div class="col-md-5 mb-2">
                 <label for="firstName">First name</label>
                 <input type="text" class="form-control" id="firstName" name="first_name" placeholder="First Name" value="<?php echo (isset($fnameValue) && !empty($fnameValue)) ? $fnameValue:'' ?>" >
+                <span class = "error"> <?php echo $first_name_error; ?></span>
               </div>
               <div class="col-md-5 mb-2">
                 <label for="lastName">Last name</label>
                 <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Last Name" value="<?php echo (isset($lnameValue) && !empty($lnameValue)) ? $lnameValue:'' ?>" >
+                <span class = "error"> <?php echo $last_name_error; ?></span>
               </div>
             </div>
 
             <div class="col-md-5 mb-2">
               <label for="email">Email</label>
               <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="<?php echo (isset($emailValue) && !empty($emailValue)) ? $emailValue:'' ?>">
+              <span class = "error"> <?php echo $email_error; ?></span>
             </div>
 
             <div class="col-md-5 mb-2">
               <label for="address">Address</label>
               <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" value="<?php echo (isset($addressValue) && !empty($addressValue)) ? $addressValue:'' ?>">
+              <span class = "error"> <?php echo $address_error; ?></span>
             </div>
 
             <div class="col-md-5 mb-2">
@@ -192,35 +280,40 @@ require_once "connection.php";
                   <option value="">Choose...</option>
                   <option value="United States" >United States</option>
                 </select>
+                <span class = "error"> <?php echo $country_error; ?></span>
               </div>
               <div class="col-md-3 mb-2">
                 <label for="state">State</label>
                 <select class="custom-select d-block w-100" name="state" id="state" >
                   <option value="">Choose...</option>
                   <option value="California">California</option>
+                  <span class = "error"> <?php echo $state_error; ?></span>
                 </select>
               </div>
               <div class="col-md-2 mb-2">
                 <label for="zip">Zip</label>
                 <input type="text" class="form-control" id="zip" name="zipcode" placeholder="" value="<?php echo (isset($zipCodeValue) && !empty($zipCodeValue)) ? $zipCodeValue:'' ?>" >
+                <span class = "error"> <?php echo $zipcode_error; ?></span>
               </div>
             </div>
             <hr class="mb-2">
+            <div class="row mt-3">
+        
 
             <h4 class="mb-2">Payment</h4>
 
             <div class="d-block my-2">
               <div class="custom-control custom-radio">
-                <input id="cashOnDelivery" name="cashOnDelivery" type="radio" class="custom-control-input">
+                <input id="cashOnDelivery" name="payment-method" type="radio" <?php if(isset($payment_method) && $payment_method == "cash-on-delivery");?> class="custom-control-input" checked="" >
                   <label class="custom-control-label" for="cashOnDelivery">Cash on Delivery</label>
-                <input id="paypal" name="paypal" type="radio" class="custom-control-input">
-                  <label class="custom-control-label" for="paypal">PayPal</label>
+                  <input id="cashOnDelivery" name="payment-method" type="radio" <?php if(isset($payment_method) && $payment_method == "paypal");?> class="custom-control-input" checked="" >
+                <label class="custom-control-label" for="paypal">Paypal</label>
               </div>
             </div>
            
             <hr class="mb-3">
             <div class="checkout-btn">
-              <button type="submit" name="submit" value="submit"><a href="pay.php">PLACE ORDER</a></button>
+              <button type="submit" name="submit" value="submit">PLACE ORDER</a></button>
             </div>
           </form>
 
