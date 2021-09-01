@@ -5,9 +5,19 @@ require_once "connection.php";
 
 //make sure login first, so that can fetch email, echo email to see if you logged in
 $email = $_SESSION['email'];
-echo $email;
+//echo $email;
 
 if(isset($_POST['save'])){
+    // Get the file info
+    $fileName = basename($_FILES['image']['name']);
+    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+    //Allow certain file formats
+    $allowTypes = array('jpg','png','jpeg','gif');
+    if(in_array($fileType, $allowTypes)){
+        $image = $_FILES['image']['tmp_name'];
+        $imgContent = addslashes(file_get_contents($image));
+
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
     $username = $_POST['username'];
@@ -35,7 +45,8 @@ if(isset($_POST['save'])){
                                             password = '$newPwd', 
                                             fname = '$fname',
                                             lname = '$lname',
-                                            bio = '$bio' 
+                                            bio = '$bio',
+                                            img = '$imgContent'
                                             WHERE email = '$email' ");
     
         $update->bindParam(':email', $email);
@@ -47,9 +58,10 @@ if(isset($_POST['save'])){
         $update->bindParam(':fname', $fname);
         $update->bindParam(':lname', $lname);
         $update->bindParam(':bio', $bio);
+        $update->bindParam(':img', $imgContent);
         $update->bindParam(':email', $email);
         $update->execute();
-
+    }
         header('location: user-profile.php');
         echo "Successfully updated Profile";
         }// End of if profile is ok 
@@ -124,7 +136,16 @@ if(isset($_POST['save'])){
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">Edogaru</span><span class="text-black-50">edogaru@mail.com.my</span><span> </span></div>
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" id="output" src="https://i.dlpng.com/static/png/5066062-user-profile-icon-png-download-fa-user-circle-o-free-profile-icon-png-820_861_preview.png"><br><label for="image">Select Profile Image: </label><input type="file" name="image" accept="image/*" onchange="loadFile(event)" class="form-control"><span> </span></div>
+            <script>
+                var loadFile = function(event) {
+                var output = document.getElementById('output');
+                output.src = URL.createObjectURL(event.target.files[0]);
+                output.onload = function() {
+                URL.revokeObjectURL(output.src) // free memory
+                }
+            };
+            </script>
         </div>
         <div class="col-md-9 border-right">
             <div class="p-3 py-5">
