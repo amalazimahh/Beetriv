@@ -134,7 +134,7 @@
                         <form>
                             
                             <div class="mb-3 form-check">
-                                <form>
+                                <form action="subscription.php" method="post">
                                 <input type="checkbox" class="form-check-input" id="check" required/>
                                 <label class="form-check-label" for="check">I have read, understood and agreed with <a class="text-warning" href="#">Beetriv Terms and Conditions</a> in becoming one of the vendors.</label>
                                 </form>
