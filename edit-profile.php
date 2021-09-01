@@ -7,6 +7,12 @@ require_once "connection.php";
 $email = $_SESSION['email'];
 //echo $email;
 
+
+$select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
+$statement = $conn->prepare($select);
+$statement->execute();
+$row = $statement->fetchAll(PDO::FETCH_ASSOC);
+
 if(isset($_POST['save'])){
     // Get the file info
     $fileName = basename($_FILES['image']['name']);
@@ -133,10 +139,11 @@ if(isset($_POST['save'])){
         </nav>
 
         <!-- Edit Profile -->
+        <?php foreach($row as $user){ ?>
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" id="output" src="https://i.dlpng.com/static/png/5066062-user-profile-icon-png-download-fa-user-circle-o-free-profile-icon-png-820_861_preview.png"><br><label for="image">Select Profile Image: </label><input type="file" name="image" accept="image/*" onchange="loadFile(event)" class="form-control"><span> </span></div>
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" id="output" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($user['img']);?>" onerror="this.src='img/profile-img.png';"><br><label for="image">Select Profile Image: </label><input type="file" name="image" accept="image/*" onchange="loadFile(event)" class="form-control"><span> </span></div>
             <script>
                 var loadFile = function(event) {
                 var output = document.getElementById('output');
@@ -160,11 +167,11 @@ if(isset($_POST['save'])){
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-12"><label class="labels">Username</label><input type="text" class="form-control" placeholder="Username" id="username" name="username" pattern="[a-zA-Z]{1,}" placeholder="Username" required></div>
-                    <div class="col-md-12"><label class="labels">Email Address</label><input type="email" class="form-control" placeholder="Email Address" id="exampleInputEmail" name="email" placeholder="Email Address" required></div>
+                    <div class="col-md-12"><label class="labels">Email Address</label><input type="email" class="form-control" id="exampleInputEmail" name="email" placeholder="<?php echo $email; ?>" disabled></div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">IC Number</label><input type="text" class="form-control" placeholder="IC Number" id="ic" name="icNum" placeholder="IC Number" required></div>
-                    <div class="col-md-6"><label class="labels">IC Colour</label><input type="text" class="form-control" list="ic2" value="" placeholder="IC Colour" name="icCol" list="ic2" placeholder="IC Colour" required>
+                    <div class="col-md-6"><label class="labels">IC Number</label><input type="text" class="form-control" id="ic" name="icNum" placeholder="<?php echo $user['ic_number']; ?>" disabled></div>
+                    <div class="col-md-6"><label class="labels">IC Colour</label><input type="text" class="form-control" list="ic2" name="icCol" list="ic2" placeholder="<?php echo $user['ic_color']; ?>" disabled>
                     <datalist id="ic2">
                                         <option value = "Yellow">
                                         <option value = "Red">
@@ -174,7 +181,7 @@ if(isset($_POST['save'])){
                     </div>
                 </div>
                 <div class="row mt-3 pb-3">
-                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" class="form-control" placeholder="Phone Number" id="phone" name="phone" placeholder= "Phone Number" required></div>
+                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" class="form-control" id="phone" name="phone" placeholder="<?php echo $user['phone_number']; ?>" disabled></div>
                     <div class="col-md-12"><label class="labels">Add Bio</label><input type="textarea" class="form-control form-control-user" placeholder= "Bio" id="bio" name="bio" placeholder= "Bio"/></div><br>
                 </div>
                 <div class="row mt-3">
@@ -183,7 +190,7 @@ if(isset($_POST['save'])){
                     <div class="col-md-12"><label class="labels">New Password</label><input type="password" class="form-control" placeholder="New Password" id="newpwd" name="newPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "New Password" required></div>
                     <div class="col-md-12"><label class="labels">Confirm Password</label><input type="password" class="form-control" placeholder="Confirm Password" id="confirmpwd" name="confirmPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Confirm Password" required></div>
                 </div>
-                <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="button" value="Save Profile" name="save"></div>
+                <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="submit" value="Save Profile" name="save"></div>
             </div>
             </form>
         </div>
@@ -191,6 +198,7 @@ if(isset($_POST['save'])){
 </div>
 </div>
 </div>
+<?php } ?>
 
 <!-- Footer-->
 <footer class="site-footer">
