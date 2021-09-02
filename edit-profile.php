@@ -1,6 +1,8 @@
 <?php
 ob_start();
 session_start();
+$email=$_SESSION['email'];
+echo $email;
 require_once "connection.php";
 
 //make sure login first, so that can fetch email, echo email to see if you logged in
@@ -186,9 +188,9 @@ if(isset($_POST['save'])){
                 </div>
                 <div class="row mt-3">
                 <h4 class="text-right">Change Password</h4><hr>
-                <div class="col-md-12"><label class="labels">Current Password</label><input type="password" class="form-control" placeholder="Current Password" id="currentpwd" name="currentPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Current Password" required></div>
-                    <div class="col-md-12"><label class="labels">New Password</label><input type="password" class="form-control" placeholder="New Password" id="newpwd" name="newPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "New Password" required></div>
-                    <div class="col-md-12"><label class="labels">Confirm Password</label><input type="password" class="form-control" placeholder="Confirm Password" id="confirmpwd" name="confirmPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Confirm Password" required></div>
+                <div class="col-md-12"><label class="labels">Current Password</label><input type="password" class="form-control" placeholder="Current Password" id="currentpwd" name="currentPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Current Password" ></div>
+                    <div class="col-md-12"><label class="labels">New Password</label><input type="password" class="form-control" placeholder="New Password" id="newpwd" name="newPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "New Password" ></div>
+                    <div class="col-md-12"><label class="labels">Confirm Password</label><input type="password" class="form-control" placeholder="Confirm Password" id="confirmpwd" name="confirmPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Confirm Password"></div>
                 </div>
                 <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="submit" value="Save Profile" name="save"></div>
             </div>
