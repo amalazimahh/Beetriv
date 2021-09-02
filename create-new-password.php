@@ -4,11 +4,11 @@ session_start();
 require_once "connection.php";
 
     //fetch email entered by user on forgot-pwd.php 
-    $email = $_SESSION['email'];
-    //echo $email;
+    $email = $_GET['email'];
+    echo $email;
 
     if(isset($_POST['create-new-password'])){
-
+        $email = $_POST['email'];
         $newpwd = $_POST['newpwd'];
         $repeatpwd = $_POST['repeatpwd'];
                                         
@@ -18,6 +18,7 @@ require_once "connection.php";
         $check_code = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
         $run = $conn->prepare($check_code);
         $run->fetch(PDO::FETCH_ASSOC);
+        echo $email;
                                         
         if($run){
         
@@ -84,6 +85,7 @@ require_once "connection.php";
 
                                     <!-- Enter new password -->
                                         <div class="form-group">
+                                            <input type="hidden" name="email" value="<?php echo $email; ?>">
                                             <input type="password" name="newpwd" class="form-control form-control-user"
                                                 id="newpwd"
                                                 placeholder="Enter New Password..." required/>
