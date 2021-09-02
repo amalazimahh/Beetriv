@@ -11,6 +11,8 @@ $statement = $conn->prepare($select);
 $statement->execute();
 $row = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+
+
 $first_name_error= $last_name_error = $email_error = $address_error = $country_error = $state_error = $zipcode_error = "";
 if($_SERVER["REQUEST_METHOD"] == "POST")
   {
@@ -35,7 +37,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     if(empty($_POST['zipcode'])){
       $zipcode_error = "* Zip Code is Required";
     }
+    if(empty($_POST['payment-method'])){
+      $payment_error = "* Payment method is Required";
+    }else{
+      $payment_method = input_data($_POST['payment-method']);
+    }
+    if(isset($payment_method) && $payment_method == "paypal"){
+      unset($_SESSION['cart_items']);
+      header('Location: pay.php');
+    }
+    if(isset($payment_method) && $payment_method == "cashondelivery"){
+      header('Location: store.php');
+    }
 }
+function input_data($data){
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data); 
+  return $data;
+}
+ 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -245,8 +266,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             <?php }?>
         </section>
 
+        <?php foreach($row as $user){ ?>
       <div class="checkout-form">
-
         <form class="needs-validation" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="row">
 
@@ -255,26 +276,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
               <div class="col-md-5 mb-2">
                 <label for="firstName">First name</label>
-                <input type="text" class="form-control" id="firstName" name="first_name" placeholder="First Name" value="<?php echo $fname ?>" disabled>
-                <span class = "error"> <?php echo $first_name_error; ?></span>
+                <input type="text" class="form-control" id="firstName" name="first_name" placeholder="First Name" value="<?php echo $user['fname'] ?>" disabled>
+                
               </div>
               <div class="col-md-5 mb-2">
                 <label for="lastName">Last name</label>
-                <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Last Name" value="<?php echo (isset($lnameValue) && !empty($lnameValue)) ? $lnameValue:'' ?>" disabled>
-                <span class = "error"> <?php echo $last_name_error; ?></span>
+                <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Last Name" value="<?php echo $user['lname'] ?>" disabled>
+                
               </div>
             </div>
 
             <div class="col-md-5 mb-2">
               <label for="email">Email</label>
               <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="<?php echo $email ?>" disabled>
-              <span class = "error"> <?php echo $email_error; ?></span>
+              
             </div>
 
             <div class="col-md-5 mb-2">
               <label for="address">Address</label>
               <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" value="<?php echo (isset($addressValue) && !empty($addressValue)) ? $addressValue:'' ?>"disabled>
-              <span class = "error"> <?php echo $address_error; ?></span>
             </div>
 
             <div class="col-md-5 mb-2">
@@ -288,14 +308,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                   <option value="">Choose...</option>
                   <option value="United States" >United States</option>
                 </select>
-                <span class = "error"> <?php echo $country_error; ?></span>
+                
               </div>
               <div class="col-md-3 mb-2">
                 <label for="state">State</label>
                 <select class="custom-select d-block w-100" name="state" id="state" >
                   <option value="">Choose...</option>
                   <option value="California">California</option>
-                  <span class = "error"> <?php echo $state_error; ?></span>
+                  
                 </select>
               </div>
               <div class="col-md-2 mb-2">
@@ -312,10 +332,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
             <div class="d-block my-2">
               <div class="custom-control custom-radio">
-                <input id="cashOnDelivery" name="payment-method" type="radio" <?php if(isset($payment_method) && $payment_method == "cash-on-delivery");?> class="custom-control-input" checked="" >
-                  <label class="custom-control-label" for="cashOnDelivery">Cash on Delivery</label>
-                  <input id="cashOnDelivery" name="payment-method" type="radio" <?php if(isset($payment_method) && $payment_method == "paypal");?> class="custom-control-input" checked="" >
-                <label class="custom-control-label" for="paypal">Paypal</label>
+                <input id="cashOnDelivery" name="payment-method" type="radio" class="custom-control-input" <?php if(isset($payment_method) && $payment_method == "cashondelivery") echo "checked"; ?> value="cashondelivery">Cash on Delivery <br><br>
+                  <!-- <label class="custom-control-label" for="cashOnDelivery">Cash on Delivery</label> <br><br> -->
+                  <input id="cashOnDelivery" name="payment-method" type="radio"  class="custom-control-input" <?php if(isset($payment_method) && $payment_method == "paypal") echo "checked"; ?> value="paypal">Paypal <br><br>
+                <!-- <label class="custom-control-label" for="paypal">Paypal</label> -->
               </div>
             </div>
            
@@ -328,7 +348,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
           </div>
 
           <br><br>
-
+          <?php } ?>
         <!-- Footer-->
         <footer class="site-footer">
 
