@@ -89,7 +89,7 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Have All Legal Related Documentation</li>
             </ul>
             <div class="d-grid">
-              <a href="#" class="btn btn-warning text-uppercase">Upgrade</a>
+              <a href="#" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalForm">Upgrade</a>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Have All Legal Related Documentation</li>
             </ul>
             <div class="d-grid">
-              <a type="button" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalForm">Upgrade</a>
+              <a type="button" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalPay">Upgrade</a>
             </div>
           </div>
         </div>
@@ -122,8 +122,8 @@
   </div>
 </section>
 
-<!-- Modal -->
-<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Vendor Modal -->
+<div class="modal fade" id="modalPay" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -146,6 +146,44 @@
                                 <p>Note: You will be directed to PayPal Login Page to proceed with your payment.</p>
                             </div>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Runner Modal -->
+<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Upgrade Your Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                        <div class="mb-3">
+                        <label class="form-label" for="customFile">Your front IC</label>
+                        <input type="file" class="form-control" id="customFile" name="front_ic"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="customFile">Your back IC</label>
+                        <input type="file" class="form-control" id="customFile" name="back_ic"/>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" for="customFile">Driver's License</label>
+                        <input type="file" class="form-control" id="customFile" name="driver_license"/>
+                      </div>
+                            <div class="mb-3 form-check">
+                                <form action="subscription.php" method="post">
+                                <input type="checkbox" class="form-check-input" id="check" required/>
+                                <label class="form-check-label" for="check">I have read, understood and agreed with <a class="text-warning" href="#">Beetriv Terms and Conditions</a> in becoming one of the vendors.</label>
+                                </form>
+                            </div>
+
+                      <div class="modal-footer d-block">
+                        <button type="submit" class="btn btn-warning float-end">Submit</button>
+                      </div>
                         </form>
                     </div>
                 </div>
