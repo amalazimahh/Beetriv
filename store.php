@@ -4,6 +4,20 @@ require_once "connection.php";
 
 $email = $_SESSION['email'];
 // echo $email;
+$session=$_SESSION['email'];
+
+if (!$session)
+{
+    header ('location: login.php');
+    die ('Login required');
+    
+}
+else if (isset($_POST['logout']))
+{
+    session_destroy();
+    echo "Logout successfull. ";
+    header ('location: login.php');
+}
 
 // Get image data from database
 $result = "SELECT * FROM product";
@@ -232,12 +246,18 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
                     <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
-                    </a></li>
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right" name="logout" method="post"></i></a></li> -->
+                    <!-- <form action = "store.php" method ="POST">
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" ><i class="bi bi-box-arrow-right" name="logout"></i></a></li>
+                   </form> -->
+                    <form action = "store.php" method = "post">
+                    <input type = "submit" name = "logout" value="logout"/>
+                    </form>
                     </ul>
                 </div>
             </div>
         </nav>
+
 
         <div class="slideshow-container">
 
