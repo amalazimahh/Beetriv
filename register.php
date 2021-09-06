@@ -70,7 +70,7 @@ require 'vendor/autoload.php';
                                 <div class="form-group">
                                 <!-- Username -->
                                     <input type="text" class="form-control form-control-user" id="username" name="username" pattern="[a-zA-Z]{1,}" title="Username must contain only letters"
-                                        placeholder="Username" required/>
+                                        placeholder="Display Name" required/>
                                 </div>
                                 <!-- IC Number -->
                                 <div class="form-group row">

@@ -335,7 +335,7 @@ input::-webkit-inner-spin-button {
  
  $('#prd_tag').tokenfield({
   autocomplete:{
-   source: ['Home','Furniture','Fashion','Mobiles','Electronic','Shirt','t-shirt','Jacket','Hoodie','Socks'],
+   source: ['Home','Furniture','Fashion','Mobiles','Electronic','Shirt','t-shirt','Jacket','Hoodie','Socks','Shawl'],
    delay:100
   },
   showAutocompleteOnFocus: true
