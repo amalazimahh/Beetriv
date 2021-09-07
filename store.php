@@ -310,18 +310,50 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         <div class="col-xs-8 col-xs-offset-2">
 		    <div class="input-group">
                 <div class="input-group-btn search-panel">
-                    <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> -->
-                    	<!-- <span id="search_concept">Filter by</span> <span class="caret"></span> -->
-                        <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> -->
-                    	<!-- <span id="search_concept">Filter by</span> <span class="caret"> -->
-                    <select id="animal" name="category" class="btn btn-default dropdown-toggle">                      
-                        <option value="0">Filter By</option>
-                        <option value="1" name="Home">Home and Living</option>
-                        <option value="2">Fashion</option>
-                        <option value="3">Mobiles and Electronics</option>
-                    </select></span>
-                    </button>
-                    </button>
+                    <!-- Filter by function -->
+                    <script language="javascript">
+                    function SelectRedirect(){
+                    switch(document.getElementById('category').value)
+                    {
+                    case "Home":
+                    window.location="homeliving.php";
+                    break;
+
+                    case "Fashion":
+                    window.location="fashion.php";
+                    break;
+
+                    case "Mobiles":
+                    window.location="mobile.php";
+                    break;
+                    case "Hobbies":
+                    window.location="hobbies.php";
+                    break;
+
+                    case "Cars":
+                    window.location="cars.php";
+                    break;
+
+                    case "Freebies":
+                    window.location="freebies.php";
+                    break;
+
+                    default:
+                    window.location="store.php"; // if no selection matches then redirected to home page
+                    break;
+                    }                           
+                    }
+                    </script>
+                    <SELECT id="category" class="btn btn-default dropdown-toggle" name="section" onChange="SelectRedirect();">
+                    <Option value="">Filter By</option>
+                    <Option value="Home">Home and Living</option>
+                    <Option value="Fashion">Fashion</option>
+                    <Option value="Mobiles">Mobiles and Electronics</option>
+                    <Option value="Hobbies">Hobbies and Games</option>
+                    <Option value="Cars">Cars and Property</option>
+                    <Option value="Freebies">Freebies, Deals and More!</option>
+                    </SELECT>
+
                     <ul class="dropdown-menu" role="menu">
                       <li><a href="#contains">Contains</a></li>
                       <li><a href="#its_equal">It's equal</a></li>
