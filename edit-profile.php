@@ -1,8 +1,8 @@
 <?php
 ob_start();
 session_start();
-$email=$_SESSION['email'];
-echo $email;
+// $email=$_SESSION['email'];
+// echo $email;
 require_once "connection.php";
 
 //make sure login first, so that can fetch email, echo email to see if you logged in
