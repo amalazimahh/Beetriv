@@ -179,6 +179,9 @@ input::-webkit-inner-spin-button {
           <option value="Home">Home and Living</option>
           <option value="Fashion">Fashion</option>
           <option value="Mobile">Mobile and Electronics</option>
+          <option value="Hobbies">Hobbies and Games</option>
+          <option value="Cars">Cars and Property</option>
+          <option value="Freebies">Freebies, Deals and More!</option>
         </select>
       </div>
     </div>
@@ -335,7 +338,7 @@ input::-webkit-inner-spin-button {
  
  $('#prd_tag').tokenfield({
   autocomplete:{
-   source: ['Home','Furniture','Fashion','Mobiles','Electronic','Shirt','t-shirt','Jacket','Hoodie','Socks'],
+   source: ['Home','Furniture','Fashion','Mobiles','Electronic','Shirt','t-shirt','Jacket','Hoodie','Socks','Shawl','Game','Car',],
    delay:100
   },
   showAutocompleteOnFocus: true
