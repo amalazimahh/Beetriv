@@ -1,9 +1,9 @@
 <?php 
     session_start();
     require_once "connection.php";
-    $email = $_SESSION['email'];
+    // $email = $_SESSION['email'];
     $id = $_GET['product'];
-    echo $email;
+    // echo $email;
 
 
     $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
@@ -194,12 +194,15 @@ else
                 <div class="row gx-4 gx-lg-5 align-items-center">
                     <div class="col-md-6"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>"></div>
                     <div class="col-md-6">
-                        <div class="small mb-1">SKU: BST-498</div>
+                        <div class="small mb-1"></div>
                         <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
-                            <span>$<?php echo $row['prd_price']?></span>
+                            <span>$<?php echo $row['prd_price']?>BND</span><br>
+                            <h10 class="lead"> [Seller name] </h10>
                         </div>
-                        <h9 class="lead"><?php echo $row['prd_desc']?></h9>
+                         <br>
+                        <h8 class="lead"> Item Description:  </h8> <br>
+                        <h9 class="lead"><?php echo $row['prd_desc']?></h9> <br><br>
                         <form method="POST">
                         <div class="d-flex" >
                         <div class="large col-2">Quantity</div>
