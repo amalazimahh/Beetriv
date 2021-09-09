@@ -1,8 +1,8 @@
 <?php 
     session_start();
     require_once('connection.php');
-    $email = $_SESSION['email'];
-    echo $email;
+    // $email = $_SESSION['email'];
+    // echo $email;
 
     if(isset($_GET['action'],$_GET['item']) && $_GET['action'] == 'remove')
     {
@@ -89,6 +89,7 @@
            <thead>
                 <tr>
                     <th>Product</th>
+                    <th>Shop</th>
                     <th>Price</th>
                     <th>Qty</th>
                     <th>Total</th>
@@ -117,6 +118,9 @@
 
                         </td>
                         <td>
+                            [Vendors]
+                        </td>
+                        <td>
                             $<?php echo $item['product_price'];?>
                         </td>
                         <td>
@@ -128,6 +132,7 @@
                     </tr>
                 <?php }?>
                 <tr class="border-top border-bottom">
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td>
