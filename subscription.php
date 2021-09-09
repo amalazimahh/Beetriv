@@ -1,3 +1,11 @@
+<?php
+ob_start();
+session_start();
+require_once "connection.php";
+
+$email = $_SESSION['email'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,7 +97,7 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Have All Legal Related Documentation</li>
             </ul>
             <div class="d-grid">
-              <a href="#" class="btn btn-warning text-uppercase">Upgrade</a>
+              <a href="#" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalForm">Upgrade</a>
             </div>
           </div>
         </div>
@@ -113,7 +121,7 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Have All Legal Related Documentation</li>
             </ul>
             <div class="d-grid">
-              <a type="button" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalForm">Upgrade</a>
+              <a type="button" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalPay">Upgrade</a>
             </div>
           </div>
         </div>
@@ -122,8 +130,8 @@
   </div>
 </section>
 
-<!-- Modal -->
-<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Vendor Modal -->
+<div class="modal fade" id="modalPay" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -134,10 +142,10 @@
                         <form>
                             
                             <div class="mb-3 form-check">
-                                <form action="subscription.php" method="post">
+                                
                                 <input type="checkbox" class="form-check-input" id="check" required/>
                                 <label class="form-check-label" for="check">I have read, understood and agreed with <a class="text-warning" href="#">Beetriv Terms and Conditions</a> in becoming one of the vendors.</label>
-                                </form>
+                                
                             </div>
                             <div class="modal-footer d-block">
                             <div class="paypal-button">
@@ -146,6 +154,42 @@
                                 <p>Note: You will be directed to PayPal Login Page to proceed with your payment.</p>
                             </div>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Runner Modal -->
+<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Upgrade Your Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                        <label class="form-label" for="customFile">Your front IC</label>
+                        <input type="file" class="form-control" id="customFile" name="front_ic"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="customFile">Your back IC</label>
+                        <input type="file" class="form-control" id="customFile" name="back_ic"/>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" for="customFile">Driver's License</label>
+                        <input type="file" class="form-control" id="customFile" name="driver_license"/>
+                      </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="check" required/>
+                                <label class="form-check-label" for="check">I have read, understood and agreed with <a class="text-warning" href="#">Beetriv Terms and Conditions</a> in becoming one of the vendors.</label>
+                            </div>
+
+                      <div class="modal-footer d-block">
+                        <button type="submit" name="submit" class="btn btn-warning float-end">Submit</button>
+                      </div>
                         </form>
                     </div>
                 </div>
@@ -236,6 +280,55 @@
           }
          }).render('#paypal-payment-button');
         </script>
+
+            <?php
+        $status = $statusMsg = '';
+        if(isset($_POST['submit'])){
+            $status = 'error';
+            if(!empty($_FILES['front_ic']['name']) && !empty($_FILES['back_ic']['name']) && !empty($_FILES['driver_license']['name'])) {
+                // Get the file info
+                $fileName1 = basename($_FILES['front_ic']['name']);
+                $fileType1 = pathinfo($fileName1, PATHINFO_EXTENSION);
+
+                $fileName2 = basename($_FILES['back_ic']['name']);
+                $fileType2 = pathinfo($fileName2, PATHINFO_EXTENSION);
+
+                $fileName3 = basename($_FILES['driver_license']['name']);
+                $fileType3 = pathinfo($fileName3, PATHINFO_EXTENSION);
+
+                // Allow certain file formats
+                $allowTypes = array('jpg','png','jpeg','gif');
+                if(in_array($fileType1, $allowTypes) || in_array($fileType2, $allowTypes) || in_array($fileType3, $allowTypes)){
+                    $image1 = $_FILES['front_ic']['tmp_name'];
+                    $front_ic = addslashes(file_get_contents($image1));
+
+                    $image2 = $_FILES['back_ic']['tmp_name'];
+                    $back_ic = addslashes(file_get_contents($image2));
+
+                    $image3 = $_FILES['driver_license']['tmp_name'];
+                    $driver_license = addslashes(file_get_contents($image3));
+
+                // Insert image content into database
+                $insert = $conn->query("INSERT INTO runner (front_ic, back_ic, driver_license) VALUES ('$front_ic', '$back_ic', '$driver_license')");
+                if($insert){
+                        $status = 'success';
+                        $statusMsg = "File uploaded successfully.";
+                        echo "<script>
+                        Qual.info('Thank you for joining Beetriv!','Runner dashboard will appear on your profile once your documentation has been reviewed.');
+                        </script>";
+                    } else {
+                       $statusMsg = "File upload failed. Please try again."; 
+                    }
+                } else { 
+                    $statusMsg = "Only JPG, JPEG, PNG, & GIF files are allowed.";
+                }
+            } else {
+                $statusMsg = "Select a file.";
+            }
+        }
+
+        //echo $statusMsg;
+    ?>
 
 </body>
 </html>

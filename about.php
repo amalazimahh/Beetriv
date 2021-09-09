@@ -292,7 +292,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                         <div class="team-text">
                                             <h2>Azimah</h2>
-                                            <p>Leader</p>
+                                            <p>Leader of Web Developer</p>
                                         </div>
                                     </div>
                                 </div>

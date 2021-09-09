@@ -4,7 +4,7 @@ session_start();
 require_once "connection.php";
 
     //fetch email entered by user on forgot-pwd.php 
-    // $email = $_GET['email'];
+    $email = $_GET['email'];
     // echo $email;
 
     if(isset($_POST['create-new-password'])){
