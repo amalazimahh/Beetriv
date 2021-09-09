@@ -216,6 +216,7 @@ function input_data($data){
            <thead>
                 <tr>
                     <th>Product</th>
+                    <td>Shop</td>
                     <th>Price</th>
                     <th>Qty</th>
                     <th>Total</th>
@@ -239,6 +240,9 @@ function input_data($data){
                             <?php echo $item['product_name'];?>               
                         </td>
                         <td>
+                            [Vendors]
+                        </td>
+                        <td>
                             $<?php echo $item['product_price'];?>
                         </td>
                         <td>
@@ -250,6 +254,7 @@ function input_data($data){
                     </tr>
                 <?php }?>
                 <tr class="border-top border-bottom">
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td>
@@ -295,6 +300,7 @@ function input_data($data){
             <div class="col-md-5 mb-2">
               <label for="address">Address</label>
               <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" value="<?php echo (isset($addressValue) && !empty($addressValue)) ? $addressValue:'' ?>"disabled>
+              
             </div>
 
             <div class="col-md-5 mb-2">
@@ -320,8 +326,8 @@ function input_data($data){
               </div>
               <div class="col-md-2 mb-2">
                 <label for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" name="zipcode" placeholder="" value="<?php echo (isset($zipCodeValue) && !empty($zipCodeValue)) ? $zipCodeValue:'' ?>" >
-                <span class = "error"> <?php echo $zipcode_error; ?></span>
+                <input type="text" class="form-control" id="zip" name="zipcode" placeholder="" value="TE2424" disabled>
+                
               </div>
             </div>
             <hr class="mb-2">
@@ -336,6 +342,7 @@ function input_data($data){
                   <!-- <label class="custom-control-label" for="cashOnDelivery">Cash on Delivery</label> <br><br> -->
                   <input id="cashOnDelivery" name="payment-method" type="radio"  class="custom-control-input" <?php if(isset($payment_method) && $payment_method == "paypal") echo "checked"; ?> value="paypal">Paypal <br><br>
                 <!-- <label class="custom-control-label" for="paypal">Paypal</label> -->
+                <!-- <span class="error"> </span> -->
               </div>
             </div>
            
