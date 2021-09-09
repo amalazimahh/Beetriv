@@ -141,7 +141,7 @@ require_once "connection.php";
       </div>
 
       <div class="text-center">
-          <h3>Your order has been submitted. Please check your email for invoice.</h3>
+          <h3>Your order has been submitted.</h3>
       </div>
 
           <br><br>
