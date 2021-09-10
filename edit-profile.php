@@ -5,9 +5,10 @@ session_start();
 //echo $email;
 require_once "connection.php";
 
+
 //make sure login first, so that can fetch email, echo email to see if you logged in
 $email = $_SESSION['email'];
-//echo $email;
+// echo $email;
 
 
 $select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
@@ -16,69 +17,35 @@ $statement->execute();
 $row = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 if(isset($_POST['save'])){
-    // Get the file info
-    $fileName = basename(isset($_FILES['image']['name']));
-    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+        // Get the file info
+        $fileName = basename($_FILES['img']['name']);
+        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+    $fname      = $_POST['fname'];
+    $lname      = $_POST['lname'];
+    $username   = $_POST['username'];
+    $emailEdit  = $_POST['email'];
+    $phone      = $_POST['phone'];
+    $bio        = $_POST['bio'];
+    $currentPwd = $_POST['currentPwd'];
+    $newPwd     = $_POST['newPwd'];                             
+    $confirmPwd = $_POST['confirmPwd'];
 
     //Allow certain file formats
     $allowTypes = array('jpg','png','jpeg','gif');
     if(in_array($fileType, $allowTypes)){
-        $image = $_FILES['image']['tmp_name'];
+        $image = $_FILES['img']['tmp_name'];
         $imgContent = addslashes(file_get_contents($image));
-
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $username = $_POST['username'];
-    $emailEdit = $_POST['email'];
-    $icNum = $_POST['icNum'];
-    $icCol = $_POST['icCol'];
-    $phone = $_POST['phone'];
-    $bio = $_POST['bio'];
-    $currentPwd = $_POST['currentPwd'];
-    $newPwd = $_POST['newPwd'];
-    $confirmPwd = $_POST['confirmPwd'];
-
-    //select all details from the table based on current user logged in
-    $select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
-    $statement = $conn->prepare($select);
-    $statement->fetch(PDO::FETCH_ASSOC);
-
-    //if user exist, then update the details based on data entered
-    if($statement){
-        $update = $conn->prepare("UPDATE users SET email = '$emailEdit',
-                                            username = '$username', 
-                                            ic_number = '$icNum',
-                                            ic_color = '$icCol', 
-                                            phone_number = '$phone',
-                                            password = '$newPwd', 
-                                            fname = '$fname',
-                                            lname = '$lname',
-                                            bio = '$bio',
-                                            img = '$imgContent'
-                                            WHERE email = '$email' ");
     
-        $update->bindParam(':email', $email);
-        $update->bindParam(':username', $username);
-        $update->bindParam(':ic_number', $icNum);
-        $update->bindParam(':ic_color', $icCol);
-        $update->bindParam(':phone_number', $phone);
-        $update->bindParam(':password', $newPwd);
-        $update->bindParam(':fname', $fname);
-        $update->bindParam(':lname', $lname);
-        $update->bindParam(':bio', $bio);
-        $update->bindParam(':img', $imgContent);
-        $update->bindParam(':email', $email);
-        $update->execute();
     }
-        header('location: user-profile.php');
-        echo "Successfully updated Profile";
-        }// End of if profile is ok 
-        else{
-        print_r($conn->errorInfo()); // if any error is there it will be posted
-        $msg=" Database problem, please contact site admin ";
-        }
-}
+    $pdoQuery = ("UPDATE users SET email = '$emailEdit', username = '$username', phone_number = '$phone', 
+    fname = '$fname', lname = '$lname', bio = '$bio', img = '$imgContent' WHERE email = '$email' ");
+    $pdoQuery_run = $conn->prepare($pdoQuery);
+    $pdoQuery_run->execute();
+    header('location: edit-profile.php');
 
+    //notify function not yet
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -141,11 +108,13 @@ if(isset($_POST['save'])){
         </nav>
 
         <!-- Edit Profile -->
-        <?php foreach($row as $user){ ?>
+        <!-- <?php foreach($row as $user){ ?> -->
+            <form action="edit-profile.php" method="post" enctype="multipart/form-data">
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" id="output" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($user['img']);?>" onerror="this.src='img/profile-img.png';"><br><label for="image">Select Profile Image: </label><input type="file" name="image" accept="image/*" onchange="loadFile(event)" class="form-control"><span> </span></div>
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+            <img class="rounded-circle mt-5" width="150px" id="output" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($user['img']);?>" onerror="this.src='img/profile-img.png';"><br><label for="image">Select Profile Image: </label><input type="file" name="img" accept="image/*" onchange="loadFile(event)" class="form-control"><span> </span></div>
             <script>
                 var loadFile = function(event) {
                 var output = document.getElementById('output');
@@ -162,14 +131,15 @@ if(isset($_POST['save'])){
                     <h4 class="text-right">Edit Profile</h4>
                 </div>
                 <hr>
-                <form action="edit-profile.php" method="post">
+                <!-- <form action="edit-profile.php" method="post" enctype="multipart/form-data"> -->
                 <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Firstname</label><input type="text" class="form-control" placeholder="Firstname" id="fname" name="fname" pattern="[a-zA-Z]{1,}" placeholder="First Name"></div>
-                    <div class="col-md-6"><label class="labels">Lastname</label><input type="text" class="form-control" placeholder="Lastname" id="lname" name="lname" pattern="[a-zA-Z]{1,}" placeholder="Last Name"></div>
+                    <input type="hidden" name="email" value="<?php echo $email; ?>">
+                    <div class="col-md-6"><label class="labels">Firstname</label><input type="text" class="form-control" placeholder="Firstname" id="fname" name="fname" pattern="[a-zA-Z]{1,}" placeholder="First Name" required></div>
+                    <div class="col-md-6"><label class="labels">Lastname</label><input type="text" class="form-control" placeholder="Lastname" id="lname" name="lname" pattern="[a-zA-Z]{1,}" placeholder="Last Name" required></div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Display Name</label><input type="text" class="form-control" placeholder="Display Name" id="username" name="username" pattern="[a-zA-Z]{1,}" placeholder="Username"></div>
-                    <div class="col-md-12"><label class="labels">Email Address</label><input type="email" class="form-control" id="exampleInputEmail" name="email" placeholder="<?php echo $email; ?>"></div>
+                    <div class="col-md-12"><label class="labels">Display Name</label><input type="text" class="form-control" placeholder="Display Name" id="username" name="username" pattern="[a-zA-Z]{1,}" placeholder="Username" required></div>
+                    <div class="col-md-12"><label class="labels">Email Address (*can use previous email)</label><input type="email" class="form-control" id="exampleInputEmail" name="email" placeholder="<?php echo $email; ?>" required></div>
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-6"><label class="labels">IC Number</label><input type="text" class="form-control" id="ic" name="icNum" placeholder="<?php echo $user['ic_number']; ?>" disabled></div>
@@ -183,8 +153,8 @@ if(isset($_POST['save'])){
                     </div>
                 </div>
                 <div class="row mt-3 pb-3">
-                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" class="form-control" id="phone" name="phone" placeholder="<?php echo $user['phone_number']; ?>"></div>
-                    <div class="col-md-12"><label class="labels">Add Bio</label><input type="textarea" class="form-control form-control-user" placeholder= "Bio" id="bio" name="bio" placeholder= "Bio"/></div><br>
+                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" class="form-control" id="phone" name="phone" placeholder="<?php echo $user['phone_number']; ?>" required></div>
+                    <div class="col-md-12"><label class="labels">Add Bio</label><input type="textarea" class="form-control form-control-user" placeholder= "Bio" id="bio" name="bio" placeholder= "Bio" required/></div><br>
                 </div>
                 <div class="row mt-3">
                 <h4 class="text-right">Change Password</h4><hr>
