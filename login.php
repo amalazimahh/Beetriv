@@ -99,6 +99,9 @@ require_once "connection.php";
         $email = $_POST['email'];
         $password = $_POST['password'];
 
+        //selecting single row for admin
+        $emailAdmin = 'admin@beetriv.com';
+
         $sql = "select * from users where email = :email AND password = :password ";
 
         $statement = $conn->prepare($sql);
@@ -108,9 +111,14 @@ require_once "connection.php";
 
         $count = $statement->rowCount();
 
-        if($count > 0){     
+        if($count > 0){
+            if($email === $emailAdmin){
+                $_SESSION['email'] = $emailAd;
+                header('location: admin/home.php');
+            }else{
             $_SESSION['email'] = $email;      
-         header('location: store.php');
+            header('location: store.php');
+            }
         } else{
             echo '<script>alert("Email or Password does not match")</script>';
         }
