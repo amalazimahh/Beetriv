@@ -43,11 +43,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
       $payment_method = input_data($_POST['payment-method']);
     }
     if(isset($payment_method) && $payment_method == "paypal"){
-      unset($_SESSION['cart_items']);
+      // unset($_SESSION['cart_items']);
       header('Location: pay.php');
     }
     if(isset($payment_method) && $payment_method == "cashondelivery"){
-      header('Location: store.php');
+      unset($_SESSION['cart_items']);
+      header('Location: cod.php');
     }
 }
 function input_data($data){
