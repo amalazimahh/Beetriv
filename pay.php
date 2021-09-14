@@ -142,6 +142,69 @@ require_once "connection.php";
         </ul>
       </div>
 
+      <?php if(isset($_SESSION['cart_items']) && count($_SESSION['cart_items']) > 0)
+      {
+        ?>
+        <table class="table">
+           <thead>
+                <tr>
+                    <th>Product</th>
+                    <td>Shop</td>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                    $totalCounter = 0;
+                    $itemCounter = 0;
+                    foreach($_SESSION['cart_items'] as $key => $item){ 
+
+                    $img = $item['product_img'];
+                    
+                    $total = $item['product_price'] * $item['qty'];
+                    $totalCounter+= $total;
+                    $itemCounter+=$item['qty'];
+                    ?>
+                    <tr>
+                        <td>
+                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
+                            <?php echo $item['product_name'];?>               
+                        </td>
+                        <td>
+                            [Vendors]
+                        </td>
+                        <td>
+                            $<?php echo $item['product_price'];?>
+                        </td>
+                        <td>
+                            <?php echo $item['qty'];?>
+                        </td>
+                        <td>
+                            <?php echo $total;?>
+                        </td>
+                    </tr>
+                <?php }?>
+                <tr class="border-top border-bottom">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <strong>
+                            <?php 
+                                echo ($itemCounter==1)?$itemCounter.' item':$itemCounter.' items'; ?>
+                        </strong>
+                    </td>
+                    <td><strong>$<?php echo $totalCounter;?></strong></td>
+                </tr> 
+                </tr>
+            </tbody> 
+        </table>
+            <?php }?>
+
+
+
       <div class="paypal-button">
         <div id="paypal-payment-button">
         </div>
