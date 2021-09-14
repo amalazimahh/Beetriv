@@ -1,8 +1,8 @@
 <?php
 ob_start();
 session_start();
-// $email=$_SESSION['email'];
-//echo $email;
+$email=$_SESSION['email'];
+// echo $email;
 require_once "connection.php";
 
 //make sure login first, so that can fetch email, echo email to see if you logged in
@@ -17,7 +17,7 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 if(isset($_POST['save'])){
     // Get the file info
-    $fileName = basename(isset($_FILES['image']['name']));
+    $fileName = basename($_FILES['image']['name']);
     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
     //Allow certain file formats
@@ -74,7 +74,7 @@ if(isset($_POST['save'])){
         echo "Successfully updated Profile";
         }// End of if profile is ok 
         else{
-        print_r($conn->errorInfo()); // if any error is there it will be posted
+        print_r($sql->errorInfo()); // if any error is there it will be posted
         $msg=" Database problem, please contact site admin ";
         }
 }
@@ -164,12 +164,12 @@ if(isset($_POST['save'])){
                 <hr>
                 <form action="edit-profile.php" method="post">
                 <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Firstname</label><input type="text" class="form-control" placeholder="Firstname" id="fname" name="fname" pattern="[a-zA-Z]{1,}" placeholder="First Name"></div>
-                    <div class="col-md-6"><label class="labels">Lastname</label><input type="text" class="form-control" placeholder="Lastname" id="lname" name="lname" pattern="[a-zA-Z]{1,}" placeholder="Last Name"></div>
+                    <div class="col-md-6"><label class="labels">Firstname</label><input type="text" class="form-control" placeholder="Firstname" id="fname" name="fname" pattern="[a-zA-Z]{1,}" placeholder="First Name" required></div>
+                    <div class="col-md-6"><label class="labels">Lastname</label><input type="text" class="form-control" placeholder="Lastname" id="lname" name="lname" pattern="[a-zA-Z]{1,}" placeholder="Last Name" required></div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Display Name</label><input type="text" class="form-control" placeholder="Display Name" id="username" name="username" pattern="[a-zA-Z]{1,}" placeholder="Username"></div>
-                    <div class="col-md-12"><label class="labels">Email Address</label><input type="email" class="form-control" id="exampleInputEmail" name="email" placeholder="<?php echo $email; ?>"></div>
+                    <div class="col-md-12"><label class="labels">Username</label><input type="text" class="form-control" placeholder="Username" id="username" name="username" pattern="[a-zA-Z]{1,}" placeholder="Username" required></div>
+                    <div class="col-md-12"><label class="labels">Email Address</label><input type="email" class="form-control" id="exampleInputEmail" name="email" placeholder="<?php echo $email; ?>" disabled></div>
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-6"><label class="labels">IC Number</label><input type="text" class="form-control" id="ic" name="icNum" placeholder="<?php echo $user['ic_number']; ?>" disabled></div>
@@ -183,7 +183,7 @@ if(isset($_POST['save'])){
                     </div>
                 </div>
                 <div class="row mt-3 pb-3">
-                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" class="form-control" id="phone" name="phone" placeholder="<?php echo $user['phone_number']; ?>"></div>
+                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" class="form-control" id="phone" name="phone" placeholder="<?php echo $user['phone_number']; ?>" disabled></div>
                     <div class="col-md-12"><label class="labels">Add Bio</label><input type="textarea" class="form-control form-control-user" placeholder= "Bio" id="bio" name="bio" placeholder= "Bio"/></div><br>
                 </div>
                 <div class="row mt-3">
