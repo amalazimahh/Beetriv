@@ -10,7 +10,6 @@
         header('location:cart.php');
         exit();
     }
-	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +18,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Shopping Cart</title>
+        <title>Purchases</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -72,21 +71,22 @@
         </nav>
         
         <!-- Product section-->
-    <div class="row mt-3">
+        <!-- Insert some code to see if order history exist, if yes return true, else display Purchases empty -->
+    <!-- <div class="row mt-3">
      <div class="col-md-12">
          <section class="container px-4 px-lg-5 my-5" >
          <a href="cart.php">Your Shopping Cart |</a>
          <a href="purchase.php">Your Purchases</a>
-        <?php if(empty($_SESSION['cart_items'])){?>
+        <?php //if(empty($_SESSION['cart_items'])){?>
         <table class="table">
             <tr>
                 <td>
                     <p>Your cart is empty</p>
                 </td>
             </tr>
-        </table>
-        <?php }?>
-        <?php if(isset($_SESSION['cart_items']) && count($_SESSION['cart_items']) > 0){?>
+        </table> -->
+        <!-- <?php //}?> -->
+        <!-- <?php //if(isset($_SESSION['cart_items']) && count($_SESSION['cart_items']) > 0){?>
         <table class="table">
            <thead>
                 <tr>
@@ -96,172 +96,63 @@
                     <th>Total</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody> -->
                 <?php 
-                    $totalCounter = 0;
-                    $itemCounter = 0;
-                    foreach($_SESSION['cart_items'] as $key => $item){ 
+                    // $totalCounter = 0;
+                    // $itemCounter = 0;
+                    // foreach($_SESSION['cart_items'] as $key => $item){ 
 
-                    $img = $item['product_img'];
+                    // $img = $item['product_img'];
                     
-                    $total = $item['product_price'] * $item['qty'];
-                    $totalCounter+= $total;
-                    $itemCounter+=$item['qty'];
+                    // $total = $item['product_price'] * $item['qty'];
+                    // $totalCounter+= $total;
+                    // $itemCounter+=$item['qty'];
                     ?>
-                    <tr>
+                    <!-- <tr>
                         <td>
-
-                            <a href="cart.php?action=remove&item=<?php echo $key?>" class="text-danger">
+                            <img src="data:image/jpg;charset=utf8;base64,<?php //echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
+                            <?php //echo $item['product_name'];?>
+                            
+                            <a href="cart.php?action=remove&item=<?php //echo $key?>" class="text-danger">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
 
-                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
-                            <?php echo $item['product_name'];?>
-
                         </td>
                         <td>
-                            $<?php echo $item['product_price'];?>
+                            $<?php //echo $item['product_price'];?>
                         </td>
                         <td>
-                            <?php echo $item['qty'];?>
+                            <?php //echo $item['qty'];?>
                         </td>
                         <td>
-                            <?php echo $total;?>
+                            <?php //echo $total;?>
                         </td>
-                    </tr>
-                <?php }?>
-                <tr class="border-top border-bottom">
+                    </tr> -->
+                <?php //}?>
+                <!-- <tr class="border-top border-bottom">
                     <td></td>
                     <td></td>
                     <td>
-                        <strong>
+                        <strong> -->
                             <?php 
-                                echo ($itemCounter==1)?$itemCounter.' item':$itemCounter.' items'; ?>
-                        </strong>
-                    </td>
-                    <td><strong>$<?php echo $totalCounter;?></strong></td>
-                </tr> 
+                                //echo ($itemCounter==1)?$itemCounter.' item':$itemCounter.' items'; ?>
+                        <!-- </strong>
+                    </td> -->
+                    <!-- <td><strong>$<?php //echo $totalCounter;?></strong></td> -->
+                <!-- </tr> 
                 </tr>
             </tbody> 
-        </table>
-        <div class="row">
+        </table> -->
+        <!-- <div class="row">
             <div class="col-md-11">
 				<a href="place-order.php">
 					<button class="btn btn-warning btn-lg float-right">Checkout</button>
 				</a>
             </div>
-        </div>
+        </div> -->
         
-            <?php }?>
-        </section>
-
-     
-        <!-- Related items section-->
-        <section class="py-5 bg-light">
-            <div class="container px-4 px-lg-5 mt-5">
-                <h2 class="fw-bolder mb-4">Related products</h2>
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">Fancy Product</h5>
-                                    <!-- Product price-->
-                                    $40.00 - $80.00
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Sale badge-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">Special Item</h5>
-                                    <!-- Product reviews-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>
-                                    <!-- Product price-->
-                                    <span class="text-muted text-decoration-line-through">$20.00</span>
-                                    $18.00
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Sale badge-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">Sale Item</h5>
-                                    <!-- Product price-->
-                                    <span class="text-muted text-decoration-line-through">$50.00</span>
-                                    $25.00
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">Popular Item</h5>
-                                    <!-- Product reviews-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>
-                                    <!-- Product price-->
-                                    $40.00
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+            <?php //}?>
+        <!-- </section> -->
 
         <!-- Footer-->
         <footer class="site-footer">
