@@ -113,7 +113,7 @@ else
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Shop Item - Start Bootstrap Template</title>
+        <title>Beetriv - Product Details</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -122,6 +122,13 @@ else
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <style>
+            .prd_img img{
+                width: 470px; 
+                height: 530px;
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
         <!-- Navigation-->
@@ -192,29 +199,60 @@ else
         <section class="py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="col-md-6"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>"></div>
+                    <div class="col-md-6 prd_img"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>"></div>
                     <div class="col-md-6">
-                        <div class="small mb-1">SKU: BST-498</div>
+                        <div class="small mb-1"><?php echo $row['prd_category']?></div>
                         <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
                             <span>$<?php echo $row['prd_price']?></span>
                         </div>
                         <h9 class="lead"><?php echo $row['prd_desc']?></h9>
                         <form method="POST">
-                        <div class="d-flex" >
-                        <div class="large col-2">Quantity</div>
-                            <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
-                            <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
-                            <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
-                                <i class="bi-cart-fill me-1"></i>
-                                Add to cart
-                            </button>
-                            <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_wishlist" value="add to wishlist">
-                                <i class="bi-bookmark-heart-fill"></i>
-                                Wishlist
-                            </button>
-                        </div>
+                            <div class="d-flex" >
+                            <div class="large col-2">Quantity</div>
+                                <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 5rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
+                                <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
+                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
+                                    <i class="bi-cart-fill me-1"></i>
+                                    Add to cart
+                                </button>
+                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_wishlist" value="add to wishlist">
+                                    <i class="bi-bookmark-heart-fill"></i>
+                                    Wishlist
+                                </button>
+                            </div>
                         </form>
+                        <p>Remaining Bid Time :</p>
+                        <h9 id="timer_value"></h9>
+                        <script type="text/javascript">
+                            var timer_date='<?php echo $row['date_expired']?>';
+                            var timer_time='<?php echo $row['time_expired']?>';
+
+                            //arrange values in date-time format 
+                            var date_time=timer_date+" "+timer_time;
+                            var end = new Date(date_time).getTime();
+
+                            //update countdown every 1 second
+                            var x = setInterval(function(){
+                                //get today's date and time
+                                var current = new Date().getTime();
+                                //to get the difference between current and expiry datetime
+                                var remain = end - current;
+                                //time calculations for day, hours, minutes and second
+                                var days = Math.floor(remain/(1000 * 60 * 60 * 24));
+                                var hours = Math.floor((remain%(1000*60*60*24))/(1000*60*60));
+                                var minutes = Math.floor((remain%(1000*60*60))/(1000*60));
+                                var seconds = Math.floor((remain%(1000*60))/1000);
+                                //Output the results in an element with id="timer_value"
+                                document.getElementById("timer_value").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                                //if countdown is over 0
+                                if(remain<0){
+                                    clearInterval(x);
+                                    document.getElementById("timer_value").innerHTML = "Bid Expired !";
+                                }
+                            },1000);
+
+                        </script>
                     </div>
                 </div>
             </div>
