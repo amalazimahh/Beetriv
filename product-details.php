@@ -206,9 +206,11 @@ else
                         <div class="fs-5 mb-5">
                             <span>$<?php echo $row['prd_price']?></span>
                         </div>
+                        <div class="pb-5">
                         <h9 class="lead"><?php echo $row['prd_desc']?></h9>
+                        </div>
                         <form method="POST">
-                            <div class="d-flex" >
+                            <div class="d-flex pb-5" >
                             <div class="large col-2">Quantity</div>
                                 <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 5rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
                                 <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
@@ -222,8 +224,14 @@ else
                                 </button>
                             </div>
                         </form>
-                        <p>Remaining Bid Time :</p>
-                        <h9 id="timer_value"></h9>
+                        <!-- bidding -->
+                        <div class="d-flex pb-4" >
+                        <div class="p-2 flex-fill bd-highlight">
+                            <div class="flex-column">
+                        <p>Remaining Bid Time:</p>
+                        <h9 class="lead text-danger" id="timer_value"></h9>
+                             </div>
+                        </div>
                         <script type="text/javascript">
                             var timer_date='<?php echo $row['date_expired']?>';
                             var timer_time='<?php echo $row['time_expired']?>';
@@ -248,12 +256,33 @@ else
                                 //if countdown is over 0
                                 if(remain<0){
                                     clearInterval(x);
-                                    document.getElementById("timer_value").innerHTML = "Bid Expired !";
+                                    document.getElementById("timer_value").innerHTML = "Bid Expired!";
                                 }
                             },1000);
 
                         </script>
+                        <div class="p-2 flex-fill bd-highlight">
+                        <div class="flex-column">
+                        <p>Current Bid:</p>
+                        <h9 class="lead">$50.00</h9>
+                             </div>
+                        </div>
                     </div>
+
+                    <div class="d-flex flex-row bd-highlight">
+                    <div class="d-flex p-2 bd-highlight">
+                    <span class="input-group-text">$</span>
+                    <input type="text" class="form-control">
+                    </div>
+                    <div class="bd-highlight"><button type="submit" name="place_bid" class="btn btn-warning"><strong>Place bid</strong></button></div>
+                    </div>
+                    <div class="col-auto">
+                        <span class="form-text">
+                        Minimum bid increment is $0.01
+                        </span>
+                    </div>
+                    </div>
+                    <!-- end bidding -->
                 </div>
             </div>
         </section>
