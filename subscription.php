@@ -264,7 +264,7 @@ $email = $_SESSION['email'];
               return actions.order.create({
                   purchase_units:[{
                       amount: {
-                          value: '0.1'
+                          value: '10'
                       }
                   }]
               });
