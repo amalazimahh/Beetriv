@@ -5,9 +5,32 @@
     $id = $_GET['product'];
     // echo $email;
 
+    // logout
+    $session=$_SESSION['email'];
+    
+    if (!$session)
+    {
+        header ('location: login.php');
+        die ('Login required');
+        
+    }
+    else if (isset($_POST['logout']))
+    {
+        session_destroy();
+        echo "Logout successfull. ";
+        header ('location: login.php');
+    }
 
     $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
     $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    if(isset($_POST['place_bid'])){
+        $current_bid = $_POST['current_bid'];
+        $pdoQuery = ("UPDATE product SET current_bid = '$current_bid', current_bidder = '$email' WHERE prd_id = '$id' ");
+        $pdoQuery_run = $conn->prepare($pdoQuery);
+        $pdoQuery_run->execute();
+        echo "<meta http-equiv='refresh' content='0'>";
+    }
 
 
     if(isset($_POST['add_to_cart']) && $_POST['add_to_cart'] == 'add to cart')
@@ -165,7 +188,9 @@ else
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
                     <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    <form action = "product-details.php" method = "post">
+                    <li><a type="submit" name="logout" class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    </form>
                     </a></li>
                     </ul>
                 </div>
@@ -264,24 +289,43 @@ else
                         <div class="p-2 flex-fill bd-highlight">
                         <div class="flex-column">
                         <p>Current Bid:</p>
-                        <h9 class="lead">$50.00</h9>
+                        <h9 class="lead">$<?php echo $row['current_bid']?></h9>
                              </div>
                         </div>
                     </div>
 
+                    <form method="POST">
                     <div class="d-flex flex-row bd-highlight">
                     <div class="d-flex p-2 bd-highlight">
                     <span class="input-group-text">$</span>
-                    <input type="text" class="form-control">
+                    <input type="number" class="form-control" name="current_bid" step="any">
+                    <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
                     </div>
                     <div class="bd-highlight"><button type="submit" name="place_bid" class="btn btn-warning"><strong>Place bid</strong></button></div>
                     </div>
                     <div class="col-auto">
-                        <span class="form-text">
+                        <span class="current_bid" >
                         Minimum bid increment is $0.01
                         </span>
                     </div>
                     </div>
+                    </form>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script>
+                        $(document).ready(function(){
+                        $("input[name=current_bid]").keyup(function(){
+                        var bid=$("input[name=current_bid]").val();
+                        if (bid <= <?php echo $row['current_bid'] ?>) {
+                            $('span.current_bid').css("color", "red");
+                            $('span.current_bid').text("Your bid needs to be higher.");
+                            }
+                        if  (bid > <?php echo $row['current_bid'] ?>) {
+                            $('span.current_bid').css("color", "grey");
+                            $('span.current_bid').text("Minimum bid increment is $0.01");
+                            }
+                        });
+                        });
+                        </script>
                     <!-- end bidding -->
                 </div>
             </div>
