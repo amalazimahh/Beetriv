@@ -19,7 +19,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Shop Item - Start Bootstrap Template</title>
+        <title>Shopping Cart</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -75,6 +75,8 @@
     <div class="row mt-3">
      <div class="col-md-12">
          <section class="container px-4 px-lg-5 my-5" >
+         <a href="cart.php">Your Shopping Cart |</a>
+         <a href="purchase.php">Your Purchases</a>
         <?php if(empty($_SESSION['cart_items'])){?>
         <table class="table">
             <tr>
@@ -109,12 +111,13 @@
                     ?>
                     <tr>
                         <td>
-                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
-                            <?php echo $item['product_name'];?>
-                            
+
                             <a href="cart.php?action=remove&item=<?php echo $key?>" class="text-danger">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
+
+                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
+                            <?php echo $item['product_name'];?>
 
                         </td>
                         <td>

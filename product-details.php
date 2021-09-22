@@ -5,9 +5,32 @@
     $id = $_GET['product'];
     // echo $email;
 
+    // logout
+    $session=$_SESSION['email'];
+    
+    if (!$session)
+    {
+        header ('location: login.php');
+        die ('Login required');
+        
+    }
+    else if (isset($_POST['logout']))
+    {
+        session_destroy();
+        echo "Logout successfull. ";
+        header ('location: login.php');
+    }
 
     $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
     $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    if(isset($_POST['place_bid'])){
+        $current_bid = $_POST['current_bid'];
+        $pdoQuery = ("UPDATE product SET current_bid = '$current_bid', current_bidder = '$email' WHERE prd_id = '$id' ");
+        $pdoQuery_run = $conn->prepare($pdoQuery);
+        $pdoQuery_run->execute();
+        echo "<meta http-equiv='refresh' content='0'>";
+    }
 
 
     if(isset($_POST['add_to_cart']) && $_POST['add_to_cart'] == 'add to cart')
@@ -113,7 +136,7 @@ else
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Shop Item - Start Bootstrap Template</title>
+        <title>Beetriv - Product Details</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -122,6 +145,13 @@ else
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <style>
+            .prd_img img{
+                width: 470px; 
+                height: 530px;
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
         <!-- Navigation-->
@@ -158,7 +188,9 @@ else
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
                     <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    <form action = "product-details.php" method = "post">
+                    <li><a type="submit" name="logout" class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    </form>
                     </a></li>
                     </ul>
                 </div>
@@ -192,33 +224,110 @@ else
         <section class="py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="col-md-6"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>"></div>
+                    <div class="col-md-6 prd_img"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>"></div>
                     <div class="col-md-6">
-                        <div class="small mb-1"></div>
+                        <div class="small mb-1"><?php echo $row['prd_category']?></div>
                         <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
                             <span>$<?php echo $row['prd_price']?>BND</span><br>
                             <h10 class="lead"> [Seller name] </h10>
                         </div>
-                         <br>
-                        <h8 class="lead"> Item Description:  </h8> <br>
-                        <h9 class="lead"><?php echo $row['prd_desc']?></h9> <br><br>
-                        <form method="POST">
-                        <div class="d-flex" >
-                        <div class="large col-2">Quantity</div>
-                            <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
-                            <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
-                            <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
-                                <i class="bi-cart-fill me-1"></i>
-                                Add to cart
-                            </button>
-                            <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_wishlist" value="add to wishlist">
-                                <i class="bi-bookmark-heart-fill"></i>
-                                Wishlist
-                            </button>
+                        <div class="pb-5">
+                        <h9 class="lead"><?php echo $row['prd_desc']?></h9>
                         </div>
+                        <form method="POST">
+                            <div class="d-flex pb-5" >
+                            <div class="large col-2">Quantity</div>
+                                <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 5rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
+                                <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
+                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
+                                    <i class="bi-cart-fill me-1"></i>
+                                    Add to cart
+                                </button>
+                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_wishlist" value="add to wishlist">
+                                    <i class="bi-bookmark-heart-fill"></i>
+                                    Wishlist
+                                </button>
+                            </div>
                         </form>
+                        <!-- bidding -->
+                        <div class="d-flex pb-4" >
+                        <div class="p-2 flex-fill bd-highlight">
+                            <div class="flex-column">
+                        <p>Remaining Bid Time:</p>
+                        <h9 class="lead text-danger" id="timer_value"></h9>
+                             </div>
+                        </div>
+                        <script type="text/javascript">
+                            var timer_date='<?php echo $row['date_expired']?>';
+                            var timer_time='<?php echo $row['time_expired']?>';
+
+                            //arrange values in date-time format 
+                            var date_time=timer_date+" "+timer_time;
+                            var end = new Date(date_time).getTime();
+
+                            //update countdown every 1 second
+                            var x = setInterval(function(){
+                                //get today's date and time
+                                var current = new Date().getTime();
+                                //to get the difference between current and expiry datetime
+                                var remain = end - current;
+                                //time calculations for day, hours, minutes and second
+                                var days = Math.floor(remain/(1000 * 60 * 60 * 24));
+                                var hours = Math.floor((remain%(1000*60*60*24))/(1000*60*60));
+                                var minutes = Math.floor((remain%(1000*60*60))/(1000*60));
+                                var seconds = Math.floor((remain%(1000*60))/1000);
+                                //Output the results in an element with id="timer_value"
+                                document.getElementById("timer_value").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                                //if countdown is over 0
+                                if(remain<0){
+                                    clearInterval(x);
+                                    document.getElementById("timer_value").innerHTML = "Bid Expired!";
+                                }
+                            },1000);
+
+                        </script>
+                        <div class="p-2 flex-fill bd-highlight">
+                        <div class="flex-column">
+                        <p>Current Bid:</p>
+                        <h9 class="lead">$<?php echo $row['current_bid']?></h9>
+                             </div>
+                        </div>
                     </div>
+
+                    <form method="POST">
+                    <div class="d-flex flex-row bd-highlight">
+                    <div class="d-flex p-2 bd-highlight">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control" name="current_bid" step="any">
+                    <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
+                    </div>
+                    <div class="bd-highlight"><button type="submit" name="place_bid" class="btn btn-warning"><strong>Place bid</strong></button></div>
+                    </div>
+                    <div class="col-auto">
+                        <span class="current_bid" >
+                        Minimum bid increment is $0.01
+                        </span>
+                    </div>
+                    </div>
+                    </form>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script>
+                        $(document).ready(function(){
+                        $("input[name=current_bid]").keyup(function(){
+                        var bid=$("input[name=current_bid]").val();
+                        if (bid <= <?php echo $row['current_bid'] ?>) {
+                            $('span.current_bid').css("color", "red");
+                            $('span.current_bid').text("Your bid needs to be higher.");
+                            }
+                        if  (bid > <?php echo $row['current_bid'] ?>) {
+                            $('span.current_bid').css("color", "grey");
+                            $('span.current_bid').text("Minimum bid increment is $0.01");
+                            }
+                        });
+                        });
+                        </script>
+                    <!-- end bidding -->
                 </div>
             </div>
         </section>

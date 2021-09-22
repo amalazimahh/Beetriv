@@ -43,7 +43,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
       $payment_method = input_data($_POST['payment-method']);
     }
     if(isset($payment_method) && $payment_method == "paypal"){
-      // unset($_SESSION['cart_items']);
+      //unset($_SESSION['cart_items']);
       header('Location: pay.php');
     }
     if(isset($payment_method) && $payment_method == "cashondelivery"){
@@ -62,16 +62,19 @@ function input_data($data){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/footer.css">
-  <title>Checkout - Place Order</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Checkout - Place Order</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/footer.css">
+        <link rel="stylesheet" href="css/user-profile.css">
   <style>
     .checkout-progress{
       margin: 80px auto;
@@ -154,9 +157,10 @@ function input_data($data){
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <!-- Navigation-->
+  <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="#!">Beetriv</a>
+                <a class="navbar-brand" href="store.php">Beetriv</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -171,10 +175,25 @@ function input_data($data){
                                 <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
                             </ul>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bid</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Active Bid</a></li>
+                                <li><a class="dropdown-item" href="#!">Ending Soon</a></li>
+                            </ul>
+                        </li>
                     </ul>
-                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
+                    <ul class="nav justify-content-end">
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
+                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
                     <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    </a>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    </a></li>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -304,50 +323,71 @@ function input_data($data){
               
             </div>
 
+            <hr class="mb-2">
+
             <div class="col-md-5 mb-2">
               <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
             </div>
 
             <div class="row">
-              <div class="col-md-3 mb-2">
-                <label for="country">Country</label>
-                <select class="custom-select d-block w-100" name="country" id="country" >
-                  <option value="">Choose...</option>
-                  <option value="United States" >United States</option>
-                </select>
-                
+
+              <div class="col-md-4 mb-4">
+                <label for="street1">Street 1</label>
+                <input type="text" class="form-control" id="street 1" name="street 1" placeholder="">
+                <span></span>
               </div>
-              <div class="col-md-3 mb-2">
-                <label for="state">State</label>
-                <select class="custom-select d-block w-100" name="state" id="state" >
-                  <option value="">Choose...</option>
-                  <option value="California">California</option>
-                  
-                </select>
+
+              <div class="col-md-4 mb-4">
+                <label for="street2">Street 2</label>
+                <input type="text" class="form-control" id="street2" name="street2" placeholder="">
+                <span></span>
               </div>
+
               <div class="col-md-2 mb-2">
-                <label for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" name="zipcode" placeholder="" value="TE2424" disabled>
-                
+                <label for="zip">Postcode / Zipcode</label>
+                <input type="text" class="form-control" id="zip" name="zipcode" placeholder="Zipcode" value="<?php echo (isset($zipCodeValue) && !empty($zipCodeValue)) ? $zipCodeValue:'' ?>" >
+                <span class = "error"> <?php echo $zipcode_error; ?></span>
               </div>
+
             </div>
+
+            <div class="row">
+              <div class="col-md-3 mb-2">
+                  <label for="country">Country</label>
+                  <select class="custom-select d-block w-100" name="country" id="country">
+                    <option value="United States" >Brunei Darussalam</option>
+                  </select>
+                </div>
+
+                <div class="col-md-3 mb-2">
+                  <label for="state">State / Province</label>
+                  <select class="custom-select d-block w-100" name="state" id="state" >
+                    <option value="">Select Province</option>
+                    <option value="Temburong">Temburong</option>
+                    <option value="Bandar Seri Begawan">Bandar Seri Begawan</option>
+                    <option value="Tutong">Tutong</option>
+                    <option value="Kuala Belait">Kuala Belait</option>
+                  </select>
+                </div>
+            </div>
+
             <hr class="mb-2">
             <div class="row mt-3">
         
 
             <h4 class="mb-2">Payment</h4>
+            <p>Select your prefered way of payment :</p>
 
             <div class="d-block my-2">
               <div class="custom-control custom-radio">
-                <input id="cashOnDelivery" name="payment-method" type="radio" class="custom-control-input" <?php if(isset($payment_method) && $payment_method == "cashondelivery") echo "checked"; ?> value="cashondelivery">Cash on Delivery <br><br>
+                <input id="cashOnDelivery" name="payment-method" type="radio" class="custom-control-input" <?php if(isset($payment_method) && $payment_method == "cashondelivery") echo "checked"; ?> value="cashondelivery"> Cash on Delivery <br><br>
                   <!-- <label class="custom-control-label" for="cashOnDelivery">Cash on Delivery</label> <br><br> -->
-                  <input id="cashOnDelivery" name="payment-method" type="radio"  class="custom-control-input" <?php if(isset($payment_method) && $payment_method == "paypal") echo "checked"; ?> value="paypal">Paypal <br><br>
+                  <input id="cashOnDelivery" name="payment-method" type="radio"  class="custom-control-input" <?php if(isset($payment_method) && $payment_method == "paypal") echo "checked"; ?> value="paypal"> Paypal <br><br>
                 <!-- <label class="custom-control-label" for="paypal">Paypal</label> -->
                 <!-- <span class="error"> </span> -->
               </div>
             </div>
            
-            <hr class="mb-3">
             <div class="checkout-btn">
               <button type="submit" name="submit" value="submit">PLACE ORDER</a></button>
             </div>
@@ -407,6 +447,9 @@ function input_data($data){
             </div>
         </footer>
 
+        <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
 </body>
 </html>

@@ -240,17 +240,55 @@ input::-webkit-inner-spin-button {
     <!-- bid details -->
     <div class="add-prd"><h3>Bid Details</h3></div>
     <hr>
+
     <div class="row">
+      <div class="col-25">
+        <label for="bid_stat">Please select bid status for product </label>
+      </div>
+
+      <div class="col-75">
+        <select name="bid_status" id="bid_stat" class="col-75">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+
+      <div class="col-25" id="bid_details">
+        <label for="bid_date">Choose Date Expiry</label>
+      </div>
+
+      <div class="col-75">
+          <input type="date" name="date_expired" id="date_expired">
+      </div>
+
+      <div class="col-25" id="bid_details">
+        <label for="time_expired">Choose Time Expiry</label>
+      </div>
+
+      <div class="col-75">
+          <input type="time" name="time_expired" id="time_expired">
+      </div>
+
+      <!-- <p id="timer_value"></p> -->
+
+      <!-- <script type="text/javascript">
+        
+      </script> -->
+
+    </div>
+
+    <!--<div class="row">
       <div class="col-25">
         <label for="bid_stat">Bid Status</label>
       </div>
       <div class="col-75">
-    <input type="radio" name="bid_status" id="yes" onkeyup="compare_input();" value="Yes">
-    <label for="Yes">Yes</label>
-    <input type="radio" name="bid_status" id="no" onkeyup="compare_input();" value="No">
-    <label for="No">No</label>
-      </div>
+        <input type="radio" name="bid_status" id="yes" onkeyup="compare_input();" value="Yes">
+          <label for="Yes">Yes</label>
+        <input type="radio" name="bid_status" id="no" onkeyup="compare_input();" value="No">
+          <label for="No">No</label>
+        </div>
     </div>
+
     <div class="row">
       <div class="col-25">
         <label for="time_upload">Bid Time Limit</label>
@@ -259,6 +297,7 @@ input::-webkit-inner-spin-button {
         <input type="text" name="time_upload" id="time_limit">
       </div>
     </div>
+
     <div class="row">
       <div class="col-25">
         <label for="start_bid">Starting Bid</label>
@@ -266,7 +305,9 @@ input::-webkit-inner-spin-button {
       <div class="col-75">
         <input type="text" name="start_bid" id="start_bid">
       </div>
-    </div>
+    </div> 
+
+    -->
     
     <!-- item media and tags -->
     <div class="add-prd"><h3>Item Media</h3></div>
@@ -280,33 +321,33 @@ input::-webkit-inner-spin-button {
         <input type="file" name="prd_img"><br>
         <div class="gallery">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script>
-  $(function() {
-    // Multiple images preview in browser
-    var imagesPreview = function(input, placeToInsertImagePreview) {
+        <script>
+          $(function() {
+            // Multiple images preview in browser
+            var imagesPreview = function(input, placeToInsertImagePreview) {
 
-        if (input.files) {
-            var filesAmount = input.files.length;
+                if (input.files) {
+                    var filesAmount = input.files.length;
 
-            for (i = 0; i < filesAmount; i++) {
-                var reader = new FileReader();
+                    for (i = 0; i < filesAmount; i++) {
+                        var reader = new FileReader();
 
-                reader.onload = function(event) {
-                    $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                        reader.onload = function(event) {
+                            $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                        }
+
+                        reader.readAsDataURL(input.files[i]);
+                    }
                 }
 
-                reader.readAsDataURL(input.files[i]);
-            }
-        }
+            };
 
-    };
-
-    $('#gallery-photo-add').on('change', function() {
-        imagesPreview(this, 'div.gallery');
-    });
-});
-</script>
-</div>
+            $('#gallery-photo-add').on('change', function() {
+                imagesPreview(this, 'div.gallery');
+            });
+        });
+        </script>
+        </div>
       </div>
     </div>
 
@@ -320,7 +361,7 @@ input::-webkit-inner-spin-button {
     </div>
     
     <div class="row">
-      <input type="submit" name="add_product" value="Submit">
+      <input type="submit" name="add_product" value="Submit" onclick="settimer();">
     </div>
   </form>
 </div>
@@ -476,8 +517,10 @@ input::-webkit-inner-spin-button {
                 $location     = $_POST['prd_location'];
                 $tag          = $_POST['prd_tag'];
                 $bid_status   = $_POST['bid_status'];
-                $time_upload  = $_POST['time_upload'];
+                $time_upload  = date('Y-m-d');
                 $category     = $_POST['prd_category'];
+                $date_expired = $_POST['date_expired'];
+                $time_expired = $_POST['time_expired'];
 
                 // Allow certain file formats
                 $allowTypes = array('jpg','png','jpeg','gif');
@@ -491,8 +534,8 @@ input::-webkit-inner-spin-button {
                 //$insert = "INSERT INTO PRODUCT(prd_name, prd_price, prd_img) VALUES (':name', ':price', ':imgContent')"
 
                 // Insert image content into database
-                $insert = $conn->query ("INSERT INTO product (prd_name,prd_price,prd_qty,prd_condition,prd_desc,prd_rating,prd_location,prd_tag,bid_status,time_upload,prd_img,prd_category) 
-                VALUES ('$name','$price','$qty','$condition','$desc','$rating','$location','$tag','$bid_status','$time_upload', '$imgContent', '$category')");
+                $insert = $conn->query ("INSERT INTO product (prd_name,prd_price,prd_qty,prd_condition,prd_desc,prd_rating,prd_location,prd_tag,bid_status,time_upload,prd_img,prd_category, date_expired, time_expired) 
+                VALUES ('$name','$price','$qty','$condition','$desc','$rating','$location','$tag','$bid_status','$time_upload', '$imgContent', '$category', '$date_expired', '$time_expired')");
 
                 //$insertimage = $conn->query("INSERT INTO product_image (prd_imgfile)VALUES ('$image')");
 

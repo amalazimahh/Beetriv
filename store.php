@@ -251,7 +251,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" ><i class="bi bi-box-arrow-right" name="logout"></i></a></li>
                    </form> -->
                     <form action = "store.php" method = "post">
-                    <input type = "submit" name = "logout" value="logout"/>
+                    <button type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button>
                     </form>
                     </ul>
                 </div>
