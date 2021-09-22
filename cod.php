@@ -16,99 +16,20 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/footer.css">
-  <script language="javascript" src="js/calendar.js"></script>
-  <title>Checkout - Place Order</title>
+<meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Cash on Delivery</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/footer.css">
+        <link rel="stylesheet" href="css/user-profile.css">
   <style>
-    .checkout-progress{
-      margin: 80px auto;
-    }
-
-    ul{
-      text-align: center;
-    }
-    
-    ul li{
-      display: inline-block;
-      width: 200px;
-      position: relative;
-      
-    }
-
-    ul li .fas{
-        background: #000;
-        /* width: 8px;
-        height: 8px;  */
-        color: #fff;
-        border-radius: 50%;
-        padding: 6px;
-    }
-
-    ul li .fas::after{
-      content: '';
-      background: #ccc;
-      height: 7px;
-      width: 250px;
-      display: block;
-      position: absolute;
-      left: 0;
-      top: 10px;
-      z-index: -1;
-    }
-
-    ul li:nth-child(1) .fas{
-      background: #148e14;
-    }
-
-    ul li:nth-child(1) .fas::after{
-      background: #148e14;
-      
-    }
-
-    ul li:first-child .fas::after{
-      width: 105px;
-      left: 100px;
-    }
-
-    ul li:last-child .fas::after{
-      width: 105px;
-    }
-
-    .checkout-form{
-      border-radius: 5px;
-      padding: 20px;
-    }
-
-    .checkout-btn{
-      text-align: center;
-    }
-
-    button{
-      text-align: center;
-      padding: 20px;
-      background-color: #000;
-      color: #fff;
-      text-transform: capitalize;
-      border-radius: 10px;
-      border: #000;
-    }
-
-    .checkout-btn a{
-      text-decoration: none;
-      color: #fff;
-    }
-    * {box-sizing: border-box;}
-ul {list-style-type: none;}
-body {font-family: Verdana, sans-serif;}
-
 .month {
   padding: 70px 25px;
   width: 100%;
@@ -195,9 +116,9 @@ body {font-family: Verdana, sans-serif;}
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="#!">Beetriv</a>
+                <a class="navbar-brand" href="store.php">Beetriv</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -212,10 +133,25 @@ body {font-family: Verdana, sans-serif;}
                                 <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
                             </ul>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bid</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Active Bid</a></li>
+                                <li><a class="dropdown-item" href="#!">Ending Soon</a></li>
+                            </ul>
+                        </li>
                     </ul>
-                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
+                    <ul class="nav justify-content-end">
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
+                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
                     <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    </a>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    </a></li>
+                    </ul>
                 </div>
             </div>
         </nav>

@@ -1,7 +1,20 @@
 <?php
 ob_start();
 session_start();
-
+$session=$_SESSION['email'];
+    
+if (!$session)
+{
+    header ('location: login.php');
+    die ('Login required');
+    
+}
+else if (isset($_POST['logout']))
+{
+    session_destroy();
+    echo "Logout successfull. ";
+    header ('location: login.php');
+}
 require_once "connection.php";
 $email = $_SESSION['email'];
 //echo $email;
@@ -47,7 +60,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
       header('Location: pay.php');
     }
     if(isset($payment_method) && $payment_method == "cashondelivery"){
-      unset($_SESSION['cart_items']);
+      // unset($_SESSION['cart_items']);
       header('Location: cod.php');
     }
 }
@@ -71,12 +84,13 @@ function input_data($data){
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
   <style>
-    .checkout-progress{
+        .checkout-progress{
       margin: 80px auto;
     }
 
@@ -186,13 +200,15 @@ function input_data($data){
                         </li>
                     </ul>
                     <ul class="nav justify-content-end">
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
+                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
                     <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
+                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
                     <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
-                    </a></li>
+                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
+                    <form action = "product-details.php" method = "post">
+                    <a type="submit" name="logout" class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a>
+                    </form>
+                    </a>
                     </ul>
                 </div>
             </div>
