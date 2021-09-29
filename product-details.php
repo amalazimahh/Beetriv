@@ -1,13 +1,21 @@
 <?php 
     session_start();
     require_once "connection.php";
-    // $email = $_SESSION['email'];
+    $email = $_SESSION['email'];
     $id = $_GET['product'];
     // echo $email;
 
     // logout
     $session=$_SESSION['email'];
-    
+
+    //cara install phpmailer
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
+    //Load Composer's autoloader
+    require 'vendor/autoload.php';
+        
     if (!$session)
     {
         header ('location: login.php');
@@ -24,13 +32,14 @@
     $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
     $row = $result->fetch(PDO::FETCH_ASSOC);
 
-    if(isset($_POST['place_bid'])){
-        $current_bid = $_POST['current_bid'];
-        $pdoQuery = ("UPDATE product SET current_bid = '$current_bid', current_bidder = '$email' WHERE prd_id = '$id' ");
-        $pdoQuery_run = $conn->prepare($pdoQuery);
-        $pdoQuery_run->execute();
-        echo "<meta http-equiv='refresh' content='0'>";
-    }
+    // Update bid
+    // if(isset($_POST['place_bid'])){
+    //     $current_bid = $_POST['current_bid'];
+    //     $pdoQuery = ("UPDATE product SET current_bid = '$current_bid', current_bidder = '$email' WHERE prd_id = '$id' ");
+    //     $pdoQuery_run = $conn->prepare($pdoQuery);
+    //     $pdoQuery_run->execute();
+    //     echo "<meta http-equiv='refresh' content='0'>";
+    // }
 
 
     if(isset($_POST['add_to_cart']) && $_POST['add_to_cart'] == 'add to cart')
@@ -124,6 +133,88 @@ else
         {
             $_SESSION['wish_items'][]= $cartArray;
             $successMsgW = true;
+        }
+
+    }
+
+    // into product_bid
+    if(isset($_POST['submit'])){
+        $current_bid = ($_POST['current_bid']);
+        $prd_id = ($_POST['prd_id']);
+        $card_number = ($_POST['card_number']);
+        $card_expiry = ($_POST['card_month'].'/'.$_POST['card_year']);
+        $cvc_cvv = ($_POST['cvc_cvv']);
+
+        //Mail Set up
+        $mail= new PHPMailer(true);
+
+        try {
+            
+            //Enable debug output
+            $mail->SMTPDebug = 0;
+
+            //Send using SMTP
+            $mail->isSMTP();
+
+            //Set the SMTP server 
+            $mail->Host = 'smtp.gmail.com';
+
+            //Enable SMTP authentication
+            $mail->SMTPAuth = true;
+
+            //SMTP username
+            $mail->Username = 'ayamketupat02@gmail.com';
+
+            //SMTP password
+            $mail->Password = 'k4k5dpkk';
+
+            //SMTP username
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+            //SMTP PORT
+            $mail->Port = 587;
+
+            //Recipients
+            $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+            //add recipient
+            $mail->addAddress($email,$username);
+
+            //Set email format to HTML
+            $mail->isHTML(true);
+
+            //converting text to html
+            // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+            $mail->Subject = 'Successful Bid Place';
+            $mail->Body    = '<p>Congratulations! </p>'.'<p>You have successfully placed a bid and currently the highest.</p>';
+            //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+            $mail->send();
+
+            $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+            $select = "SELECT * FROM product_bid WHERE 1";
+
+            $insert = $conn->query ("INSERT INTO product_bid (prd_id, current_bid, card_number, card_expiry, cvc_cvv, email) VALUES ('$prd_id','$current_bid','$card_expiry','$cvc_cvv', '$email')");
+            //mysql_query($conn, $sql);
+            // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
+
+            // $pdoQuery = "INSERT INTO product_bid (prd_id, current_bidder, current_bid, card_number, card_expiry, cvc_cvv) VALUES ('$email','$id','$current_bid','$card_expiry','$cvc_cvv')";
+            // $pdoResult = $conn->prepare($pdoQuery);
+            // $pdoExec = $pdoResult->execute();
+
+            // if($result){
+            //     echo 'Success';
+            // }else{
+            //     echo 'Error';
+            // }
+
+        }catch (Exception $e){
+            echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+
+        
+
         }
 
     }
@@ -229,7 +320,7 @@ else
                         <div class="small mb-1"><?php echo $row['prd_category']?></div>
                         <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
-                            <span>$<?php echo $row['prd_price']?>BND</span><br>
+                            <span>BND$<?php echo $row['prd_price']?></span><br>
                             <h10 class="lead"> [Seller name] </h10>
                         </div>
                         <div class="pb-5">
@@ -290,7 +381,7 @@ else
                         <div class="p-2 flex-fill bd-highlight">
                         <div class="flex-column">
                         <p>Current Bid:</p>
-                        <h9 class="lead">$<?php echo $row['current_bid']?></h9>
+                        <h9 class="lead">BND$<?php echo $row['current_bid']?></h9>
                              </div>
                         </div>
                     </div>
@@ -298,11 +389,13 @@ else
                     <form method="POST">
                     <div class="d-flex flex-row bd-highlight">
                     <div class="d-flex p-2 bd-highlight">
-                    <span class="input-group-text">$</span>
-                    <input type="number" class="form-control" name="current_bid" step="any">
-                    <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
+                    <span class="input-group-text">BND$</span>
+                    <input type="hidden" name="prd_id" value="<?php echo $row['prd_id']?>">
+                    <input type="number" class="form-control" name="current_bid" step="any">    
                     </div>
-                    <div class="bd-highlight"><button type="submit" name="place_bid" class="btn btn-warning"><strong>Place bid</strong></button></div>
+                    <div class="d-grid">
+                    <a href="#" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalForm">Place Bid</a>
+                    </div>
                     </div>
                     <div class="col-auto">
                         <span class="current_bid" >
@@ -310,7 +403,7 @@ else
                         </span>
                     </div>
                     </div>
-                    </form>
+                    
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                     <script>
                         $(document).ready(function(){
@@ -330,6 +423,66 @@ else
                     <!-- end bidding -->
                 </div>
             </div>
+
+                <!-- Credit cards Modal -->
+            <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Credit/Debit Card  Details Required</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    
+                                    <div class="card">
+                                        <div class="card-header p-0">
+                                            <h2 class="mb-0"> <button class="btn btn-light btn-block text-left p-3 rounded-0" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    <div class="d-flex align-items-center justify-content-between"> <span>Credit/Debit card</span>
+                                                        <div class="icons"> <img src="https://i.imgur.com/2ISgYja.png" width="30"> <img src="https://i.imgur.com/W1vtnOV.png" width="30"> </div>
+                                                    </div>
+                                                </button> </h2>
+                                        </div>
+                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                            <div class="card-body payment-card-body"> <span class="font-weight-normal card-text">Card Number</span>
+                                                <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span><input type="text" id="debit" name="card_number" class="form-control" placeholder="0000 0000 0000 0000" required> </div>
+                                                <div class="row mt-3 mb-3">
+                                                    <div class="col-md-6"> <span class="font-weight-normal card-text">Expiry Date</span>
+                                                        <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-calendar-week-fill"></i></span> <input type="text" name="card_month" placeholder="MM" id="month" maxlength="2" class="form-control" required/><span class="input-group-text">/</span><input type ="text" name="card_year" placeholder ="YY" id ="year" maxlength =2 class="form-control" required/></div>
+                                                    </div>
+                                                    <div class="col-md-6"> <span class="font-weight-normal card-text">CVC/CVV</span>
+                                                        <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-lock-fill"></i></span> <input type="text" id="card_cvv" name="cvc_cvv" class="form-control" placeholder="000" required> </div>
+                                                    </div>
+                                                </div> <span class="certificate-text text-danger"> <i class="bi bi-exclamation-circle"></i> You are not allowed to cancel your bid once submitted.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                        <div class="mb-3 pt-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="check" required/>
+                                            <label class="form-check-label" for="check">I have read, understood and agreed with <a class="text-warning" href="#">Beetriv Terms and Conditions</a>.</label>
+                                        </div>
+
+                                <div class="modal-footer d-block">
+                                    <button type="submit" id="submit" name="submit" class="btn btn-warning float-end">Submit</button>
+                                </div>
+
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                                <script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.12/jquery.mask.min.js"></script>
+                                <script>
+                                    $('#debit').mask('0000 0000 0000 0000');
+
+                                    $("#card_cvv").mask("0009",{ 
+                                    clearIfNotMatch: true 
+                                    });
+
+                                </script>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
         </section>
         <!-- Related items section-->
         <section class="py-5 bg-light">
