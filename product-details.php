@@ -242,7 +242,7 @@ else
                     $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
     
                     //add recipient
-                    $mail->addAddress($current_bidder,$username);
+                    $mail->addAddress($prev_bidder,$username);
     
                     //Set email format to HTML
                     $mail->isHTML(true);
