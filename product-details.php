@@ -137,85 +137,219 @@ else
 
     }
 
-    // into product_bid
-    if(isset($_POST['submit'])){
-        $current_bid = ($_POST['current_bid']);
-        $prd_id = ($_POST['prd_id']);
-        $card_number = ($_POST['card_number']);
-        $card_expiry = ($_POST['card_month'].'/'.$_POST['card_year']);
-        $cvc_cvv = ($_POST['cvc_cvv']);
+    // add into product_bid
+    $stmt = $conn->query("SELECT * FROM product_bid WHERE prd_id = '$id'");
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    //$count = $stmt->fetchColumn();
 
-        //Mail Set up
-        $mail= new PHPMailer(true);
+    if(isset($_POST['placebid'])){
+        // if ($count) {
+            if ( $res > 0) {
+                // Update bid
+                    $prd_id         = ($_POST['prd_id']);
+                    $current_bid   = $_POST['current_bid'];
+                    $current_bidder    = ($_POST['current_bidder']);
+                    $pdoQuery = ("UPDATE product_bid SET current_bid = '$current_bid', current_bidder = '$email', prev_bidder = '$current_bidder' WHERE prd_id = '$prd_id' ");
+                    $pdoQuery_run = $conn->prepare($pdoQuery);
+                    $pdoQuery_run->execute();
+                    echo "<meta http-equiv='refresh' content='0'>";
+                
+                    //Mail Set up
+            $mail= new PHPMailer(true);
 
-        try {
+            try {
+
+                //Send mail to highest bidder
+                
+                //Enable debug output
+                $mail->SMTPDebug = 0;
+
+                //Send using SMTP
+                $mail->isSMTP();
+
+                //Set the SMTP server 
+                $mail->Host = 'smtp.gmail.com';
+
+                //Enable SMTP authentication
+                $mail->SMTPAuth = true;
+
+                //SMTP username
+                $mail->Username = 'ayamketupat02@gmail.com';
+
+                //SMTP password
+                $mail->Password = 'k4k5dpkk';
+
+                //SMTP username
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+                //SMTP PORT
+                $mail->Port = 587;
+
+                //Recipients
+                $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+                //add recipient
+                $mail->addAddress($current_bidder,$username);
+
+                //Set email format to HTML
+                $mail->isHTML(true);
+
+                //converting text to html
+                // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+                $mail->Subject = 'Successful Bid Place';
+                $mail->Body    = '<p>Congratulations! </p>'.'<p>You have successfully placed a bid and currently the highest on item <b>'.$row['prd_name'].'.</b></p>';
+                //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+                $mail->send();
+
+                $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+
+            }catch (Exception $e){
+                echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+
+            }
+                try {
+
+                    //Send mail to highest bidder
+                    
+                    //Enable debug output
+                    $mail->SMTPDebug = 0;
+    
+                    //Send using SMTP
+                    $mail->isSMTP();
+    
+                    //Set the SMTP server 
+                    $mail->Host = 'smtp.gmail.com';
+    
+                    //Enable SMTP authentication
+                    $mail->SMTPAuth = true;
+    
+                    //SMTP username
+                    $mail->Username = 'ayamketupat02@gmail.com';
+    
+                    //SMTP password
+                    $mail->Password = 'k4k5dpkk';
+    
+                    //SMTP username
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    
+                    //SMTP PORT
+                    $mail->Port = 587;
+    
+                    //Recipients
+                    $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+    
+                    //add recipient
+                    $mail->addAddress($current_bidder,$username);
+    
+                    //Set email format to HTML
+                    $mail->isHTML(true);
+    
+                    //converting text to html
+                    // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    
+                    $mail->Subject = 'Oh no!';
+                    $mail->Body    = '<p>There is a new highest bid placed on your item <b>'.$row['prd_name'].'</b> and your bid on item <b>'.$row['prd_name'].'</b> has been outbid.</p>';
+                    //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+    
+                    $mail->send();
+    
+                    $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+    
+    
+                }catch (Exception $e){
+                    echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+                }
+
+
+                    } else {
+                        $prd_id         = ($_POST['prd_id']);
+            // $current_bidder = ($_POST['email']);
+            $current_bid    = ($_POST['current_bid']);
+            $card_number    = ($_POST['card_number']);
+            $card_expiry    = ($_POST['card_expiry']);
+            $cvc_cvv        = ($_POST['cvc_cvv']);
+
+            //Mail Set up
+            $mail= new PHPMailer(true);
+
+            try {
+                
+                //Enable debug output
+                $mail->SMTPDebug = 0;
+
+                //Send using SMTP
+                $mail->isSMTP();
+
+                //Set the SMTP server 
+                $mail->Host = 'smtp.gmail.com';
+
+                //Enable SMTP authentication
+                $mail->SMTPAuth = true;
+
+                //SMTP username
+                $mail->Username = 'ayamketupat02@gmail.com';
+
+                //SMTP password
+                $mail->Password = 'k4k5dpkk';
+
+                //SMTP username
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+                //SMTP PORT
+                $mail->Port = 587;
+
+                //Recipients
+                $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+                //add recipient
+                $mail->addAddress($email,$username);
+
+                //Set email format to HTML
+                $mail->isHTML(true);
+
+                //converting text to html
+                // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+                $mail->Subject = 'Successful Bid Place';
+                $mail->Body    = '<p>Congratulations! </p>'.'<p>You have successfully placed a bid and currently the highest on item <b>'.$row['prd_name'].'.</b></p>';
+                //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+                $mail->send();
+
+                $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+                $select = "SELECT * FROM product_bid WHERE 1";
+
+                $insert = $conn->query ("INSERT INTO product_bid (prd_id,current_bidder, current_bid, card_number, card_expiry, cvc_cvv) VALUES ('$prd_id','$email','$current_bid', '$card_number','$card_expiry','$cvc_cvv')");
+                //mysql_query($conn, $sql);
+                // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
+
+                // $pdoQuery = "INSERT INTO product_bid (prd_id, current_bidder, current_bid, card_number, card_expiry, cvc_cvv) VALUES ('$email','$id','$current_bid','$card_expiry','$cvc_cvv')";
+                // $pdoResult = $conn->prepare($pdoQuery);
+                // $pdoExec = $pdoResult->execute();
+
+                // if($result){
+                //     echo 'Success';
+                // }else{
+                //     echo 'Error';
+                // }
+
+            }catch (Exception $e){
+                echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+
             
-            //Enable debug output
-            $mail->SMTPDebug = 0;
 
-            //Send using SMTP
-            $mail->isSMTP();
-
-            //Set the SMTP server 
-            $mail->Host = 'smtp.gmail.com';
-
-            //Enable SMTP authentication
-            $mail->SMTPAuth = true;
-
-            //SMTP username
-            $mail->Username = 'ayamketupat02@gmail.com';
-
-            //SMTP password
-            $mail->Password = 'k4k5dpkk';
-
-            //SMTP username
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-
-            //SMTP PORT
-            $mail->Port = 587;
-
-            //Recipients
-            $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
-
-            //add recipient
-            $mail->addAddress($email,$username);
-
-            //Set email format to HTML
-            $mail->isHTML(true);
-
-            //converting text to html
-            // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-
-            $mail->Subject = 'Successful Bid Place';
-            $mail->Body    = '<p>Congratulations! </p>'.'<p>You have successfully placed a bid and currently the highest.</p>';
-            //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
-
-            $mail->send();
-
-            $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
-
-            $select = "SELECT * FROM product_bid WHERE 1";
-
-            $insert = $conn->query ("INSERT INTO product_bid (prd_id, current_bid, card_number, card_expiry, cvc_cvv, email) VALUES ('$prd_id','$current_bid','$card_expiry','$cvc_cvv', '$email')");
-            //mysql_query($conn, $sql);
-            // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
-
-            // $pdoQuery = "INSERT INTO product_bid (prd_id, current_bidder, current_bid, card_number, card_expiry, cvc_cvv) VALUES ('$email','$id','$current_bid','$card_expiry','$cvc_cvv')";
-            // $pdoResult = $conn->prepare($pdoQuery);
-            // $pdoExec = $pdoResult->execute();
-
-            // if($result){
-            //     echo 'Success';
-            // }else{
-            //     echo 'Error';
-            // }
-
-        }catch (Exception $e){
-            echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+            }
+                            }
+                    // } else {
+                    // echo 'Error: '.mysql_error();
+                    //         }
 
         
-
-        }
+            
 
     }
 
@@ -381,7 +515,7 @@ else
                         <div class="p-2 flex-fill bd-highlight">
                         <div class="flex-column">
                         <p>Current Bid:</p>
-                        <h9 class="lead">BND$<?php echo $row['current_bid']?></h9>
+                        <h9 class="lead">BND$<?php echo $res['current_bid']?></h9>
                              </div>
                         </div>
                     </div>
@@ -391,10 +525,11 @@ else
                     <div class="d-flex p-2 bd-highlight">
                     <span class="input-group-text">BND$</span>
                     <input type="hidden" name="prd_id" value="<?php echo $row['prd_id']?>">
+                    <input type="hidden" name="current_bidder" value="<?php echo $res['current_bidder']?>">
                     <input type="number" class="form-control" name="current_bid" step="any">    
                     </div>
                     <div class="d-grid">
-                    <a href="#" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalForm">Place Bid</a>
+                    <button class="btn btn-warning text-uppercase" name= "placebid" data-bs-toggle="modal" data-bs-target="#modalForm">Place Bid</button>
                     </div>
                     </div>
                     <div class="col-auto">
@@ -447,7 +582,7 @@ else
                                                 <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span><input type="text" id="debit" name="card_number" class="form-control" placeholder="0000 0000 0000 0000" required> </div>
                                                 <div class="row mt-3 mb-3">
                                                     <div class="col-md-6"> <span class="font-weight-normal card-text">Expiry Date</span>
-                                                        <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-calendar-week-fill"></i></span> <input type="text" name="card_month" placeholder="MM" id="month" maxlength="2" class="form-control" required/><span class="input-group-text">/</span><input type ="text" name="card_year" placeholder ="YY" id ="year" maxlength =2 class="form-control" required/></div>
+                                                        <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-calendar-week-fill"></i></span> <input type="text" name="card_expiry" placeholder="MM" id="month" maxlength="2" class="form-control" required/><span class="input-group-text">/</span><input type ="text" name="card_expiry" placeholder ="YY" id ="year" maxlength =2 class="form-control" required/></div>
                                                     </div>
                                                     <div class="col-md-6"> <span class="font-weight-normal card-text">CVC/CVV</span>
                                                         <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-lock-fill"></i></span> <input type="text" id="card_cvv" name="cvc_cvv" class="form-control" placeholder="000" required> </div>
@@ -463,7 +598,7 @@ else
                                         </div>
 
                                 <div class="modal-footer d-block">
-                                    <button type="submit" id="submit" name="submit" class="btn btn-warning float-end">Submit</button>
+                                    <button type="submit" id="submit" name="placebid" class="btn btn-warning float-end">Submit</button>
                                 </div>
 
                                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -648,4 +783,3 @@ else
         <script src="js/scripts.js"></script>
     </body>
 </html>
-
