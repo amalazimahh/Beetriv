@@ -153,6 +153,7 @@ else
                     $pdoQuery_run = $conn->prepare($pdoQuery);
                     $pdoQuery_run->execute();
                     echo "<meta http-equiv='refresh' content='0'>";
+                    
                 
                     //Mail Set up
             $mail= new PHPMailer(true);
@@ -324,12 +325,9 @@ else
                 $select = "SELECT * FROM product_bid WHERE 1";
 
                 $insert = $conn->query ("INSERT INTO product_bid (prd_id,current_bidder, current_bid, card_number, card_expiry, cvc_cvv) VALUES ('$prd_id','$email','$current_bid', '$card_number','$card_expiry','$cvc_cvv')");
+                echo "<meta http-equiv='refresh' content='0'>";
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
-
-                // $pdoQuery = "INSERT INTO product_bid (prd_id, current_bidder, current_bid, card_number, card_expiry, cvc_cvv) VALUES ('$email','$id','$current_bid','$card_expiry','$cvc_cvv')";
-                // $pdoResult = $conn->prepare($pdoQuery);
-                // $pdoExec = $pdoResult->execute();
 
                 // if($result){
                 //     echo 'Success';
@@ -370,6 +368,8 @@ else
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <!-- alert -->
+        <script src="https://cdn.jsdelivr.net/gh/cosmogicofficial/quantumalert@latest/minfile/quantumalert.js" charset="utf-8"></script>
         <style>
             .prd_img img{
                 width: 470px; 
@@ -515,7 +515,13 @@ else
                         <div class="p-2 flex-fill bd-highlight">
                         <div class="flex-column">
                         <p>Current Bid:</p>
-                        <h9 class="lead">BND$<?php echo $res['current_bid']?></h9>
+                        <h9 class="lead"><?php if (isset($res['current_bid']) ){
+                            //Exists
+                            echo "BND$".$res['current_bid'];
+                        }else{
+                            //Doesn't exists
+                            echo "No bid yet";
+                        }?></h9>
                              </div>
                         </div>
                     </div>
