@@ -2,9 +2,64 @@
 ob_start();
 session_start();
 require_once "connection.php";
-unset($_SESSION['cart_items']);
 $email = $_SESSION['email'];
 //echo $email
+// $id = $_GET['product'];
+$result = $conn->query("SELECT * FROM product");
+$row = $result->fetch(PDO::FETCH_ASSOC);
+
+$result1 = $conn->query("SELECT * FROM users WHERE email = '$email'");
+$row1 = $result1->fetch(PDO::FETCH_ASSOC);
+echo $row1['username'];
+// $select = "SELECT * From PRODUCT WHERE 1";
+$orderID = $conn->lastInsertId();
+if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
+  {
+        foreach($_SESSION['cart_items'] as $item)
+          {
+            //$totalPrice+=$item['total_price'];
+            $paramOrderDetails = [
+              'product_id' =>  $item['product_id'],
+              'product_name' =>  $item['product_name'],
+              'product_price' =>  $item['product_price'],
+              'qty' =>  $item['qty'],
+              'email' => $_SESSION['email'],
+              'username' => $row1['username'],
+              'user_id' => $row1['user_id']
+               ];
+            // $test1 = [
+            //     'user_id' => $row1['user_id']
+            //    ];
+               
+            $sqlDetails = 'insert into order_details (prd_id, prd_name, prd_price, prd_qty, user_id, email, username) values(:product_id,:product_name,:product_price,:qty,:user_id,:email,:username) ';
+            // $sqlDetails1 = 'insert into order_detail (user_id) values(:user_id)';
+
+            // $orderDetailStmt = $conn->prepare($sqlDetails1);
+            // $orderDetailStmt->execute($test1);
+
+            $orderDetailStmt = $conn->prepare($sqlDetails);
+            
+            $orderDetailStmt->execute($paramOrderDetails);
+          }
+                        
+          //  $updateSql = 'update orders set total_price = :total where id = :id';
+
+            // $rs = $db->prepare($updateSql);
+            // $prepareUpdate = [
+            // 'total' => $totalPrice,
+            // 'id' =>$getOrderID
+            //  ];
+
+            // $rs->execute($prepareUpdate);
+                        
+            unset($_SESSION['cart_items']);
+            // $_SESSION['confirm_order'] = true;
+            // header('location:thank-you.php');
+            // exit();
+                    }
+                  
+                  
+
 ?>
 
 <!DOCTYPE html>
@@ -162,6 +217,7 @@ $email = $_SESSION['email'];
       <div class="text-center">
           <h3>Your order has been submitted.</h3>
       </div>
+
 
           <br><br>
 
