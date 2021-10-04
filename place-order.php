@@ -309,7 +309,7 @@ function input_data($data){
 
         <?php foreach($row as $user){ ?>
       <div class="checkout-form">
-        <form class="needs-validation" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+        <form class="needs-validation" method="POST" action="">
             <div class="row">
 
             <h4 class="mb-2">Shipping Address</h4>
