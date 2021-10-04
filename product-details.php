@@ -136,7 +136,25 @@ else
         }
 
     }
-
+    //Inquiry chat service
+        if(isset($_POST['contact'])){
+            $productID = intval($_POST['product_id']);
+            
+            $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+    
+            
+            $cartArray = [
+                'product_id'    =>$productID,
+                'product_name'  =>$row['prd_name'],
+                'product_price' =>$row['prd_price'],
+                'product_img'   =>$row['prd_img']
+            ];
+    
+            header ('location: chat.php');
+            die ('Login required');
+        }
+    
     // add into product_bid
     $stmt = $conn->query("SELECT * FROM product_bid WHERE prd_id = '$id'");
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -472,6 +490,10 @@ else
                                 <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_wishlist" value="add to wishlist">
                                     <i class="bi-bookmark-heart-fill"></i>
                                     Wishlist
+                                </button>
+                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="contact" value="contact">
+                                    <i class="bi-chat-fill"></i>
+                                    Contact
                                 </button>
                             </div>
                         </form>
