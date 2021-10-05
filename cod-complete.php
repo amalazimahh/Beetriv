@@ -5,8 +5,42 @@ session_start();
 require_once "connection.php";
 $email = $_SESSION['email'];
 // echo $email;
+$result = $conn->query("SELECT * FROM product");
+$row = $result->fetch(PDO::FETCH_ASSOC);
 
-unset($_SESSION['cart_items']);
+$result1 = $conn->query("SELECT * FROM users WHERE email = '$email'");
+$row1 = $result1->fetch(PDO::FETCH_ASSOC);
+
+$status = "pending";
+$paymentStat ="pending";
+$payment_mthd ="Cash";
+if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
+  {
+        foreach($_SESSION['cart_items'] as $item)
+          {
+            //$totalPrice+=$item['total_price'];
+            $paramOrderDetails = [
+              'product_id' =>  $item['product_id'],
+              'product_name' =>  $item['product_name'],
+              'product_price' =>  $item['product_price'],
+              'qty' =>  $item['qty'],
+              'email' => $_SESSION['email'],
+              'username' => $row1['username'],
+              'user_id' => $row1['user_id'],
+              'stat' => $status,
+              'contact_no' => $row1['phone_number'],
+              'payment_mthd' => $payment_mthd,
+              'payment_stat' => $paymentStat
+               ];       
+            $sqlDetails = 'insert into order_details (prd_id, prd_name, prd_price, prd_qty, user_id, email, username, stat, contact_no, payment_mthd, payment_stat) 
+            values(:product_id,:product_name,:product_price,:qty,:user_id,:email,:username,:stat,:contact_no,:payment_mthd,:payment_stat)';
+               $orderDetailStmt = $conn->prepare($sqlDetails);
+            
+                $orderDetailStmt->execute($paramOrderDetails);
+          }
+
+        unset($_SESSION['cart_items']);
+  }
 ?>
 
 <!DOCTYPE html>
