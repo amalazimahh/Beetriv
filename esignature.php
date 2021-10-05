@@ -1,6 +1,56 @@
 <?php
     session_start();
     require_once('connection.php');
+    $id = $_GET['id'];
+    //select single data
+    //select email
+    $result1 = $conn->query("SELECT * FROM order_details WHERE id ='$id'");
+    $row1 = $result1->fetch(PDO::FETCH_ASSOC);
+    $name = $row1['stat'];
+    if(($name) == 'pending'){
+    //add code to save details to receipt table
+        if(isset($_POST['submit'])){
+            $prdID          =$_POST['product_id'];
+            $prdName        =$_POST['product_name'];
+            $prdQty         =$_POST['product_qty'];
+            $prdPrice       =$_POST['product_price'];
+            $prdStat        =$_POST['product_stat'];
+            $paymentMthd    =$_POST['payment_mthd'];
+
+            //insert into receipt table
+            $insert =$conn->query("INSERT INTO receipts (prd_id,prd_name,prd_qty,prd_price,prd_stats,payment_mthd)
+            VALUE ('$prdID','$prdName','$prdQty','$prdPrice','$prdStat','$paymentMthd')");
+
+            //update order_details table
+            $update = "UPDATE order_details SET stat='completed' WHERE id='$id'";
+            $runUpdate = $conn->prepare($update);
+            $runUpdate->execute();
+
+            $update1 = "UPDATE order_details SET payment_stat='paid' WHERE id='$id'";
+            $runUpdate1 = $conn->prepare($update1);
+            $runUpdate1->execute();
+
+
+            // $result = "DELETE FROM order_details where id='$id'";
+            // $statement = $conn->prepare($result);
+            // $statement->execute();
+
+            header('location: runner-order.php');
+        }
+    }else{
+        header('location: runner-order.php');
+    }
+
+    //add code to update receipt table
+
+
+
+    //add code to delete data form order_details
+    // $result = "DELETE FROM order_details where id='$id'";
+    // $statement = $conn->prepare($result);
+    // $statement->execute();
+    // $row = $statement->fetchAll(PDO::FETCH_ASSOC);  
+
     //$email = $_SESSION['email'];
     // echo $email;
 
@@ -37,11 +87,18 @@
 
 <div class="container">
   
-  <form method="POST" action="esignature.php">
+  <form method="POST" action="">
 
       <h2>Cash on Delivery E-Signature</h2>
 
       <!-- Add some code here to display cod items with details -->
+        <!-- Hidden input type to sotre data inside database -->
+        <input type="hidden" name="product_id" value="<?php echo $row1['prd_id']?>">
+        <input type="hidden" name="product_name" value="<?php echo $row1['prd_name']?>">
+        <input type="hidden" name="product_qty" value="<?php echo $row1['prd_qty']?>">
+        <input type="hidden" name="product_price" value="<?php echo $row1['prd_price']?>">
+        <input type="hidden" name="product_mthd" value="<?php echo $row1['payment_mthd']?>">
+        <input type="hidden" name="product_stat" value="Completed">
 
       <!-- Retrieve customer's signature -->
       <div class="col-md-12">
@@ -64,7 +121,7 @@
       </div>
 
       <br>
-      <button class="btn btn-success">Submit</button>
+      <button name="submit">Submit</button>
   </form>
 
 </div>
