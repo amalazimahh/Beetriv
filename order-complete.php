@@ -10,9 +10,12 @@ $row = $result->fetch(PDO::FETCH_ASSOC);
 
 $result1 = $conn->query("SELECT * FROM users WHERE email = '$email'");
 $row1 = $result1->fetch(PDO::FETCH_ASSOC);
-echo $row1['username'];
+// echo $row1['username'];
 // $select = "SELECT * From PRODUCT WHERE 1";
 $orderID = $conn->lastInsertId();
+$status = "pending";
+$paymentStat ="paid";
+$payment_mthd ="Paypal";
 if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
   {
         foreach($_SESSION['cart_items'] as $item)
@@ -25,13 +28,18 @@ if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
               'qty' =>  $item['qty'],
               'email' => $_SESSION['email'],
               'username' => $row1['username'],
-              'user_id' => $row1['user_id']
+              'user_id' => $row1['user_id'],
+              'stat' => $status,
+              'contact_no' => $row1['phone_number'],
+              'payment_mthd' => $payment_mthd,
+              'payment_stat' => $paymentStat
                ];
             // $test1 = [
             //     'user_id' => $row1['user_id']
             //    ];
                
-            $sqlDetails = 'insert into order_details (prd_id, prd_name, prd_price, prd_qty, user_id, email, username) values(:product_id,:product_name,:product_price,:qty,:user_id,:email,:username) ';
+            $sqlDetails = 'insert into order_details (prd_id, prd_name, prd_price, prd_qty, user_id, email, username, stat, contact_no, payment_mthd, payment_stat) 
+            values(:product_id,:product_name,:product_price,:qty,:user_id,:email,:username,:stat,:contact_no,:payment_mthd,:payment_stat) ';
             // $sqlDetails1 = 'insert into order_detail (user_id) values(:user_id)';
 
             // $orderDetailStmt = $conn->prepare($sqlDetails1);
