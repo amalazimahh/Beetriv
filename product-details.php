@@ -155,11 +155,11 @@ else
             die ('Login required');
         }
     
-    // add into product_bid
     $stmt = $conn->query("SELECT * FROM product_bid WHERE prd_id = '$id'");
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
     //$count = $stmt->fetchColumn();
 
+    // add into product_bid
     if(isset($_POST['placebid'])){
         // if ($count) {
             if ( $res > 0) {
@@ -287,9 +287,8 @@ else
                         $prd_id         = ($_POST['prd_id']);
             // $current_bidder = ($_POST['email']);
             $current_bid    = ($_POST['current_bid']);
-            $card_number    = ($_POST['card_number']);
-            $card_expiry    = ($_POST['card_expiry']);
-            $cvc_cvv        = ($_POST['cvc_cvv']);
+            $paypal_email    = ($_POST['paypal_email']);
+            $paypal_psw    = ($_POST['paypal_psw']);
 
             //Mail Set up
             $mail= new PHPMailer(true);
@@ -342,7 +341,11 @@ else
 
                 $select = "SELECT * FROM product_bid WHERE 1";
 
-                $insert = $conn->query ("INSERT INTO product_bid (prd_id,current_bidder, current_bid, card_number, card_expiry, cvc_cvv) VALUES ('$prd_id','$email','$current_bid', '$card_number','$card_expiry','$cvc_cvv')");
+                $insert = $conn->query ("INSERT INTO product_bid (prd_id,current_bidder, current_bid) VALUES ('$prd_id','$email','$current_bid')");
+
+                $select1 = "SELECT * FROM paypal_details WHERE 1";
+
+                $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
                 echo "<meta http-equiv='refresh' content='0'>";
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
@@ -369,6 +372,8 @@ else
 
     }
 
+    $statement = $conn->query("SELECT * FROM paypal_details WHERE user_paypal = '$email'");
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -479,9 +484,11 @@ else
                         <h9 class="lead"><?php echo $row['prd_desc']?></h9>
                         </div>
                         <form method="POST">
-                            <div class="d-flex pb-5" >
+                        <div class="d-flex pb-4" >
                             <div class="large col-2">Quantity</div>
                                 <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 5rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
+                        </div>    
+                            <div class="d-flex pb-4" >
                                 <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
                                 <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
                                     <i class="bi-cart-fill me-1"></i>
@@ -497,6 +504,8 @@ else
                                 </button>
                             </div>
                         </form>
+
+                        <?php if( $row['bid_status'] == "yes"): ?>
                         <!-- bidding -->
                         <div class="d-flex pb-4" >
                         <div class="p-2 flex-fill bd-highlight">
@@ -624,13 +633,13 @@ else
                     <!-- end bidding -->
                 </div>
             </div>
-
+            <?php endif; ?>
                 <!-- Credit cards Modal -->
             <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Credit/Debit Card  Details Required</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">PayPal Details Required</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -638,46 +647,40 @@ else
                                     <div class="card">
                                         <div class="card-header p-0">
                                             <h2 class="mb-0"> <button class="btn btn-light btn-block text-left p-3 rounded-0" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                    <div class="d-flex align-items-center justify-content-between"> <span>Credit/Debit card</span>
-                                                        <div class="icons"> <img src="https://i.imgur.com/2ISgYja.png" width="30"> <img src="https://i.imgur.com/W1vtnOV.png" width="30"> </div>
+                                                    <div class="d-flex align-items-center justify-content-between"> <span>PayPal</span>
+                                                        <div class="icon"> <img src="https://i.imgur.com/7kQEsHU.png" width="30"></div>
                                                     </div>
                                                 </button> </h2>
                                         </div>
                                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                            <div class="card-body payment-card-body"> <span class="font-weight-normal card-text">Card Number</span>
-                                                <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span><input type="text" id="debit" name="card_number" class="form-control" placeholder="0000 0000 0000 0000" required> </div>
-                                                <div class="row mt-3 mb-3">
-                                                    <div class="col-md-6"> <span class="font-weight-normal card-text">Expiry Date</span>
-                                                        <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-calendar-week-fill"></i></span> <input type="text" name="card_expiry" placeholder="MM" id="month" maxlength="2" class="form-control" required/><span class="input-group-text">/</span><input type ="text" name="card_expiry" placeholder ="YY" id ="year" maxlength =2 class="form-control" required/></div>
-                                                    </div>
-                                                    <div class="col-md-6"> <span class="font-weight-normal card-text">CVC/CVV</span>
-                                                        <div class="d-flex bd-highlight"> <span class="input-group-text"><i class="bi bi-lock-fill"></i></span> <input type="text" id="card_cvv" name="cvc_cvv" class="form-control" placeholder="000" required> </div>
-                                                    </div>
-                                                </div> <span class="certificate-text text-danger"> <i class="bi bi-exclamation-circle"></i> You are not allowed to cancel your bid once submitted.</span>
+                                            <div class="card-body payment-card-body"> 
+                                                <div class="d-flex bd-highlight pb-4"><input type="text" name="paypal_email" class="form-control" value="<?php if (isset($result['user_paypal']) ){
+                                                    //Exists
+                                                    echo  $result['paypal_email'];
+                                                }?>" placeholder="PayPal Email" required> </div>
+                                                <div class="d-flex bd-highlight"><input type="password" name="paypal_psw" class="form-control" value="<?php if (isset($result['paypal_psw']) ){
+                                                    //Exists
+                                                    echo  $result['paypal_psw'];
+                                                }?>" placeholder="PayPal Password" required> </div>
+                                                  
+                                        <div class="pt-4 justify-content-center form-check">
+                                            <input type="checkbox" class="form-check-input" id="check" required/>
+                                            <label class="form-check-label" for="check">I have read, understood and agreed with <a class="text-warning" href="#">Beetriv Terms and Conditions</a>.</label>
+                                        </div>
+                                                    
+                                                </div> <div class="p-2"></div>
                                             </div>
                                         </div>
                                     </div>
                                 
-                                        <div class="mb-3 pt-3 form-check">
-                                            <input type="checkbox" class="form-check-input" id="check" required/>
-                                            <label class="form-check-label" for="check">I have read, understood and agreed with <a class="text-warning" href="#">Beetriv Terms and Conditions</a>.</label>
-                                        </div>
+                                    <div class="text-center pb-3">
+                                        <span class="certificate-text text-danger"> <i class="bi bi-exclamation-circle"></i> You are not allowed to cancel your bid once submitted.</span>
+                                    </div>
 
                                 <div class="modal-footer d-block">
                                     <button type="submit" id="submit" name="placebid" class="btn btn-warning float-end">Submit</button>
                                 </div>
 
-                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-                                <script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
-                                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.12/jquery.mask.min.js"></script>
-                                <script>
-                                    $('#debit').mask('0000 0000 0000 0000');
-
-                                    $("#card_cvv").mask("0009",{ 
-                                    clearIfNotMatch: true 
-                                    });
-
-                                </script>
                                     </form>
                                 </div>
                             </div>
