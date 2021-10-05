@@ -3,10 +3,17 @@ ob_start();
 session_start();
 require_once "connection.php";
 //$email = $_SESSION['email'];
+//select db
 $result = "SELECT * FROM order_details";
 $statement = $conn->prepare($result);
 $statement->execute();
 $row = $statement->fetchAll(PDO::FETCH_ASSOC);
+//select email
+$result1 = $conn->query("SELECT * FROM order_details");
+$row1 = $result1->fetch(PDO::FETCH_ASSOC);
+$name = $row1['username'];
+
+//to display per customer
 ?>
 
 <!DOCTYPE html>
@@ -137,35 +144,49 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </nav>
         <!--content-->
-        
+        <?php if($row1 == $row1){ ?>
             <table class ='table'>
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Customer Name</th>
                         <th>Product</th>
                         <th>Product ID</th>
                         <th>Product Quantity</th>
                         <th>Product Price</th>
                         <th>Customer Email</th>
+                        <th>Payment Method</th>
+                        <th>Payment Status</th>
+                        <th>Delivery Status</th>
+                        <th>Contact Number</th>
+                        <th> </th>
                         <!-- <th>Customer Contact Number</th>to be added -->
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach($row as $orders){ ?>
                         <tr>
+                            <td><?php echo $orders['id'] ?></td>
                             <td><?php echo $orders['username'] ?></td>
                             <td><?php echo $orders['prd_name'] ?></td>
                             <td><?php echo $orders['prd_id'] ?></td>
                             <td><?php echo $orders['prd_qty'] ?></td>
                             <td><?php echo $orders['prd_price'] ?></td>
                             <td><?php echo $orders['email'] ?></td>
-                            <td><button>Accept Order</button></td>
+                            <td><?php echo $orders['payment_mthd'] ?></td>
+                            <td><?php echo $orders['payment_stat'] ?></td>
+                            <td><?php echo $orders['stat'] ?></td>
+                            <td><?php echo $orders['contact_no'] ?></td>
+                            <td><a href="esignature.php?id=<?php echo $orders['id'];?>">
+					        <button class="btn btn-warning btn-lg float-right">Accept</button>
+				            </a></td>
+                            
 
                         </tr>
                         <?php } ?>
                 </tbody>
             </table>
-               
+            <?php } ?>
 
 
         <!-- Footer-->
