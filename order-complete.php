@@ -12,7 +12,7 @@ $result1 = $conn->query("SELECT * FROM users WHERE email = '$email'");
 $row1 = $result1->fetch(PDO::FETCH_ASSOC);
 // echo $row1['username'];
 // $select = "SELECT * From PRODUCT WHERE 1";
-$orderID = $conn->lastInsertId();
+// $orderID = $conn->lastInsertId();
 $status = "pending";
 $paymentStat ="paid";
 $payment_mthd ="Paypal";
