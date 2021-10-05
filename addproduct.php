@@ -163,10 +163,19 @@ input::-webkit-inner-spin-button {
   <form method="post" enctype="multipart/form-data">
     <div class="row">
       <div class="col-25">
-        <label for="name">Product Name</label>
+        <label for="name">Display Name</label>
       </div>
       <div class="col-75">
-        <input type="text" name="prd_name">
+      <input type="hidden" name="email" value="<?php echo $email; ?>">
+        <input type="text" name="display_name" placeholder="<?php echo $email; ?>" disabled>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="price">Product Name</label>
+      </div>
+      <div class="col-75">
+        <input type="text" name="prd_name" step="any">
       </div>
     </div>
     <div class="row">
@@ -525,7 +534,7 @@ input::-webkit-inner-spin-button {
                 // Get the file info
                 $fileName = basename($_FILES['prd_img']['name']);
                 $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
+                $displayname  = $_POST['email'];
                 $name         = $_POST['prd_name'];
                 $price        = $_POST['prd_price'];
                 $qty          = $_POST['prd_qty'];
@@ -554,8 +563,8 @@ input::-webkit-inner-spin-button {
                 //$insert = "INSERT INTO PRODUCT(prd_name, prd_price, prd_img) VALUES (':name', ':price', ':imgContent')"
 
                 // Insert image content into database
-                $insert = $conn->query ("INSERT INTO product (prd_name,prd_price,prd_qty,prd_condition,prd_desc,prd_rating,prd_location,prd_tag,bid_status,time_upload,prd_img,prd_category, date_expired, time_expired, starting_bid, bid_increment) 
-                VALUES ('$name','$price','$qty','$condition','$desc','$rating','$location','$tag','$bid_status','$time_upload', '$imgContent', '$category', '$date_expired', '$time_expired', '$starting_price', '$bid_increment')");
+                $insert = $conn->query ("INSERT INTO product (display_name,prd_name,prd_price,prd_qty,prd_condition,prd_desc,prd_rating,prd_location,prd_tag,bid_status,time_upload,prd_img,prd_category, date_expired, time_expired, starting_bid, bid_increment) 
+                VALUES ('$displayname','$name','$price','$qty','$condition','$desc','$rating','$location','$tag','$bid_status','$time_upload', '$imgContent', '$category', '$date_expired', '$time_expired', '$starting_price', '$bid_increment')");
 
                 //$insertimage = $conn->query("INSERT INTO product_image (prd_imgfile)VALUES ('$image')");
 
