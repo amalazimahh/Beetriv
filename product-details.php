@@ -208,16 +208,16 @@ else
                 $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
 
                 //add recipient
-                $mail->addAddress($current_bidder,$username);
+                $mail->addAddress($email,$username);
 
                 //Set email format to HTML
                 $mail->isHTML(true);
 
                 //converting text to html
                 // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-
+                $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/product-details.php?product=$id";
                 $mail->Subject = 'Successful Bid Place';
-                $mail->Body    = '<p>Congratulations! </p>'.'<p>You have successfully placed a bid and currently the highest on item <b>'.$row['prd_name'].'.</b></p>';
+                $mail->Body    = '<p>Congratulations! </p>'.'<p>You have successfully placed a bid and currently the highest on item <b>'.$row['prd_name'].'</b>. Click link below to see your item:</p><br>'.$url;
                 //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
 
                 $mail->send();
@@ -261,16 +261,16 @@ else
                     $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
     
                     //add recipient
-                    $mail->addAddress($prev_bidder,$username);
+                    $mail->addAddress($current_bidder,$username);
     
                     //Set email format to HTML
                     $mail->isHTML(true);
     
                     //converting text to html
                     // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-    
+                    $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/product-details.php?product=$id";
                     $mail->Subject = 'Oh no!';
-                    $mail->Body    = '<p>There is a new highest bid placed on your item <b>'.$row['prd_name'].'</b> and your bid on item <b>'.$row['prd_name'].'</b> has been outbid.</p>';
+                    $mail->Body    = '<p>There is a new highest bid placed on your item <b>'.$row['prd_name'].'</b> and your bid on item <b>'.$row['prd_name'].'</b> has been outbid. Click link below to see the item:</p><br>'.$url;
                     //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
     
                     $mail->send();
@@ -331,9 +331,9 @@ else
 
                 //converting text to html
                 // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-
+                $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/product-details.php?product=$id";
                 $mail->Subject = 'Successful Bid Place';
-                $mail->Body    = '<p>Congratulations! </p>'.'<p>You have successfully placed a bid and currently the highest on item <b>'.$row['prd_name'].'.</b></p>';
+                $mail->Body    = '<p>Congratulations! </p>'.'<p>You have successfully placed a bid and currently the highest on item <b>'.$row['prd_name'].'</b>. Click link below to see your item:</p><br>'.$url;
                 //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
 
                 $mail->send();
@@ -502,7 +502,8 @@ else
                         <div class="p-2 flex-fill bd-highlight">
                             <div class="flex-column">
                         <p>Remaining Bid Time:</p>
-                        <h9 class="lead text-danger" id="timer_value"></h9>
+                        <h9 class="lead" id="timer_value"></h9>
+                        <p class="text-danger" id="timer_ending"></p>
                              </div>
                         </div>
                         <script type="text/javascript">
@@ -519,21 +520,39 @@ else
                                 var current = new Date().getTime();
                                 //to get the difference between current and expiry datetime
                                 var remain = end - current;
+                                // console.log(remain);
                                 //time calculations for day, hours, minutes and second
                                 var days = Math.floor(remain/(1000 * 60 * 60 * 24));
                                 var hours = Math.floor((remain%(1000*60*60*24))/(1000*60*60));
                                 var minutes = Math.floor((remain%(1000*60*60))/(1000*60));
                                 var seconds = Math.floor((remain%(1000*60))/1000);
                                 //Output the results in an element with id="timer_value"
+                                document.getElementById("timer_value").style.color = "#4bb543";
                                 document.getElementById("timer_value").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
                                 //if countdown is over 0
                                 if(remain<0){
                                     clearInterval(x);
+                                    document.getElementById("timer_value").style.color = "#ff0000";
                                     document.getElementById("timer_value").innerHTML = "Bid Expired!";
                                 }
+
+                                if(remain < 86400000){
+                                    clearInterval(x);
+                                    document.getElementById("timer_value").style.color = "#ff0000";
+                                    document.getElementById("timer_ending").innerHTML = "Bid is ending soon!";
+                                }
+                                
                             },1000);
+                            
 
                         </script>
+                        <div class="p-2 flex-fill bd-highlight">
+                            <div class="flex-column">
+                        <p>Starting Bid:</p>
+                        <h9 class="lead">BND$<?php echo $row['starting_bid'] ?></h9>
+
+                             </div>
+                        </div>
                         <div class="p-2 flex-fill bd-highlight">
                         <div class="flex-column">
                         <p>Current Bid:</p>
@@ -554,29 +573,48 @@ else
                     <span class="input-group-text">BND$</span>
                     <input type="hidden" name="prd_id" value="<?php echo $row['prd_id']?>">
                     <input type="hidden" name="current_bidder" value="<?php echo $res['current_bidder']?>">
-                    <input type="number" class="form-control" name="current_bid" step="any">    
+                    <input type="number" class="form-control" name="current_bid" step="any" id="current_bid"> 
+                    <script>
+                    // function verifyBid() {
+                    //     var current_bid = document.getElementById("current_bid").value;
+                    //     var starting_bid='';
+                    //     if(current_bid <= starting_bid) {
+                    //         document.getElementById("bid_msg").innerHTML = "**Bid is less than starting bid.";
+                    //         return false;
+                    //     }
+                    // }
+                    </script>  
                     </div>
                     <div class="d-grid">
-                    <button class="btn btn-warning text-uppercase" name= "placebid" data-bs-toggle="modal" data-bs-target="#modalForm">Place Bid</button>
+                    <button class="btn btn-warning text-uppercase" onclick="verifyBid()" name= "placebid" data-bs-toggle="modal" data-bs-target="#modalForm">Place Bid</button>
                     </div>
                     </div>
                     <div class="col-auto">
+                    <span id="bid_msg" >
+                        
+                        </span>
                         <span class="current_bid" >
-                        Minimum bid increment is $0.01
+                        <?php if (isset($row['bid_increment']) ){
+                            //Exists
+                            echo  "Minimum bid increment is BND$".$row['bid_increment'];
+                        }else{
+                            //Doesn't exists
+                            echo "Minimum bid increment is BND$0.01";
+                        }?>
                         </span>
                     </div>
                     </div>
-                    
+                
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                     <script>
                         $(document).ready(function(){
                         $("input[name=current_bid]").keyup(function(){
                         var bid=$("input[name=current_bid]").val();
-                        if (bid <= <?php echo $row['current_bid'] ?>) {
+                        if (bid <= <?php echo $res['current_bid'] ?>) {
                             $('span.current_bid').css("color", "red");
                             $('span.current_bid').text("Your bid needs to be higher.");
                             }
-                        if  (bid > <?php echo $row['current_bid'] ?>) {
+                        if  (bid > <?php echo $res['current_bid'] ?>) {
                             $('span.current_bid').css("color", "grey");
                             $('span.current_bid').text("Minimum bid increment is $0.01");
                             }
