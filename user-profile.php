@@ -6,11 +6,16 @@ require_once "connection.php";
 //make sure login first, so that can fetch email, echo email to see if you logged in
 $email = $_SESSION['email'];
 //echo $email;
-
+//Select user from user database.
 $select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
 $statement = $conn->prepare($select);
 $statement->execute();
 $row = $statement->fetchAll(PDO::FETCH_ASSOC);
+//Select Receipt for database
+$result = "SELECT * FROM order_details";
+$statement = $conn->prepare($result);
+$statement->execute();
+$row1 = $statement->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -166,40 +171,24 @@ body {
                     <th scope="col" width="15%">Payment Status</th>
                     <th scope="col" width="15%">Delivery Status</th>
                     <th scope="col" width="20%">Item(s)</th>
+                    <th scope="col" width="10%">Quantity</th>
                     
                 </tr>
             </thead>
             <tbody>
+            <?php foreach($row1 as $orders){ ?>
+
                 <tr>
-                    
-                    <td>12</td>
-                    <td>1 Oct, 21</td>
-                    <td>PayPal</td>
-                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1 text-success">Paid</span></td>
-                    <td class="text-success">Delivered</td>
-                    <td>Wirecard for figma</td>
-                    
-                </tr>
-                <tr>
-                    
-                    <td>14</td>
+                    <td><?php echo $orders['id'] ?></td>
                     <td>12 Oct, 21</td>
-                    <td>Cash</td>
-                    <td><i class="fa fa-dot-circle-o text-danger"></i><span class="ms-1">Pending</span></td>
-                    <td>Pending</td>
-                    <td>Altroz furry</td>
+                    <td><?php echo $orders['payment_mthd'] ?></td>
+                    <td><?php echo $orders['stat'] ?></td>
+                    <td><?php echo $orders['payment_stat'] ?></td>
+                    <td><?php echo $orders['prd_name'] ?></td>
+                    <td><?php echo $orders['prd_qty'] ?></td>
                     
                 </tr>
-                <tr>
-                    
-                    <td>17</td>
-                    <td>1 Nov, 21</td>
-                    <td>PayPal</td>
-                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1 text-success">Paid</span></td>
-                    <td>Pending</td>
-                    <td>Apple Macbook air</td>
-                    
-                </tr>
+                <?php } ?>
             </tbody>
         </table>
     </div>
