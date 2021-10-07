@@ -159,17 +159,33 @@ else
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
     //$count = $stmt->fetchColumn();
 
+    $statement = $conn->query("SELECT * FROM paypal_details WHERE user_paypal = '$email'");
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+
     // add into product_bid
     if(isset($_POST['placebid'])){
         // if ($count) {
+            $current_bid   = $_POST['current_bid'];
+            if ( $current_bid <= $row['starting_bid'] || $current_bid < ($res['current_bid'] + $row['bid_increment']) || $current_bid <= $res['current_bid'] ) {
+                 echo '<script>alert("Bid needs to be higher!")</script>';
+                //echo "<script>Qual.error('Unsuccessful Bid','Bid needs to be higher.')</script>";
+                
+            } else {
             if ( $res > 0) {
                 // Update bid
                     $prd_id         = ($_POST['prd_id']);
-                    $current_bid   = $_POST['current_bid'];
+                    // $current_bid   = $_POST['current_bid'];
+                    $paypal_email    = ($_POST['paypal_email']);
+                    $paypal_psw    = ($_POST['paypal_psw']);
                     $current_bidder    = ($_POST['current_bidder']);
                     $pdoQuery = ("UPDATE product_bid SET current_bid = '$current_bid', current_bidder = '$email', prev_bidder = '$current_bidder' WHERE prd_id = '$prd_id' ");
                     $pdoQuery_run = $conn->prepare($pdoQuery);
                     $pdoQuery_run->execute();
+
+                    if (empty($result)) {
+                    $select1 = "SELECT * FROM paypal_details WHERE 1";
+                    $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
+                    }
                     echo "<meta http-equiv='refresh' content='0'>";
                     
                 
@@ -231,7 +247,7 @@ else
             }
                 try {
 
-                    //Send mail to highest bidder
+                    //Send mail to prev bidder
                     
                     //Enable debug output
                     $mail->SMTPDebug = 0;
@@ -286,7 +302,7 @@ else
                     } else {
                         $prd_id         = ($_POST['prd_id']);
             // $current_bidder = ($_POST['email']);
-            $current_bid    = ($_POST['current_bid']);
+            // $current_bid    = ($_POST['current_bid']);
             $paypal_email    = ($_POST['paypal_email']);
             $paypal_psw    = ($_POST['paypal_psw']);
 
@@ -343,10 +359,10 @@ else
 
                 $insert = $conn->query ("INSERT INTO product_bid (prd_id,current_bidder, current_bid) VALUES ('$prd_id','$email','$current_bid')");
 
-                $select1 = "SELECT * FROM paypal_details WHERE 1";
-
-                $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
-                echo "<meta http-equiv='refresh' content='0'>";
+                if (empty($result)) {
+                    $select1 = "SELECT * FROM paypal_details WHERE 1";
+                    $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
+                    }
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
 
@@ -362,6 +378,9 @@ else
             
 
             }
+
+
+                    }
                             }
                     // } else {
                     // echo 'Error: '.mysql_error();
@@ -372,8 +391,7 @@ else
 
     }
 
-    $statement = $conn->query("SELECT * FROM paypal_details WHERE user_paypal = '$email'");
-    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -552,9 +570,9 @@ else
                                 }
                                 
                             },1000);
-                            
-
+                        
                         </script>
+                   
                         <div class="p-2 flex-fill bd-highlight">
                             <div class="flex-column">
                         <p>Starting Bid:</p>
@@ -595,7 +613,7 @@ else
                     </script>  
                     </div>
                     <div class="d-grid">
-                    <button class="btn btn-warning text-uppercase" onclick="verifyBid()" name= "placebid" data-bs-toggle="modal" data-bs-target="#modalForm">Place Bid</button>
+                    <button class="btn btn-warning text-uppercase" name= "placebid" data-bs-toggle="modal" data-bs-target="#modalForm">Place Bid</button>
                     </div>
                     </div>
                     <div class="col-auto">
