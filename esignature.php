@@ -4,6 +4,7 @@
     $id = $_GET['id'];
     //select single data
     //select email
+    $today = date('Y-m-d');
     $result1 = $conn->query("SELECT * FROM order_details WHERE id ='$id'");
     $row1 = $result1->fetch(PDO::FETCH_ASSOC);
     $name = $row1['stat'];
