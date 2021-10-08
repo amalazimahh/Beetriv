@@ -343,7 +343,7 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
           onApprove:function(data, actions){
               return actions.order.capture().then(function(details){
                   console.log(details)
-                  window.location.href='order-complete.php';
+                  window.location.href='order-complete.php?pay='+details.id;
               })
           },
           onCancel:function(data){
