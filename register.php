@@ -62,6 +62,7 @@ require 'vendor/autoload.php';
                                 <h1 class="h4 text-gray-900 mb-4">Sign Up to Beetriv</h1>
                             </div>
                             <form class="user" method="POST">
+                                <input type="hidden" name="type" value="customer">
                             <div class="form-group">
                                 <!-- Email -->
                                     <input type="email" class="form-control form-control-user" id="email" name="email"
@@ -179,6 +180,7 @@ require 'vendor/autoload.php';
             $phone           = ($_POST['phone']);
             $password        = ($_POST['password']);
             $rpassword       = ($_POST['rpassword']);
+            $typee           = ($_POST['type']);
 
 
             //Mail Set up
@@ -233,8 +235,8 @@ require 'vendor/autoload.php';
 
                 $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
 
-                $sql = $conn->query ("INSERT INTO users (email, username, ic_number, ic_color, phone_number, password, vcode) VALUES ('$email','$username','$ic','$ic2','$phone'
-                ,'$password','$vcode')");
+                $sql = $conn->query ("INSERT INTO users (email, username, ic_number, ic_color, phone_number, password, vcode, type) VALUES ('$email','$username','$ic','$ic2','$phone'
+                ,'$password','$vcode', '$typee')");
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
 
