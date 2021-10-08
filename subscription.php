@@ -272,7 +272,10 @@ $email = $_SESSION['email'];
           onApprove:function(data, actions){
               return actions.order.capture().then(function(details){
                   console.log(details)
-                  Qual.success("Successful Payment","Welcome and thank you for joining us!");
+                 
+                Qual.success("Successful Payment","Welcome and thank you for joining us!");
+                //insert timer if can
+                window.location.href='welcome-seller.php';
               })
           },
           onCancel:function(data){
@@ -284,6 +287,7 @@ $email = $_SESSION['email'];
             <?php
         $status = $statusMsg = '';
         if(isset($_POST['submit'])){
+            
             $status = 'error';
             if(!empty($_FILES['front_ic']['name']) && !empty($_FILES['back_ic']['name']) && !empty($_FILES['driver_license']['name'])) {
                 // Get the file info
@@ -298,6 +302,7 @@ $email = $_SESSION['email'];
 
                 // Allow certain file formats
                 $allowTypes = array('jpg','png','jpeg','gif');
+                // $updte = $conn->query("UPDATE users SET type='runner' WHERE email='$email'");
                 if(in_array($fileType1, $allowTypes) || in_array($fileType2, $allowTypes) || in_array($fileType3, $allowTypes)){
                     $image1 = $_FILES['front_ic']['tmp_name'];
                     $front_ic = addslashes(file_get_contents($image1));
@@ -310,21 +315,31 @@ $email = $_SESSION['email'];
 
                 // Insert image content into database
                 $insert = $conn->query("INSERT INTO runner (front_ic, back_ic, driver_license) VALUES ('$front_ic', '$back_ic', '$driver_license')");
+                // $updte = $conn->query("UPDATE users SET type='runner' WHERE email='$email'");
+                        // $updte = "UPDATE users SET type='runner' WHERE email='$email'";
+                        // $pdoQuery_run = $conn->prepare($updte); 
+                        // $pdoQuery_run = execute(); 
                 if($insert){
                         $status = 'success';
                         $statusMsg = "File uploaded successfully.";
                         echo "<script>
                         Qual.info('Thank you for joining Beetriv!','Runner dashboard will appear on your profile once your documentation has been reviewed.');
                         </script>";
+                        $updte = $conn->query("UPDATE users SET type='runner' WHERE email='$email'");
                     } else {
                        $statusMsg = "File upload failed. Please try again."; 
                     }
                 } else { 
                     $statusMsg = "Only JPG, JPEG, PNG, & GIF files are allowed.";
                 }
-            } else {
+                //update user type
+                
+            }
+            // $updte = $conn->query("UPDATE users SET type='runner' WHERE email='$email'");
+             else {
                 $statusMsg = "Select a file.";
             }
+            // $updte = $conn->query("UPDATE users SET type='runner' WHERE email='$email'");
         }
 
         //echo $statusMsg;
