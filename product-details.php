@@ -402,6 +402,9 @@ else
         // $pdoQuery = ("UPDATE product_bid SET bid_result = '$current_bidder', bid_time = '$expired' WHERE prd_id = '$id' ");
         //             $pdoQuery_run = $conn->prepare($pdoQuery);
         //             $pdoQuery_run->execute();
+        $pdoQuery = ("UPDATE product SET bid_expiry = '$expired' WHERE prd_id = '$id' ");
+                    $pdoQuery_run = $conn->prepare($pdoQuery);
+                    $pdoQuery_run->execute();
         
         if (empty($res['bid_result'])) {         
             try {
@@ -573,6 +576,7 @@ else
                         <div class="pb-5">
                         <h9 class="lead"><?php echo $row['prd_desc']?></h9>
                         </div>
+                        <?php if( empty($row['bid_expiry']) ): ?>
                         <form method="POST">
                         <div class="d-flex pb-4" >
                             <div class="large col-2">Quantity</div>
@@ -594,8 +598,9 @@ else
                                 </button>
                             </div>
                         </form>
+                        <?php endif; ?>
 
-                        <?php if( $row['bid_status'] == "yes"): ?>
+                        <?php if( $row['bid_status'] == "yes" && empty($row['bid_expiry']) ): ?>
                         <!-- bidding -->
                         <div class="d-flex pb-4" >
                         <div class="p-2 flex-fill bd-highlight">
@@ -724,6 +729,14 @@ else
                 </div>
             </div>
             <?php endif; ?>
+
+                        <!-- show for winning bid -->
+            <?php if( isset($row['bid_expiry']) ): ?>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success" type="button">Get Bid Item Here</button>
+                </div>
+                <?php endif; ?>
+
                 <!-- Credit cards Modal -->
             <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">

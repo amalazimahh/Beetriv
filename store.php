@@ -390,7 +390,10 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         <section class="py-5">
         <div class="prd-div"><h3>Latest Added Items</h3></div>
            <div class="product">
-               <?php foreach($row as $product){ ?>
+               <?php 
+               foreach($row as $product){ 
+                if (empty($product['bid_expiry'])) {
+                   ?>
               <div class="content">
                   <form method="POST"></form>
               <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
@@ -401,7 +404,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                    <button class="buy-prd btn-warning">Add to cart</button>
                </form>  
                  </div>
-                <?php } ?>
+                <?php } }?>
                </div>
     </div>
         </section>
