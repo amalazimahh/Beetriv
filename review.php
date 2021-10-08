@@ -27,6 +27,7 @@
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <link rel="stylesheet" href="css/feedback-form.css">
     </head>
     <body>
         <!-- Navigation-->
@@ -70,74 +71,123 @@
             </div>
         </nav>
 
-            <div class="row mt-3">
-                <div class="col-md-12">
-                    <section class="container px-4 px-lg-5 my-5" >
-                        <!-- Show lists of items purchased -->
-                        <!-- <table class="table">
-                            <tr>
-                                <td>
-                                    <p>Your puchases is empty. Shop now !</p>
-                                </td>
-                            </tr>
-                        </table> -->
+        <main>
 
-                        <table class="table">
-                        <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Shop</th>
-                                    <th>Price</th>
-                                    <th>Qty</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                    <tr>
-                                        <td>
-                                            <img src="data:image/jpg;charset=utf8;base64" class="rounded img-thumbnail mr-2" style="width:40px;">
-                                            <p>Example</p>
-                                        </td>
-                                        <td>
-                                            [Vendors]
-                                        </td>
-                                        <td>
-                                            $12.00
-                                        </td>
-                                        <td>
-                                            1
-                                        </td>
-                                        <td>
-                                            $12.00
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-dark flex-shrink-0">
-                                                <a class="nav-item nav-link" style='color:black' aria-current="page" href="seller-review.php">
-                                                    <i class="bi bi-pen-fill"></i>
-                                                    Review
-                                                </a>
-                                                
-                                            </button>
-                                        </td>
-                                    </tr>
-                                <!-- <tr class="border-top border-bottom">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <strong>
-                                        
-                                        </strong>
-                                    </td>
-                                </tr>  -->
-                                </tr>
-                            </tbody> 
-                        </table>
+        <!-- product details and status -->
 
-                    </section>
+        </main>
+
+        <section>
+            <!-- insert leave feedback form -->
+            <div class="container-contact100">
+		        <div class="wrap-contact100">
+                    <form action="seller-review.php" method="post">
+                        <span class="contact100-form-title">
+                            Leave Your Feedback
+                        </span>
+
+                        <!-- <div class="wrap-input100 validate-input bg1" data-validate="Please Type Your Name">
+                            <span class="label-input100">Product Description *</span>
+                            <input class="input100" type="text" name="name" placeholder="What do you think of this product..">
+                        </div> -->
+
+                        <span class="label-input100"><b>Select a star based on your experience</b></span>
+                        <br>
+
+                        <div class="rating-star">
+                            <span class="label-input100">Product Quality</span>
+                                <!-- star rating code here -->
+                                <div class="rate">
+                                    <input type="radio" id="star5" name="rate" value="5" />
+                                    <label for="star5" title="text">5 stars</label>
+                                    <input type="radio" id="star4" name="rate" value="4" />
+                                    <label for="star4" title="text">4 stars</label>
+                                    <input type="radio" id="star3" name="rate" value="3" />
+                                    <label for="star3" title="text">3 stars</label>
+                                    <input type="radio" id="star2" name="rate" value="2" />
+                                    <label for="star2" title="text">2 stars</label>
+                                    <input type="radio" id="star1" name="rate" value="1" />
+                                    <label for="star1" title="text">1 star</label>
+                                </div>
+
+                                <br>
+
+                            <span class="label-input100">Seller Service</span>
+                            <!-- star rating code here -->
+                                <div class="rate">
+                                    <input type="radio" id="star5" name="rate" value="5" />
+                                    <label for="star5" title="text">5 stars</label>
+                                    <input type="radio" id="star4" name="rate" value="4" />
+                                    <label for="star4" title="text">4 stars</label>
+                                    <input type="radio" id="star3" name="rate" value="3" />
+                                    <label for="star3" title="text">3 stars</label>
+                                    <input type="radio" id="star2" name="rate" value="2" />
+                                    <label for="star2" title="text">2 stars</label>
+                                    <input type="radio" id="star1" name="rate" value="1" />
+                                    <label for="star1" title="text">1 star</label>
+                                </div>
+
+                                <br>
+                            
+                            <span class="label-input100">Runner Service</span>
+                            <!-- star rating code here -->
+                                <div class="rate">
+                                    <input type="radio" id="star5" name="rate" value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                    <input type="radio" id="star4" name="rate" value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                    <input type="radio" id="star3" name="rate" value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                    <input type="radio" id="star2" name="rate" value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                    <input type="radio" id="star1" name="rate" value="1" />
+                                        <label for="star1" title="text">1 star</label>
+                                </div>
+
+                                <br>
+                            
+                            <span class="label-input100">Overall Rate</span>
+                            <!-- star rating code here -->
+                                <div class="rate">
+                                    <input type="radio" id="star5" name="rate" value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                    <input type="radio" id="star4" name="rate" value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                    <input type="radio" id="star3" name="rate" value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                    <input type="radio" id="star2" name="rate" value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                    <input type="radio" id="star1" name="rate" value="1" />
+                                        <label for="star1" title="text">1 star</label>
+                                </div>
+
+                                <br>
+                        </div>
+
+                        <div class="wrap-input100 validate-input bg0 rs1-alert-validate" data-validate = "Please leave your feedback for this seller">
+                            <span class="label-input100">Feedback</span>
+                            <textarea class="input100" name="message" placeholder="Your feedback here..."></textarea>
+                        </div>
+
+                        <div class="wrap-input100 validate-input bg0 rs1-alert-validate">
+                            <span class="label-input100">Upload an image of the product</span>
+                            <br>
+                            <input type="file" name="prd_img"><br>
+                        </div>
+
+                        <div class="container-contact100-form-btn">
+                            <button class="contact100-form-btn">
+                                <span>
+                                    Submit
+                                    <i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <br><br><br><br><br><br><br><br>
+
+        </section>
         
         <!-- Footer-->
         <footer class="site-footer">

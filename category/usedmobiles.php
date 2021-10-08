@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "connection.php";
+require_once "../connection.php";
 
 $email = $_SESSION['email'];
 // echo $email;
@@ -20,7 +20,7 @@ else if (isset($_POST['logout']))
 }
 
 // Get image data from database
-$result = "SELECT * FROM product";
+$result = "SELECT * FROM product WHERE prd_category= 'Mobile' && prd_condition= 'Used'";
 $handle = $conn->prepare($result);
 $handle->execute();
 $row = $handle->fetchAll(PDO::FETCH_ASSOC);
@@ -34,8 +34,8 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         <meta name="description" content="" />
         <meta name="author" content="" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="css/styles.css">
-        <link rel="stylesheet" href="css/footer.css">
+        <link rel="stylesheet" href="../css/styles.css">
+        <link rel="stylesheet" href="../css/footer.css">
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300i,400,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -133,8 +133,8 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         /* flex-basis: 100%; */
         }
         .content{
-        width: 19%;
-        margin: 15px;
+        width: 20%;
+        margin: 10px;
         box-sizing: border-box;
         float: left;
         text-align: center;
@@ -218,27 +218,30 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         }
 
         </style>
-        <title>Beetriv</title>
+        <title>Beetriv | Mobiles and Electronics</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Search bar -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="css/user-profile.css">
-        <link href="css/category.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/user-profile.css">
+        <link href="../css/responsive.css" rel="stylesheet">
+        <link href="../css/category.css" rel="stylesheet">
 
     </head>
     <body>
+        
+    
         <!-- Navigation-->
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="store.php">Beetriv</a>
+                <a class="navbar-brand" href="../store.php">Beetriv</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link" aria-current="page" href="store.php">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                        <li class="nav-item"><a class="nav-link" aria-current="page" href="../store.php">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../about.php">About</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -259,38 +262,32 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                         </li>
                     </ul>
                     <ul class="nav justify-content-end">
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
-                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
-                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
-                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right" name="logout" method="post"></i></a></li> -->
-                    <!-- <form action = "store.php" method ="POST">
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" ><i class="bi bi-box-arrow-right" name="logout"></i></a></li>
-                   </form> -->
-                    <form action = "store.php" method = "post">
-                    <button type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button>
-                    </form>
+                        <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="../wishlist.php">
+                        <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
+                        <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="../cart.php">
+                        <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
+                        <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="../user-profile.php"><i class="bi-person-circle"></i></a></li>
+                        <form action = "../store.php" method = "post">
+                            <button type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button>
+                        </form>
                     </ul>
                 </div>
             </div>
         </nav>
+        <!-- End of Nav Bar -->
 
-        <!-- End of Navigation Bar -->
-
-        <!-- Ads slideshow -->
+        <!-- Slideshow -->
         <div class="slideshow-container">
-
             <div class="mySlides fade">
-                <img src="img/store/delivery.png" style="width:100%">
+                <img src="../img/store/delivery.png" style="width:100%">
             </div>
 
             <div class="mySlides fade">
-                <img src="img/store/summer.png" style="width:100%">
+                <img src="../img/store/summer.png" style="width:100%">
             </div>
 
             <div class="mySlides fade">
-                <img src="img/store/collab.png" style="width:100%">
+                <img src="../img/store/collab.png" style="width:100%">
             </div>
 
         </div>
@@ -303,31 +300,33 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
             <span class="dot"></span>
         </div>
 
-        <!-- Ads Slideshow Javascript -->
+        <!-- Slideshow Js -->
         <script>
             var slideIndex = 0;
             showSlides();
 
             function showSlides() {
-                var i;
-                var slides = document.getElementsByClassName("mySlides");
-                var dots = document.getElementsByClassName("dot");
-                for (i = 0; i < slides.length; i++) {
-                    slides[i].style.display = "none";
-                }
-                slideIndex++;
-                if (slideIndex > slides.length) {slideIndex = 1}
-                for (i = 0; i < dots.length; i++) {
-                    dots[i].className = dots[i].className.replace(" active", "");
-                }
-                slides[slideIndex-1].style.display = "block";
-                dots[slideIndex-1].className += " active";
-                setTimeout(showSlides, 2000); // Change image every 2 seconds
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("dot");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";
+            dots[slideIndex-1].className += " active";
+            setTimeout(showSlides, 2000); // Change image every 2 seconds
             }
         </script>
 
-        <!-- Searchbar -->
-        <form method = "POST" action="search.php" class="input-group">
+        <!-- End of slideshow -->
+
+        <!-- Search bar -->
+        <form method = "POST" action="../search.php" class="input-group">
             <div class="container">
                 <div class="row">
                     <div class="col-xs-8 col-xs-offset-2">
@@ -347,7 +346,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                         break;
 
                                         case "Mobiles":
-                                        window.location="mobile.php";
+                                        window.location="mobiles.php";
                                         break;
                                         case "Hobbies":
                                         window.location="hobbies.php";
@@ -367,16 +366,17 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                         }                           
                                     }
                                 </script>
-                                <!-- Filter By section -->
+
                                 <SELECT id="category" class="btn btn-default dropdown-toggle" name="section" onChange="SelectRedirect();">
-                                    <Option value="">Filter By</option>
-                                    <Option value="Home">Home and Living</option>
-                                    <Option value="Fashion">Fashion</option>
-                                    <Option value="Mobiles">Mobiles and Electronics</option>
-                                    <Option value="Hobbies">Hobbies and Games</option>
-                                    <Option value="Cars">Cars and Property</option>
-                                    <Option value="Freebies">Freebies, Deals and More!</option>
+                                <Option value="">Filter By</option>
+                                <Option value="Home">Home and Living</option>
+                                <Option value="Fashion">Fashion</option>
+                                <Option value="Mobiles">Mobiles and Electronics</option>
+                                <Option value="Hobbies">Hobbies and Games</option>
+                                <Option value="Cars">Cars and Property</option>
+                                <Option value="Freebies">Freebies, Deals and More!</option>
                                 </SELECT>
+                    
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="#contains">Contains</a></li>
@@ -399,42 +399,23 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </form>
 
+        <!-- Dropdown for search by categories Js -->
         <script>
-            $(document).ready(function(e){
-                $('.search-panel .dropdown-menu').find('a').click(function(e) {
-                    e.preventDefault();
-                    var param = $(this).attr("href").replace("#","");
-                    var concept = $(this).text();
-                    $('.search-panel span#search_concept').text(concept);
-                    $('.input-group #search_param').val(param);
-                });
+        $(document).ready(function(e){
+            $('.search-panel .dropdown-menu').find('a').click(function(e) {
+                e.preventDefault();
+                var param = $(this).attr("href").replace("#","");
+                var concept = $(this).text();
+                $('.search-panel span#search_concept').text(concept);
+                $('.input-group #search_param').val(param);
             });
+        });
         </script>
 
+        <div class="prd-div"><h3>Mobiles and Electronics - Used</h3></div>
 
-        <!-- Section-->
-        <!-- <section class="py-5">
-        <div class="prd-div"><h3>Latest Added Items</h3></div>
-           <div class="product">
-               <?php 
-               foreach($row as $product){ 
-                if (empty($product['bid_expiry'])) {
-                   ?>
-              <div class="content">
-                  <form method="POST"></form>
-              <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
-              <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
-               <h4><?php echo $product['prd_name']; ?></h4>
-              <h6>$<?php echo $product['prd_price']; ?></h6>
-              <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
-                   <button class="buy-prd btn-warning">Add to cart</button>
-               </form>  
-                 </div>
-                <?php } }?>
-               </div>
-        </div>
-        <section> -->
-
+        <!-- Product preview -->
+        <section>
             <!-- Place category sidebar and products in a container  -->
             <div class="prd-grid">
                 <div class="prd-flex">
@@ -446,37 +427,37 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="panel-group category-products" id="accordian"><!--category-productsr-->
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title"><a href="category/homeliving.php">Home and Living</a></h4>
+                                            <h4 class="panel-title"><a href="homeliving.php">Home and Living</a></h4>
                                         </div>
                                     </div>
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title"><a href="category/fashion.php">Fashion</a></h4>
+                                            <h4 class="panel-title"><a href="fashion.php">Fashion</a></h4>
                                         </div>
                                     </div>
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title"><a href="category/mobiles.php">Mobiles and Electronics</a></h4>
+                                            <h4 class="panel-title"><a href="mobiles.php">Mobiles and Electronics</a></h4>
                                         </div>
                                     </div>
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title"><a href="category/hobbies.php">Hobbies and Games</a></h4>
+                                            <h4 class="panel-title"><a href="hobbies.php">Hobbies and Games</a></h4>
                                         </div>
                                     </div>
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title"><a href="category/car.php">Car and Property</a></h4>
+                                            <h4 class="panel-title"><a href="car.php">Car and Property</a></h4>
                                         </div>
                                     </div>
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title"><a href="category/freebies.php">Freebies, Deals and More!</a></h4>
+                                            <h4 class="panel-title"><a href="freebies.php">Freebies, Deals and More!</a></h4>
                                         </div>
                                     </div>
 
@@ -487,8 +468,8 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                     <h2>Item Condition</h2>
                                     <div class="brands-name">
                                         <ul class="nav nav-pills nav-stacked">
-                                            <li><a href="newitems.php"> <span class="pull-right"></span>New</a></li>
-                                            <li><a href="useditems.php"> <span class="pull-right"></span>Used</a></li>
+                                            <li><a href="newmobiles.php"> <span class="pull-right"></span>New</a></li>
+                                            <li><a href="usedmobiles.php"> <span class="pull-right"></span>Used</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -574,36 +555,34 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
 
                 <div class="prd-flex-2">
                     <div class="product">
-                        <?php foreach($row as $product){ 
-                             if (empty($product['bid_expiry'])) { ?>
+                        <?php foreach($row as $product){ ?>
                             <div class="content">
                                 <form method="POST"></form>
                                     <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
                                     <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
                                     <h3><?php echo $product['prd_name']; ?></h3>
                                     <h6>$<?php echo $product['prd_price']; ?></h6>
-                                    <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
+                                    <a class="text-warning" href="../product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
                                     <button class="buy-prd btn-warning">Add to cart</button>
                                 </form>  
                             </div>
-                        <?php } }?>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
         </section>
-
+                        
         <!-- Footer-->
         <footer class="site-footer">
-
             <div class="container">
                 <div class="row">
                 <!-- first section -->
                 <div class="col-xs-6 col-md-3">
                     <h6>CORPORATE</h6>
                     <ul class="footer-links">
-                        <li><a href="about.php">About Beetriv</a></li>
-                        <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
-                        <li><a href="footer/termsco.php">Terms and Conditions</a></li>
+                        <li><a href="../about.php">About Beetriv</a></li>
+                        <li><a href="../footer/privacy-policy.php">Privacy Policy</a></li>
+                        <li><a href="../footer/termsco.php">Terms and Conditions</a></li>
                     </ul>
                 </div>
 
@@ -611,9 +590,9 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-xs-6 col-md-3">
                     <h6>DEALS, PAYMENT & DELIVERY</h6>
                     <ul class="footer-links">
-                        <li><a href="footer/deals.php">Our Deals</a></li>
-                        <li><a href="footer/delivery.php">Delivery Services</a></li>
-                        <li><a href="footer/payment.php">Payment</a></li>
+                        <li><a href="../footer/deals.php">Our Deals</a></li>
+                        <li><a href="../footer/delivery.php">Delivery Services</a></li>
+                        <li><a href="../footer/payment.php">Payment</a></li>
                     </ul>
                 </div>
 
@@ -621,12 +600,12 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-xs-6 col-md-3">
                     <h6>CUSTOMER CARE</h6>
                     <ul class="footer-links">
-                        <li><a href="footer/be-seller.php">Become Our Seller</a></li>
-                        <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
-                        <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
-                        <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
-                        <li><a href="footer/customer-protection.php">Customer Protection</a></li>
-                        <li><a href="footer/faq.php">FAQ</a></li>
+                        <li><a href="../footer/be-seller.php">Become Our Seller</a></li>
+                        <li><a href="../footer/buy-guides.php">How to Buy on Beetriv</a></li>
+                        <li><a href="../footer/sell-guides.php">How to Sell on Beetriv</a></li>
+                        <li><a href="../footer/bid-guides.php">How Bidding Works</a></li>
+                        <li><a href="../footer/customer-protection.php">Customer Protection</a></li>
+                        <li><a href="../footer/faq.php">FAQ</a></li>
                     </ul>
                 </div>
 
@@ -646,5 +625,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+
+        <script src="js/main.js"></script>
     </body>
 </html>

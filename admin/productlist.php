@@ -5,6 +5,11 @@ session_start();
 require_once "../connection.php";
     $email = $_SESSION['email'];
 
+// Get image data from database
+$result = "SELECT * FROM product";
+$handle = $conn->prepare($result);
+$handle->execute();
+$row = $handle->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +23,7 @@ require_once "../connection.php";
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Sales</title>
+    <title>Product List</title>
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -179,25 +184,34 @@ require_once "../connection.php";
                             <table class="table table-bordered">
                                 <thead class="thead-dark">
                                     <tr>
-                                    <th scope="col">Photo</th>
+                                    <th scope="col"></th>
                                     <th scope="col">Name</th>
-                                    <th scope="col">Description</th>
+                                    <th scope="col">Category</th>
+                                    <!-- <th scope="col">Description</th> -->
                                     <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Condition</th>
                                     <th scope="col">Bid Status</th>
                                     <th scope="col">Tools</th>
                                     </tr>
                                 </thead>
+                                <?php 
+                                foreach($row as $product){
+                                ?>
                                 <tbody>
                                     <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@mdo</td>
+                                    <th scope="row"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>" class="rounded" style="width:60px;"></th>
+                                    <td><?php echo $product['prd_name']; ?></td>
+                                    <td><?php echo $product['prd_category']; ?></td>
+                                    <!-- <td><?php echo $product['prd_desc']; ?></td> -->
+                                    <td>$<?php echo $product['prd_price']; ?></td>
+                                    <td><?php echo $product['prd_qty']; ?></td>
+                                    <td><?php echo $product['prd_condition']; ?></td>
+                                    <td><?php echo $product['bid_status']; ?></td>
                                     <td>@mdo</td>
                                     </tr>
-                                    <tr>
-                                    <th scope="row">2</th>
+                                    <!-- <tr> -->
+                                    <!-- <th scope="row">2</th>
                                     <td>Jacob</td>
                                     <td>Thornton</td>
                                     <td>@fat</td>
@@ -210,10 +224,12 @@ require_once "../connection.php";
                                     <td>the Bird</td>
                                     <td>@twitter</td>
                                     <td>@twitter</td>
-                                    <td>@twitter</td>
-                                    </tr>
+                                    <td>@twitter</td> -->
+                                    <!-- </tr> -->
                                 </tbody>
+                                <?php }?>
                                 </table>
+                                
                             </div>
                         </div>
             </div>

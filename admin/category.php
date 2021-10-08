@@ -5,6 +5,10 @@ session_start();
 require_once "../connection.php";
     $email = $_SESSION['email'];
 
+$result = "SELECT * FROM category";
+$handle = $conn->prepare($result);
+$handle->execute();
+$row = $handle->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -179,20 +183,18 @@ require_once "../connection.php";
                             <table class="table table-bordered">
                                 <thead class="thead-dark">
                                     <tr>
-                                    <th scope="col">Category</th>
+                                    <th scope="col">Category Name</th>
                                     <th scope="col">Tools</th>
                                     </tr>
                                 </thead>
+                                <?php foreach($row as $product){?>
                                 <tbody>
                                     <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    </tr>
-                                    <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
+                                    <th scope="row"><?php echo $product['name']; ?></th>
+                                    <td></td>
                                     </tr>
                                 </tbody>
+                                <?php }?>
                                 </table>
                             </div>
                         </div>

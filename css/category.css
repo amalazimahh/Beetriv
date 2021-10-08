@@ -86,7 +86,7 @@
 }
 
 .category-products {
-    border: 1px solid #F7F7F0;
+    /* border: 1px solid #F7F7F0; */
     margin-bottom: 35px;
     padding-bottom: 20px;
     padding-top: 15px;
@@ -109,7 +109,7 @@
 h2.title:after {
     content: " ";
     position: absolute;
-    border: 1px solid #f5f5f5;
+    /* border: 1px solid #f5f5f5; */
     bottom: 8px;
     left: 0;
     width: 100%;
@@ -148,6 +148,10 @@ h2.title:before {
     -webkit-box-shadow: none;
     box-shadow: none;
     margin-bottom: 0px;
+}
+
+.category-products .panel-default .panel-heading:hover{
+    background-color: #ffcd39;
 }
 
 .category-products .panel-default .panel-heading {
@@ -196,7 +200,7 @@ h2.title:before {
 }
 
 .brands-name {
-    border: 1px solid #F7F7F0;
+    /* border: 1px solid #F7F7F0; */
     padding-bottom: 20px;
     padding-top: 15px;
 }
@@ -212,7 +216,7 @@ h2.title:before {
 }
 
 .brands-name .nav-stacked li a:hover {
-    background-color: #fff;
+    background-color: #ffcd39;
     color: #696763;
 }
 
@@ -224,13 +228,14 @@ h2.title:before {
     position: relative;
 }
 
-.price-range {
+.data-range {
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .well {
     background-color: #FFFFFF;
-    border: 1px solid #F7F7F0;
+    /* border: 1px solid #F7F7F0; */
     border-radius: 4px;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -746,4 +751,120 @@ h2.title {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
 }
+
+/* CSS for Price Slider */
+.data-slider {
+    width: 300px;
+    margin: auto;
+    text-align: center;
+    position: relative;
+    height: 6em;
+  }
+  .data-slider svg,
+  .data-slider input[type=range] {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+  input[type=number] {
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 1.6em;
+    -moz-appearance: textfield;
+  }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  input[type=number]:invalid,
+  input[type=number]:out-of-range {
+    border: 2px solid #e60023;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+  }
+  input[type=range]:focus {
+    outline: none;
+  }
+  input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ffcd39;
+  }
+  input[type=range]:focus::-ms-fill-lower {
+    background: #ffcd39;
+  }
+  input[type=range]:focus::-ms-fill-upper {
+    background: #ffcd39;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: #ffcd39;
+    border-radius: 1px;
+    box-shadow: none;
+    border: 0;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    z-index: 2;
+    position: relative;
+    box-shadow: 0px 0px 0px #000;
+    border: 1px solid #ffcd39;
+    height: 18px;
+    width: 18px;
+    border-radius: 25px;
+    background: #fff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -7px;
+  }
+  input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: #ffcd39;
+    border-radius: 1px;
+    box-shadow: none;
+    border: 0;
+  }
+  input[type=range]::-moz-range-thumb {
+    z-index: 2;
+    position: relative;
+    box-shadow: 0px 0px 0px #000;
+    border: 1px solid #ffcd39;
+    height: 18px;
+    width: 18px;
+    border-radius: 25px;
+    background: #fff;
+    cursor: pointer;
+  }
+  input[type=range]::-ms-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+  input[type=range]::-ms-fill-lower,
+  input[type=range]::-ms-fill-upper {
+    background: #ffcd39;
+    border-radius: 1px;
+    box-shadow: none;
+    border: 0;
+  }
+  input[type=range]::-ms-thumb {
+    z-index: 2;
+    position: relative;
+    box-shadow: 0px 0px 0px #000;
+    border: 1px solid #ffcd39;
+    height: 18px;
+    width: 18px;
+    border-radius: 25px;
+    background: #fff;
+    cursor: pointer;
+  }
 

@@ -159,17 +159,33 @@ else
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
     //$count = $stmt->fetchColumn();
 
+    $statement = $conn->query("SELECT * FROM paypal_details WHERE user_paypal = '$email'");
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+
     // add into product_bid
     if(isset($_POST['placebid'])){
         // if ($count) {
+            $current_bid   = $_POST['current_bid'];
+            if ( $current_bid <= $row['starting_bid'] || $current_bid < ($res['current_bid'] + $row['bid_increment']) || $current_bid <= $res['current_bid'] ) {
+                 echo '<script>alert("Bid needs to be higher!")</script>';
+                //echo "<script>Qual.error('Unsuccessful Bid','Bid needs to be higher.')</script>";
+                
+            } else {
             if ( $res > 0) {
                 // Update bid
                     $prd_id         = ($_POST['prd_id']);
-                    $current_bid   = $_POST['current_bid'];
+                    // $current_bid   = $_POST['current_bid'];
+                    $paypal_email    = ($_POST['paypal_email']);
+                    $paypal_psw    = ($_POST['paypal_psw']);
                     $current_bidder    = ($_POST['current_bidder']);
                     $pdoQuery = ("UPDATE product_bid SET current_bid = '$current_bid', current_bidder = '$email', prev_bidder = '$current_bidder' WHERE prd_id = '$prd_id' ");
                     $pdoQuery_run = $conn->prepare($pdoQuery);
                     $pdoQuery_run->execute();
+
+                    if (empty($result)) {
+                    $select1 = "SELECT * FROM paypal_details WHERE 1";
+                    $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
+                    }
                     echo "<meta http-equiv='refresh' content='0'>";
                     
                 
@@ -231,7 +247,7 @@ else
             }
                 try {
 
-                    //Send mail to highest bidder
+                    //Send mail to prev bidder
                     
                     //Enable debug output
                     $mail->SMTPDebug = 0;
@@ -286,7 +302,7 @@ else
                     } else {
                         $prd_id         = ($_POST['prd_id']);
             // $current_bidder = ($_POST['email']);
-            $current_bid    = ($_POST['current_bid']);
+            // $current_bid    = ($_POST['current_bid']);
             $paypal_email    = ($_POST['paypal_email']);
             $paypal_psw    = ($_POST['paypal_psw']);
 
@@ -343,10 +359,10 @@ else
 
                 $insert = $conn->query ("INSERT INTO product_bid (prd_id,current_bidder, current_bid) VALUES ('$prd_id','$email','$current_bid')");
 
-                $select1 = "SELECT * FROM paypal_details WHERE 1";
-
-                $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
-                echo "<meta http-equiv='refresh' content='0'>";
+                if (empty($result)) {
+                    $select1 = "SELECT * FROM paypal_details WHERE 1";
+                    $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
+                    }
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
 
@@ -362,18 +378,95 @@ else
             
 
             }
+
+
+                    }
                             }
                     // } else {
                     // echo 'Error: '.mysql_error();
-                    //         }
-
-        
-            
+                    //         }           
 
     }
 
-    $statement = $conn->query("SELECT * FROM paypal_details WHERE user_paypal = '$email'");
-    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    //notify when time expired
+    date_default_timezone_set('Asia/Brunei');
+    $expireday = $row['date_expired']; //from database
+    $expiretime = $row['time_expired'];
+    $dateTime = new DateTime();
+    // echo $dateTime->format('Y-m-d H:i:s');
+    $combinedDT = date('Y-m-d H:i:s', strtotime("$expireday $expiretime"));
+    // echo $combinedDT;
+    if ($combinedDT < $dateTime->format('Y-m-d H:i:s')) {
+        $current_bidder = $res['current_bidder'];
+        $expired = 'expired';
+        // $pdoQuery = ("UPDATE product_bid SET bid_result = '$current_bidder', bid_time = '$expired' WHERE prd_id = '$id' ");
+        //             $pdoQuery_run = $conn->prepare($pdoQuery);
+        //             $pdoQuery_run->execute();
+        $pdoQuery = ("UPDATE product SET bid_expiry = '$expired' WHERE prd_id = '$id' ");
+                    $pdoQuery_run = $conn->prepare($pdoQuery);
+                    $pdoQuery_run->execute();
+        
+        if (empty($res['bid_result'])) {         
+            try {
+
+                //Mail Set up
+                $mail= new PHPMailer(true);
+                
+                //Enable debug output
+                $mail->SMTPDebug = 0;
+
+                //Send using SMTP
+                $mail->isSMTP();
+
+                //Set the SMTP server 
+                $mail->Host = 'smtp.gmail.com';
+
+                //Enable SMTP authentication
+                $mail->SMTPAuth = true;
+
+                //SMTP username
+                $mail->Username = 'ayamketupat02@gmail.com';
+
+                //SMTP password
+                $mail->Password = 'k4k5dpkk';
+
+                //SMTP username
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+                //SMTP PORT
+                $mail->Port = 587;
+
+                //Recipients
+                $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+                //add recipient
+                $mail->addAddress($current_bidder,$username);
+
+                //Set email format to HTML
+                $mail->isHTML(true);
+
+                //converting text to html
+                // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+                $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/product-details.php?product=$id";
+                $mail->Subject = 'Bid time has ran out!';
+                $mail->Body    = '<p>Congratulation!</p><br><p>You are the highest bid on item <b>'.$row['prd_name'].'</b> and you can claim your item <b>'.$row['prd_name'].'</b> at link below:</p><br>'.$url;
+                //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+                $mail->send();
+
+                $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+                $pdoQuery = ("UPDATE product_bid SET bid_result = '$current_bidder', bid_time = '$expired' WHERE prd_id = '$id' ");
+                    $pdoQuery_run = $conn->prepare($pdoQuery);
+                    $pdoQuery_run->execute();
+
+            }catch (Exception $e){
+                echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+            }
+        }
+    }
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -483,6 +576,7 @@ else
                         <div class="pb-5">
                         <h9 class="lead"><?php echo $row['prd_desc']?></h9>
                         </div>
+                        <?php if( empty($row['bid_expiry']) ): ?>
                         <form method="POST">
                         <div class="d-flex pb-4" >
                             <div class="large col-2">Quantity</div>
@@ -504,8 +598,9 @@ else
                                 </button>
                             </div>
                         </form>
+                        <?php endif; ?>
 
-                        <?php if( $row['bid_status'] == "yes"): ?>
+                        <?php if( $row['bid_status'] == "yes" && empty($row['bid_expiry']) ): ?>
                         <!-- bidding -->
                         <div class="d-flex pb-4" >
                         <div class="p-2 flex-fill bd-highlight">
@@ -552,9 +647,9 @@ else
                                 }
                                 
                             },1000);
-                            
-
+                        
                         </script>
+                   
                         <div class="p-2 flex-fill bd-highlight">
                             <div class="flex-column">
                         <p>Starting Bid:</p>
@@ -595,7 +690,7 @@ else
                     </script>  
                     </div>
                     <div class="d-grid">
-                    <button class="btn btn-warning text-uppercase" onclick="verifyBid()" name= "placebid" data-bs-toggle="modal" data-bs-target="#modalForm">Place Bid</button>
+                    <button class="btn btn-warning text-uppercase" name= "placebid" data-bs-toggle="modal" data-bs-target="#modalForm">Place Bid</button>
                     </div>
                     </div>
                     <div class="col-auto">
@@ -634,6 +729,14 @@ else
                 </div>
             </div>
             <?php endif; ?>
+
+                        <!-- show for winning bid -->
+            <?php if( isset($row['bid_expiry']) ): ?>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success" type="button">Get Bid Item Here</button>
+                </div>
+                <?php endif; ?>
+
                 <!-- Credit cards Modal -->
             <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -845,6 +948,12 @@ else
         </div>
 
         </footer>
+
+        <script>
+            if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+            }
+        </script>
 
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>

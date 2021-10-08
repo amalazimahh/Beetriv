@@ -20,7 +20,7 @@ else if (isset($_POST['logout']))
 }
 
 // Get image data from database
-$result = "SELECT * FROM product";
+$result = "SELECT * FROM product WHERE prd_condition= 'New'";
 $handle = $conn->prepare($result);
 $handle->execute();
 $row = $handle->fetchAll(PDO::FETCH_ASSOC);
@@ -413,27 +413,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
 
 
         <!-- Section-->
-        <!-- <section class="py-5">
-        <div class="prd-div"><h3>Latest Added Items</h3></div>
-           <div class="product">
-               <?php 
-               foreach($row as $product){ 
-                if (empty($product['bid_expiry'])) {
-                   ?>
-              <div class="content">
-                  <form method="POST"></form>
-              <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
-              <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
-               <h4><?php echo $product['prd_name']; ?></h4>
-              <h6>$<?php echo $product['prd_price']; ?></h6>
-              <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
-                   <button class="buy-prd btn-warning">Add to cart</button>
-               </form>  
-                 </div>
-                <?php } }?>
-               </div>
-        </div>
-        <section> -->
+        <section>
 
             <!-- Place category sidebar and products in a container  -->
             <div class="prd-grid">
@@ -574,8 +554,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
 
                 <div class="prd-flex-2">
                     <div class="product">
-                        <?php foreach($row as $product){ 
-                             if (empty($product['bid_expiry'])) { ?>
+                        <?php foreach($row as $product){ ?>
                             <div class="content">
                                 <form method="POST"></form>
                                     <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
@@ -586,7 +565,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                     <button class="buy-prd btn-warning">Add to cart</button>
                                 </form>  
                             </div>
-                        <?php } }?>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

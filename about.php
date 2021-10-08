@@ -195,7 +195,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Search bar -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
         <link rel="stylesheet" href="css/about.css">
 
@@ -245,7 +245,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         <!-- header -->
         <div class="page-header">
             <div class="container">
-                    <div class="col-12">
+                    <div class="col-12 pt-5">
                         <h2>About Us</h2>
                     </div>
                     <div class="col-12">
@@ -284,7 +284,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                 <p>Introducing</p>
                                 <h2>Beetriv Member</h2>
                             </div>
-                            <div class="row">
+                            <div class="d-flex justify-content-center row">
                                 <div class="col-lg-2 col-md-6">
                                     <div class="team-item">
                                         <div class="team-img">
@@ -299,7 +299,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="col-lg-2 col-md-6">
                                     <div class="team-item">
                                         <div class="team-img ">
-                                            <img src="img/team-2.jpg" alt="Team Image">
+                                            <img src="img/team-2.png" alt="Team Image">
                                         </div>
                                         <div class="team-text">
                                             <h2>Afiqah</h2>
