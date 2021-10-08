@@ -5,6 +5,11 @@ session_start();
 require_once "../connection.php";
     $email = $_SESSION['email'];
 
+    $result = "SELECT * FROM users";
+    $handle = $conn->prepare($result);
+    $handle->execute();
+    $row = $handle->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -133,7 +138,7 @@ require_once "../connection.php";
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                                 <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                    src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['img']); ?>">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -179,6 +184,7 @@ require_once "../connection.php";
                             <table class="table table-bordered">
                                 <thead class="thead-dark">
                                     <tr>
+                                    <th scope="col"></th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Display Name</th>
                                     <th scope="col">Verification Code</th>
@@ -186,29 +192,18 @@ require_once "../connection.php";
                                     <th scope="col">Tools</th>
                                     </tr>
                                 </thead>
+                                <?php foreach($row as $user){?>
                                 <tbody>
                                     <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
+                                    <th scope="row"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($user['img']); ?>" class="rounded" style="width:60px;"></th>
+                                    <td><?php echo $user['email'];?></td>
+                                    <td><?php echo $user['username'];?></td>
+                                    <td><?php echo $user['vcode'];?></td>
+                                    <td><?php echo date('M d, Y', strtotime($user['created_at']));?></td>
                                     <td>@mdo</td>
-                                    <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                    <td>@fat</td>
-                                    </tr>
-                                    <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                    <td>@twitter</td>
                                     </tr>
                                 </tbody>
+                                <?php }?>
                                 </table>
                             </div>
                         </div>

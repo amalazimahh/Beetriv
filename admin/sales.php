@@ -5,6 +5,22 @@ session_start();
 require_once "../connection.php";
     $email = $_SESSION['email'];
 
+    // $result = "SELECT * FROM receipts";
+    // $handle = $conn->prepare($result);
+    // $handle->execute();
+    // $row = $handle->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $conn->prepare("SELECT * FROM receipts LEFT JOIN order_details ON order_details.id=receipts.id");
+    $stmt->execute();
+    $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // $total = 0;
+    // foreach($stmt as $srow){
+    // $subtotal = $srow['prd_price']*$srow['prd_qty'];
+    // $total += $subtotal;
+    // }
+    // echo "$".number_format($total, 2);
+
 ?>
 
 <!DOCTYPE html>
@@ -188,29 +204,21 @@ require_once "../connection.php";
                                     <th scope="col">Full Details</th>
                                     </tr>
                                 </thead>
+                                <?php foreach($row as $receipt){?>
                                 <tbody>
                                     <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
+                                    <th scope="row"><?php echo date('M d, Y', strtotime($receipt['sales_date']));?></th>
+                                    <td><?php echo $receipt['username']; ?></td>
+                                    <td><?php echo $receipt['payId']; ?></td>
+                                    <td>$<?php $total = 0;
+                                                $totalSum = $receipt['prd_price']*$receipt['prd_qty'];
+                                                $total += $totalSum; 
+                                                echo $total; ?></td>
                                     <td>@mdo</td>
                                     </tr>
                                     <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                    <td>@fat</td>
-                                    </tr>
-                                    <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                    <td>@twitter</td>
-                                    </tr>
                                 </tbody>
+                                <?php }?>
                                 </table>
                             </div>
                         </div>
