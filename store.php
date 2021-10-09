@@ -20,10 +20,16 @@ else if (isset($_POST['logout']))
 }
 
 // Get image data from database
-$result = "SELECT * FROM product";
+$result = "SELECT * FROM product where prd_category!= 'Freebies'";
 $handle = $conn->prepare($result);
 $handle->execute();
 $row = $handle->fetchAll(PDO::FETCH_ASSOC);
+
+// promo product
+$result2 = "SELECT * FROM product WHERE prd_category= 'Freebies'";
+$handle = $conn->prepare($result2);
+$handle->execute();
+$rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -609,12 +615,27 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                     <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
                                     <button class="buy-prd btn-warning">Add to cart</button>
                                 </form>  
+                                
                             </div>
+                            
                         <?php } }?>
-                    </div>
+               <?php foreach($rowPromo as $promo){ ?>
+              <div class="content">
+                  <form method="POST"></form>
+              <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($promo['prd_img']); ?>">
+              <input type="hidden" name="ide" value=<?php echo $promo['prd_id'];?> >
+               <h4><?php echo $promo['prd_name']; ?></h4>
+              <h6 class="text-muted text-decoration-line-through">$<?php echo $promo['new_price']; ?></h6><h6>$<?php echo $promo['prd_price']; ?></h6>
+              <a class="text-warning" href="product-details.php?product=<?php echo $promo['prd_id'];?>">View</a>
+                   <button class="buy-prd btn-warning">Add to cart</button>
+               </form>  
+                 </div>
+                <?php } ?>
+               </div>
                 </div>
             </div>
         </section>
+        
 
         <!-- Footer-->
         <footer class="site-footer">
