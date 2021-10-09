@@ -104,6 +104,17 @@ $email = $_SESSION['email'];
       </div>
     </div>
   </div>
+  <div class="row justify-content-center p-5">
+  <div class="col-lg-4">
+        <div class="card mb-5 mb-lg-0">
+          <div class="card-body">
+            <h5 class="card-title text-muted text-uppercase text-center">Discount and Promotions</h5>
+            <div class="d-grid">
+              <a href="discount.php" class="btn btn-warning text-uppercase" name="discountpromo">SALE!</a>
+            </div>
+          </div>
+        </div>
+      </div>
 </section>
 
         <!-- Bootstrap JS -->
