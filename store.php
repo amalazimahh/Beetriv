@@ -339,26 +339,26 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                         switch(document.getElementById('category').value)
                                         {
                                         case "Home":
-                                        window.location="homeliving.php";
+                                        window.location="category/homeliving.php";
                                         break;
 
                                         case "Fashion":
-                                        window.location="fashion.php";
+                                        window.location="category/fashion.php";
                                         break;
 
                                         case "Mobiles":
-                                        window.location="mobile.php";
+                                        window.location="category/mobiles.php";
                                         break;
                                         case "Hobbies":
-                                        window.location="hobbies.php";
+                                        window.location="category/hobbies.php";
                                         break;
 
                                         case "Cars":
-                                        window.location="cars.php";
+                                        window.location="category/car.php";
                                         break;
 
                                         case "Freebies":
-                                        window.location="freebies.php";
+                                        window.location="category/freebies.php";
                                         break;
 
                                         default:
@@ -506,14 +506,30 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                             // Without JQuery
                                             // var slider = new Slider('#sl2', {});
                                         </script> -->
+                                        <form method="post">
                                         <div class="data-slider"><span>From
-                                            <input type="number" value="50" min="0" max="1000"/>	To
-                                            <input type="number" value="500" min="0" max="1000"/></span>
+                                            <input type="number" value="50" name="min_range" min="0" max="1000"/>	To
+                                            <input type="number" value="500" name="max_range" min="0" max="1000"/></span>
                                             <input value="50" min="0" max="1000" step="10" type="range"/>
                                             <input value="500" min="0" max="1000" step="10" type="range"/>
                                             <svg width="100%" height="24">
                                                 <line x1="4" y1="0" x2="300" y2="0" stroke="#212121" stroke-width="12" stroke-dasharray="1 28"></line>
                                             </svg>
+                                            <div class="pt-5">
+                                            <button type="submit" name="filter" class="btn btn-outline-dark">Filter</button>
+                                            </div>
+                                        </form>
+                                        <?php 
+                                        if(isset($_POST['filter'])){
+                                            $min = $_POST['min_range'];
+                                            $max = $_POST['max_range'];
+                                        // $stmt = $conn->query("SELECT * FROM product WHERE prd_price BETWEEN '$min' AND '$max'");
+                                        // $res = $stmt->fetch(PDO::FETCH_ASSOC);
+                                        $result = "SELECT * FROM product WHERE prd_price BETWEEN '$min' AND '$max'";
+                                        $handle = $conn->prepare($result);
+                                        $handle->execute();
+                                        $row = $handle->fetchAll(PDO::FETCH_ASSOC);
+                                        } ?>
 
                                             <!-- Javascript for price slider -->
                                             <script>
@@ -572,7 +588,15 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                     <!-- </div> -->
                 </div>
 
+                
+
                 <div class="prd-flex-2">
+                <?php if (isset($_POST['filter']) && !$row ): ?>
+                        <div class="container">         
+                            <div class="pt-5 text-center"><h1>No items found!</h1></div>
+                        </div>
+                <?php endif; ?>
+
                     <div class="product">
                         <?php foreach($row as $product){ 
                              if (empty($product['bid_expiry'])) { ?>
