@@ -46,7 +46,7 @@ if(isset($_POST['save_product'])){
         $imgContent = addslashes(file_get_contents($image));
     
     }
-    $pdoQuery = ("UPDATE product SET prd_name='$prd_name', prd_price = '$prd_price', prd_qty = '$prd_qty', prd_desc = '$prd_desc', 
+    $pdoQuery = ("UPDATE product SET prd_price = '$prd_price', prd_qty = '$prd_qty', prd_desc = '$prd_desc', 
     prd_rating = '$prd_rating', prd_location = '$prd_location', prd_img = '$imgContent', prd_category = '$prd_category' WHERE prd_id = '$id' ");
     $pdoQuery_run = $conn->prepare($pdoQuery);
     $pdoQuery_run->execute();
@@ -79,6 +79,23 @@ if(isset($_POST['save_product'])){
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/footer.css">
+
+    <!-- disabled previous day -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	  	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	  	<script>
+            $( function() {
+	   			$("#start_promo").datepicker({
+	   				minDate: 0
+	   			});
+	  		});
+              $( function() {
+	   			$("#end_promo").datepicker({
+	   				minDate: 0
+	   			});
+	  		});
+	  	</script>
 </head>
 <body>
 <!-- Navigation-->
@@ -124,7 +141,7 @@ if(isset($_POST['save_product'])){
 
         <!-- Edit Product -->
         <?php foreach($rowProduct as $product){ ?> 
-            <form action="edit-product.php" method="post" enctype="multipart/form-data">
+            <form action="" method="post" enctype="multipart/form-data">
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class="col-md-3 border-right">
@@ -149,7 +166,7 @@ if(isset($_POST['save_product'])){
                 <!-- <form action="seller-profile.php" method="post" enctype="multipart/form-data"> -->
                 <div class="row mt-2">
                     <input type="hidden" name="product" value="<?php echo $id; ?>">
-                    <div class="col-md-12"><label class="labels">Product Name</label><input type="text" class="form-control" placeholder="<?php echo $product['prd_name']; ?>" id="prd_name" name="prd_name" disabled></div>
+                    <div class="col-md-12"><label class="labels">Product Name</label><input type="text" class="form-control"id="prd_name" name="prd_name" placeholder="<?php echo $product['prd_name']; ?>"  disabled></div>
                     <div class="col-md-12"><label class="labels">Category</label>
                     <select name="prd_category" class="form-control">
                         <option value="Select">Select Category</option>
@@ -184,11 +201,7 @@ if(isset($_POST['save_product'])){
                     <div class="col-md-12"><label class="labels">Meet up location</label>
                     <input type="text" class="form-control" id="prd_location" name="prd_location" placeholder="<?php echo $product['prd_location']; ?>"  required></div>
                 </div>
-                <div class="row mt-3">
-                <h4 class="text-right">Discount Promotion</h4><hr>
-                <div class="col-md-12"><label class="labels">Discount Percentage (%)</label><input type="number" class="form-control" placeholder="Discount" id="discount" name="discount" pattern=".{0,100}" title="Not more than 100" placeholder= "Discount" ></div>
-                </div>
-            </div>
+                
                 <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="submit" value="Save Product" name="save_product"></div>
             </form>
         </div>
