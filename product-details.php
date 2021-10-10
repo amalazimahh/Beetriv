@@ -733,7 +733,7 @@ else
                         <!-- show for winning bid -->
             <?php if( $row['bid_status'] == "yes" && isset($row['bid_expiry']) ): ?>
                 <div class="d-grid gap-2">
-                    <button class="btn btn-success" type="button">Get Bid Item Here</button>
+                    <button class="btn btn-success" onclick="location.href = 'paybid.php';"  type="button">Get Bid Item Here</button>
                 </div>
                 <?php endif; ?>
 
