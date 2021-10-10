@@ -396,7 +396,7 @@ else
     // echo $dateTime->format('Y-m-d H:i:s');
     $combinedDT = date('Y-m-d H:i:s', strtotime("$expireday $expiretime"));
     // echo $combinedDT;
-    if ($combinedDT < $dateTime->format('Y-m-d H:i:s')) {
+    if ( $row['bid_status'] == "yes" && $combinedDT < $dateTime->format('Y-m-d H:i:s')) {
         $current_bidder = $res['current_bidder'];
         $expired = 'expired';
         // $pdoQuery = ("UPDATE product_bid SET bid_result = '$current_bidder', bid_time = '$expired' WHERE prd_id = '$id' ");
@@ -731,7 +731,7 @@ else
             <?php endif; ?>
 
                         <!-- show for winning bid -->
-            <?php if( isset($row['bid_expiry']) ): ?>
+            <?php if( $row['bid_status'] == "yes" && isset($row['bid_expiry']) ): ?>
                 <div class="d-grid gap-2">
                     <button class="btn btn-success" type="button">Get Bid Item Here</button>
                 </div>
