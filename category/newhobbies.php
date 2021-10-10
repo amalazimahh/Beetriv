@@ -575,9 +575,9 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                             <div class="pt-5 text-center"><h1>No items found!</h1></div>
                         </div>
                 <?php endif; ?>
-
-                    <div class="product">
-                        <?php if ( isset($row['prd_id'])) {
+                
+                <div class="product">
+                        <?php if ( empty($row['prd_id'])) {
                         foreach($row as $product){ ?>
                             <div class="content">
                                 <form method="POST"></form>
