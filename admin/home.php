@@ -190,7 +190,7 @@ $today = date('Y-m-d');
                                                 Total Sales</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <?php
-                                                $stmt = $conn->prepare("SELECT * FROM order_details LEFT JOIN product ON product.prd_id=order_details.prd_id");
+                                                $stmt = $conn->prepare("SELECT * FROM order_details LEFT JOIN product ON product.prd_id=order_details.prd_id WHERE stat='completed' AND payment_stat='paid' ");
                                                 $stmt->execute();
 
                                                 $total = 0;
