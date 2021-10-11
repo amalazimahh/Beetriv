@@ -4,6 +4,8 @@ session_start();
 require_once "connection.php";
 
 $email = $_SESSION['email'];
+
+
 ?>
 
 <!DOCTYPE html>
@@ -73,13 +75,14 @@ $email = $_SESSION['email'];
             </div>
         </nav>
 
-    <!-- This snippet uses Font Awesome 5 Free as a dependency. You can download it at fontawesome.io! -->
-
+    
+<!-- add new item -->
+<form action="" method="POST">
 <section class="pricing py-3">
   <div class="container">
       <div><h2 class="text-center">Manage Your Store!</h2></div>
     <div class="row justify-content-center p-5">
-      <!-- Free Tier -->
+      
       <div class="col-lg-4">
         <div class="card mb-5 mb-lg-0">
           <div class="card-body">
@@ -91,13 +94,36 @@ $email = $_SESSION['email'];
         </div>
       </div>
   
-      <!-- Pro Tier -->
+      <!-- pop up button -->
+      
+      <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="modalForm" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalForm">Add Promotional Banner</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="promo_img.php" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                        <label class="form-label" for="banner_img">Banner Image</label>
+                        <input type="file" class="form-control" id="banner_img" name="banner_img"/>
+                    </div>
+                      <div class="modal-footer d-block">
+                        <button type="submit" name="submit" class="btn btn-warning float-end">Submit</button>
+                      </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+     <!-- edit banner -->
       <div class="col-lg-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Edit Banner</h5>
+            <h5 class="card-title text-muted text-uppercase text-center">Add Promotional Banner</h5>
             <div class="d-grid">
-              <a href="banner.php" type="button" class="btn btn-warning text-uppercase" name="edit_item">Edit</a>
+              <a href="#" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalForm">Edit</a>
             </div>
           </div>
         </div>
@@ -115,7 +141,9 @@ $email = $_SESSION['email'];
           </div>
         </div>
       </div>
+          </form>
 </section>
+
 
         <!-- Bootstrap JS -->
         <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
