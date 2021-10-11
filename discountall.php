@@ -1,41 +1,87 @@
 <?php
 ob_start();
 session_start();
+$email=$_SESSION['email'];
+// echo $email;
 require_once "connection.php";
 
-$email = $_SESSION['email'];
+// get all product id
+// $id = $_GET['idAll'];
 
 
+// echo $id;
+
+$selectproduct = "SELECT * FROM product WHERE display_name='$email'";
+$result = $conn->query($selectproduct);
+$result->execute();
+$rowProduct = $result->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+
+if(isset($_POST['saves'])){
+    
+    $prd_price      = $_POST['prd_price'];
+    $new_price      = $_POST['new_price'];
+    $prd_category   = $_POST['prd_category'];
+    $prd_discount   = $_POST['discountall'];
+    $start_promo    = $_POST['start_promo'];
+    $end_promo      = $_POST['end_promo'];
+
+    // $formula  = int($prd_price/100) * $prd_discount;
+    // $newprice = $prd_price - $formula;
+    
+    $pdoQuery = ("UPDATE product SET prd_price = '$new_price', new_price = '$prd_price', prd_category = '$prd_category', 
+    prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE display_name='$email'");
+    $pdoQuery_run = $conn->prepare($pdoQuery);
+    $pdoQuery_run->execute();
+    // header('location: seller-dashboard.php ');
+
+    }
+    
+    
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beetriv - Manage Store</title>
-    <link rel="stylesheet" href="css/subscription.css">
+    <title>Beetriv - Discount Promotion</title>
+    <link rel="stylesheet" href="css/edit-profile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
-        <link rel="stylesheet" href="css/footer.css">
-        <link rel="stylesheet" href="css/user-profile.css">
-        <style>
-            .paypal-button{
-            text-align: center;
-            margin: 5px;
-            }
-        </style>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/footer.css">
+
+    <!-- disabled previous day -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	  	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	  	<!-- <script>
+            $( function() {
+	   			$("#start_promo").datepicker({
+	   				minDate: 0
+	   			});
+	  		});
+              
+	  	</script>
+          <script>
+              $( function() {
+	   			$("#end_promo").datepicker({
+	   				minDate: 0
+	   			});
+	  		});
+          </script> -->
 </head>
 <body>
-        <!-- Navigation-->
-        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
+<!-- Navigation-->
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="store.php">Beetriv</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -75,78 +121,71 @@ $email = $_SESSION['email'];
             </div>
         </nav>
 
-    
-<!-- add new item -->
-<form action="" method="POST">
-<section class="pricing py-3">
-  <div class="container">
-      <div><h2 class="text-center">Manage Your Store!</h2></div>
-    <div class="row justify-content-center p-5">
-      
-      <div class="col-lg-4">
-        <div class="card mb-5 mb-lg-0">
-          <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Add New Item</h5>
-            <div class="d-grid">
-              <a href="addproduct.php" class="btn btn-warning text-uppercase" name="add_item">Add</a>
-            </div>
-          </div>
+        <!-- Edit Product -->
+        <form action="" method="post" enctype="multipart/form-data">
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-1">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"></div>
+            <!-- <img class="rounded-circle mt-5" width="150px" id="output" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']);?>" onerror="this.src='img/profile-img.png';"><br></label></div> -->
+            <script>
+                var loadFile = function(event) {
+                var output = document.getElementById('output');
+                output.src = URL.createObjectURL(event.target.files[0]);
+                output.onload = function() {
+                URL.revokeObjectURL(output.src) // free memory
+                }
+            };
+            </script>
         </div>
-      </div>
-  
-      <!-- pop up button -->
-      
-      <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="modalForm" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalForm">Add Promotional Banner</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="promo_img.php" method="post" enctype="multipart/form-data">
-                        <div class="mb-3">
-                        <label class="form-label" for="banner_img">Banner Image</label>
-                        <input type="file" class="form-control" id="banner_img" name="banner_img"/>
-                    </div>
-                      <div class="modal-footer d-block">
-                        <button type="submit" name="submit" class="btn btn-warning float-end">Submit</button>
-                      </div>
-                        </form>
-                    </div>
+        
+        <div class="col-md-9 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Add discount to all product</h4>
                 </div>
-            </div>
-        </div>
-     <!-- edit banner -->
-      <div class="col-lg-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Add Promotional Banner</h5>
-            <div class="d-grid">
-              <a href="#" class="btn btn-warning text-uppercase" data-bs-toggle="modal" data-bs-target="#modalForm">Edit</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row justify-content-center p-5">
-  <div class="col-lg-4">
-        <div class="card mb-5 mb-lg-0">
-          <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Discount and Promotions</h5>
-            <div class="d-grid">
-              <a href="discount.php" class="btn btn-warning text-uppercase" name="discountpromo">SALE!</a>
-            </div>
-          </div>
-        </div>
-      </div>
-          </form>
-</section>
+                <hr>
+                <form action="seller-profile.php" method="post" enctype="multipart/form-data">
+                <div class="row mt-2">
+                    <input type="hidden" name="product" value="<?php echo $id; ?>">
+                    <div class="col-md-12"><label class="labels">Discount Percentage To All</label><input type="text" class="form-control" placeholder="" id="discountall" name="discountall" require></div>
+                    <?php foreach ($rowProduct as $product){?>
+                    <input type="hidden" name="prd_price" value="<?php echo $rowProduct['prd_price']?>">
+                    <input type="hidden" name="new_price" value="<?php echo $rowProduct['new_price']?>">
+                    <!-- <input type="hidden" name="prd_price">
+                    <input type="hidden" name="new_price"> -->
+                    
+                    <?php } ?>
+                    <div class="col-md-12"><label class="labels">Category</label>
+                    <select name="prd_category" class="form-control">
+                        <option value="Freebies">Freebies, Deals and More!</option>
+                        </select>
+                        <div class="col-md-12"><label class="labels">Start Promotions</label><input type="date" class="form-control" placeholder="Start Date" id="start_promo" name="start_promo" autocomplete="off" require></div>
+                <div class="col-md-12"><label class="labels">End Promotions</label><input type="date" class="form-control" placeholder="End Date" id="end_promo" name="end_promo" autocomplete="off" require></div>
+                        <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="submit" value="Save Product" name="saves" ></div>
+                    </div>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script>
+        $(document).on("keyup", "#prd_discount", function() {
+            var oriPrice = "<?php echo $product['prd_price']; ?>";
+            var percentage = $('#prd_discount').val();
+            var formula = (percentage / 100).toFixed(2); 
+            var multiply = oriPrice * formula;
+            var discount = oriPrice - multiply;
+            $("input[name=new_price]").val(discount);
 
+            console.log(percentage);
+            console.log(oriPrice);
+            console.log(discount);
+        });
+    </script>
+        </form>
+                    </div>
+        </div>
+        </div>
+        </div>
+        </div>
 
-        <!-- Bootstrap JS -->
-        <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
 <!-- Footer-->
 <footer class="site-footer">
 

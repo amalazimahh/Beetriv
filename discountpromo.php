@@ -23,15 +23,15 @@ if(isset($_POST['saves'])){
     $new_price      = $_POST['new_price'];
     $prd_category   = $_POST['prd_category'];
     $prd_discount   = $_POST['prd_discount'];
-    $start_promo    = date('Y-m-d');
-    $end_promo      = date('Y-m-d');
+    $start_promo    = $_POST['start_promo'];
+    $end_promo      = $_POST['end_promo'];
   
     
     $pdoQuery = ("UPDATE product SET prd_price = '$new_price', new_price = '$prd_price', prd_category = '$prd_category', 
     prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE prd_id = '$id' ");
     $pdoQuery_run = $conn->prepare($pdoQuery);
     $pdoQuery_run->execute();
-    header('location: seller-profile.php ');
+    header('location: seller-dashboard.php ');
 
     
     }
