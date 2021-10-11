@@ -18,13 +18,12 @@ $rowProduct = $result->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-
 if(isset($_POST['saves'])){
     
     $prd_price      = $_POST['prd_price'];
     $new_price      = $_POST['new_price'];
     $prd_category   = $_POST['prd_category'];
-    $prd_discount   = $_POST['discountall'];
+    $prd_discount   = $_POST['prd_discount'];
     $start_promo    = $_POST['start_promo'];
     $end_promo      = $_POST['end_promo'];
 
@@ -38,7 +37,7 @@ if(isset($_POST['saves'])){
     // header('location: seller-dashboard.php ');
 
     }
-    
+
     
 ?>
 <!DOCTYPE html>
@@ -145,17 +144,33 @@ if(isset($_POST['saves'])){
                     <h4 class="text-right">Add discount to all product</h4>
                 </div>
                 <hr>
-                <form action="seller-profile.php" method="post" enctype="multipart/form-data">
+                <form action="" method="post" enctype="multipart/form-data">
                 <div class="row mt-2">
                     <input type="hidden" name="product" value="<?php echo $id; ?>">
-                    <div class="col-md-12"><label class="labels">Discount Percentage To All</label><input type="text" class="form-control" placeholder="" id="discountall" name="discountall" require></div>
+                    <div class="col-md-12"><label class="labels">Discount Percentage To All</label><input type="text" class="form-control" placeholder="" id="prd_discount" name="prd_discount" require></div>
                     <?php foreach ($rowProduct as $product){?>
-                    <input type="hidden" name="prd_price" value="<?php echo $rowProduct['prd_price']?>">
-                    <input type="hidden" name="new_price" value="<?php echo $rowProduct['new_price']?>">
-                    <!-- <input type="hidden" name="prd_price">
-                    <input type="hidden" name="new_price"> -->
-                    
+                    <?php echo $product['prd_price']?>
+                    <input type="hidden" name="prd_price" value="<?php echo $product['prd_price']?>">
+                    <input type="hidden" name="new_price" value="<?php echo $product['new_price']?>">
+                    <input  type="hidden" id="prd_price" name="prd_price" disabled></div> 
+                    <input type="hidden" placeholder="New Price" id="new_price" name="new_price" step="0.1" disabled></div>
+                    <script>
+                    $(document).on("keyup", "#prd_discount", function() {
+                        var oriPrice = "<?php echo $product['prd_price']; ?>";
+                        var percentage = $('#prd_discount').val();
+                        var formula = (percentage / 100).toFixed(2); 
+                        var multiply = oriPrice * formula;
+                        var discount = oriPrice - multiply;
+                        $("input[name=new_price]").val(discount);
+
+                        console.log(percentage);
+                        console.log(oriPrice);
+                        console.log(discount);
+                    });
+                </script>
                     <?php } ?>
+                    
+                    
                     <div class="col-md-12"><label class="labels">Category</label>
                     <select name="prd_category" class="form-control">
                         <option value="Freebies">Freebies, Deals and More!</option>
@@ -165,20 +180,7 @@ if(isset($_POST['saves'])){
                         <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="submit" value="Save Product" name="saves" ></div>
                     </div>
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-            <script>
-        $(document).on("keyup", "#prd_discount", function() {
-            var oriPrice = "<?php echo $product['prd_price']; ?>";
-            var percentage = $('#prd_discount').val();
-            var formula = (percentage / 100).toFixed(2); 
-            var multiply = oriPrice * formula;
-            var discount = oriPrice - multiply;
-            $("input[name=new_price]").val(discount);
-
-            console.log(percentage);
-            console.log(oriPrice);
-            console.log(discount);
-        });
-    </script>
+            
         </form>
                     </div>
         </div>
