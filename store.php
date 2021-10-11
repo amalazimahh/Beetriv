@@ -19,6 +19,25 @@ else if (isset($_POST['logout']))
     header ('location: login.php');
 }
 
+$selectprofile = $conn->query("SELECT * FROM users WHERE email='$email'");
+$row1 = $selectprofile->fetch(PDO::FETCH_ASSOC);
+$type = $row1['type'];
+if (isset($_POST['profile'])){
+    if(($type) == 'seller'){
+        header('location: seller-dashboard.php');
+    }
+    else if(($type) == 'customer'){
+        header('location: user-profile.php');
+    }
+
+}
+if (isset($_POST['cart'])){
+    header('location: cart.php');
+}
+if (isset($_POST['wishlist'])){
+    header('location: wishlist.php');
+}
+
 // Get image data from database
 $result = "SELECT * FROM product where prd_category!= 'Freebies'";
 $handle = $conn->prepare($result);
@@ -264,18 +283,22 @@ $rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
                             </ul>
                         </li>
                     </ul>
-                    <ul class="nav justify-content-end">
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
-                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
-                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
+                    <!-- <ul class="nav justify-content-end"> -->
+                   
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li> -->
                     <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right" name="logout" method="post"></i></a></li> -->
                     <!-- <form action = "store.php" method ="POST">
                     <li><a class="nav-item nav-link" style='color:black' aria-current="page" ><i class="bi bi-box-arrow-right" name="logout"></i></a></li>
                    </form> -->
                     <form action = "store.php" method = "post">
-                    <button type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button>
+                        <ul class="nav justify-content-end">
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php"> -->
+                    <li><button type="submit" name="wishlist" class="bi bi-heart" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i></li>
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php"> -->
+                    <li><button type="submit" name="cart" class="bi bi-cart4" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i></button></li>
+                    <li><button type="submit" name="profile" class="nav-item" style='background-color:transparent'><i class="bi-person-circle"></i></button></li>
+                    <li><button type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button></li>
+                    </ul>
                     </form>
                     </ul>
                 </div>
