@@ -167,8 +167,8 @@ body {
                 <tr class="bg-light">
                     
                     <th scope="col" width="10%">Product ID</th>
+                    <th scope="col" width="15%">Product Name</th>
                     <th scope="col" width="10%">Product Image</th>
-                    <th scope="col" width="10%">Product Name</th>
                     <th scope="col" width="10%">Product Category</th>
                     <th scope="col" width="10%">Price</th>
                     <th scope="col" width="10%">Product Quantity</th>
@@ -191,7 +191,7 @@ body {
                 <tr>
                 <td><?php echo $rowProduct['prd_id']; ?></td>
                 <td><?php echo $rowProduct['prd_name']; ?></td>
-                <th scope="row"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($rowProduct['prd_img']); ?>" class="rounded" style="width:150px;"></th>
+                <th scope="row"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($rowProduct['prd_img']); ?>" class="rounded" style="width:150px; height:150px"></th>
                 <td><?php echo $rowProduct['prd_category']; ?></td>
                 <td>$<?php echo $rowProduct['prd_price']; ?></td>
                 <td><?php echo $rowProduct['prd_qty']; ?></td>
