@@ -29,6 +29,9 @@ if (isset($_POST['profile'])){
     else if(($type) == 'customer'){
         header('location: user-profile.php');
     }
+    else if(($type) == 'runner'){
+        header('location: runner-order.php');
+    }
 
 }
 if (isset($_POST['cart'])){
