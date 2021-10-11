@@ -28,6 +28,14 @@
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <style>
+            .newbutton{
+                position: absolute;
+                top: 100px;
+                right: 10%;
+                left: 75%;
+            }
+        </style>
     </head>
     <body>
         <!-- Navigation-->
@@ -75,8 +83,12 @@
     <div class="row mt-3">
      <div class="col-md-12">
          <section class="container px-4 px-lg-5 my-5" >
-         <a href="cart.php">Your Shopping Cart |</a>
-         <a href="purchase.php">Your Purchases</a>
+             <div class="newbutton">
+                <a class="btn btn-outline-dark flex-shrink-0" href="purchase.php">
+                    <i class="bi bi-bag-fill me-1"></i>
+                    My Purchases
+                </a>
+             </div>
         <?php if(empty($_SESSION['cart_items'])){?>
         <table class="table">
             <tr>
