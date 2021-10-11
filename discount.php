@@ -138,9 +138,10 @@ $result = $conn->query($selectproduct);
                 <td><?php echo $rowProduct['prd_location']; ?></td>
                 <td><a href="discountpromo.php?id=<?php echo $rowProduct['prd_id'];?>">
 				<button class="btn btn-warning btn-lg float-right">Edit</button></a>
-                <td><a href="discountall.php?idAll=<?php echo $rowProduct['prd_id'];?>">
-				<button class="btn btn-warning btn-lg float-right">Edit ALL</button></a></tr>
+                
                 <?php } ?>
+                <td><a href="discountall.php">
+				<button class="btn btn-warning btn-lg float-right">Edit ALL</button></a></tr>
             </tbody>
                                 </table>
                             </div>
