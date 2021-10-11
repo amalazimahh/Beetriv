@@ -14,12 +14,25 @@ $row1 = $result1->fetch(PDO::FETCH_ASSOC);
 $status = "pending";
 $paymentStat ="pending";
 $payment_mthd ="Cash";
-if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
+
+
+$binde = [
+    'user_id' => $row1['user_id'],
+  ];
+  $testting = 'insert into user_test(user_id) values (:user_id)';
+  $statement1 = $conn->prepare($testting);
+  $statement1->execute($binde);
+  
+  if($statement1->rowCount() == 1)
+      {    
+    if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
   {
+        $orderID = $conn->lastInsertId();
         foreach($_SESSION['cart_items'] as $item)
           {
             //$totalPrice+=$item['total_price'];
             $paramOrderDetails = [
+              'order_id' => $orderID,
               'product_id' =>  $item['product_id'],
               'product_name' =>  $item['product_name'],
               'product_price' =>  $item['product_price'],
@@ -32,8 +45,8 @@ if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
               'payment_mthd' => $payment_mthd,
               'payment_stat' => $paymentStat
                ];       
-            $sqlDetails = 'insert into order_details (prd_id, prd_name, prd_price, prd_qty, user_id, email, username, stat, contact_no, payment_mthd, payment_stat) 
-            values(:product_id,:product_name,:product_price,:qty,:user_id,:email,:username,:stat,:contact_no,:payment_mthd,:payment_stat)';
+               $sqlDetails = 'insert into order_details (request_id,prd_id, prd_name, prd_price, prd_qty, user_id, email, username, stat, contact_no, payment_mthd, payment_stat) 
+               values(:order_id,:product_id,:product_name,:product_price,:qty,:user_id,:email,:username,:stat,:contact_no,:payment_mthd,:payment_stat) ';
                $orderDetailStmt = $conn->prepare($sqlDetails);
             
                 $orderDetailStmt->execute($paramOrderDetails);
@@ -41,6 +54,7 @@ if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
 
         unset($_SESSION['cart_items']);
   }
+}
 ?>
 
 <!DOCTYPE html>
