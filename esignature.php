@@ -4,10 +4,33 @@
     $id = $_GET['id'];
     //select single data
     //select email
-    $today = date('Y-m-d');
-    $result1 = $conn->query("SELECT * FROM order_details WHERE id ='$id'");
+
+        //cara install phpmailer
+        use PHPMailer\PHPMailer\PHPMailer;
+        use PHPMailer\PHPMailer\SMTP;
+        use PHPMailer\PHPMailer\Exception;
+    //Load Composer's autoloader
+    require 'vendor/autoload.php';
+
+
+
+    //Selecting user with Cash only
+    $result1 = $conn->query("SELECT * FROM order_details WHERE id ='$id' AND payment_mthd ='Cash'");
     $row1 = $result1->fetch(PDO::FETCH_ASSOC);
     $name = $row1['stat'];
+    $name2 = $row1['email'];
+    $email = $row1['email'];
+    // $orderID = $row1['request_id'];
+
+ 
+    // $select = "SELECT * FROM order_details WHERE email = '$email' AND payment_stat ='paid' ";
+    // $statement = $conn->prepare($select);
+    // $statement->execute();
+    // $row2 = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    $today = date('Y-m-d');
+
+    echo $name2;
     if(($name) == 'pending'){
     //add code to save details to receipt table
         if(isset($_POST['submit'])){
@@ -51,12 +74,78 @@
             // $statement = $conn->prepare($result);
             // $statement->execute();
 
+            // $binde = [
+            //     'user_id' => $row1['user_id'],
+            //   ];
+            //   $testting = 'insert into user_test(user_id) values (:user_id)';
+            //   $statement1 = $conn->prepare($testting);
+            //   $statement1->execute($binde);
+              
+            //   if($statement1->rowCount() == 1)
+            //       {    
+            // $orderID = $conn->lastInsertId();
+            $select = "SELECT * FROM order_details WHERE email = '$email' AND  payment_stat ='paid' AND payment_mthd='Cash'  ";
+            $statement = $conn->prepare($select);
+            $statement->execute();
+            $row2 = $statement->fetchAll(PDO::FETCH_ASSOC);
+            
+            //enter phpmailer here?
+            
+            $mail = new PHPMailer(true);
+
+                    try {
+                        //Server settings
+                        $mail->SMTPDebug = 0;                                   //Enable verbose debug output
+                        $mail->isSMTP();                                        //Send using SMTP
+                        $mail->Host       = "smtp.gmail.com";                   //Set the SMTP server to send through
+                        $mail->SMTPAuth   = true;                               //Enable SMTP authentication
+                        $mail->Username   = 'ayamketupat02@gmail.com';          //SMTP username
+                        $mail->Password   = 'k4k5dpkk';                         //SMTP password
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     //Enable implicit TLS encryption
+                        $mail->Port       = 587;                                //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                        
+                
+                        //Recipients
+                        $mail->setFrom('ayamketupat02@gmail.com', 'beetriv.com');
+                        $mail->addAddress($name2);                              //Add a recipient 
+                    
+                        //Content
+                        $mail->isHTML(true);                                  //Set email format to HTML
+                        $mail->Subject = 'Beetriv[Online Receipt]';
+                        $mail->Body    = '<h1> Thanks for shopping with us! </h1>'.
+                        '<table style="width:90%; height: 100px;border-collapse:collapse;">
+                          <tr>
+                          
+                          <th style="border-bottom: 1px solid black; text-align:left; padding:10px;">Item ID </th>
+                          <th style="border-bottom: 1px solid black; text-align:left; padding:10px;">Item Name</th>
+                          <th style="border-bottom: 1px solid black; text-align:left; padding:10px;">Item Price</th>
+                          <th style="border-bottom: 1px solid black; text-align:left; padding:10px;">Item Quantity</th>
+                          </tr>';
+                          
+                          foreach($row2 as $items){
+                          $mail->Body .= 
+                          '<tr>'.
+                          '<td style="border: 1px solid black; padding:15px;">' .$items['prd_id']. '</td>'.
+                          '<td style="border: 1px solid black; padding:15px;">' .$items['prd_name']. '</td>'.
+                          '<td style="border: 1px solid black; padding:15px;">'."$" .$items['prd_price']. '</td>'.
+                          '<td style="border: 1px solid black; padding:15px;">' .$items['prd_qty']. '</td>'.
+                          '</tr>'
+                          ;
+                    }
+                                      
+                        
+                        $mail->send();
+                    } catch (Exception $e) {
+                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                    }
             header('location: runner-order.php');
         }
     }else{
         header('location: runner-order.php');
     }
 
+
+    
     //add code to update receipt table
 
     //fetch product details based from the order id
