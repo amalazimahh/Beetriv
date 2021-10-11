@@ -3,6 +3,14 @@ ob_start();
 session_start();
 require_once "connection.php";
 $email = $_SESSION['email'];
+
+    //cara install phpmailer
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
+    //Load Composer's autoloader
+    require 'vendor/autoload.php';
 //echo $email
 // $id = $_GET['product'];
 $result = $conn->query("SELECT * FROM product");
@@ -10,18 +18,42 @@ $row = $result->fetch(PDO::FETCH_ASSOC);
 
 $result1 = $conn->query("SELECT * FROM users WHERE email = '$email'");
 $row1 = $result1->fetch(PDO::FETCH_ASSOC);
+
+
+// $result3 = $conn->query("SELECT * FROM order_details");
+// $row3 = $result->fetch(PDO::FETCH_ASSOC);
+// $
+// $userid = $row1['user_id'];
 // echo $row1['username'];
 // $select = "SELECT * From PRODUCT WHERE 1";
 // $orderID = $conn->lastInsertId();
+
+
+
 $status = "pending";
 $paymentStat ="paid";
 $payment_mthd ="Paypal";
-if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
+$payment_type = "test";
+
+
+$binde = [
+  'user_id' => $row1['user_id'],
+];
+$testting = 'insert into user_test(user_id) values (:user_id)';
+$statement1 = $conn->prepare($testting);
+$statement1->execute($binde);
+
+if($statement1->rowCount() == 1)
+    {
+  if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
   {
+    
+      $orderID = $conn->lastInsertId();
         foreach($_SESSION['cart_items'] as $item)
           {
             //$totalPrice+=$item['total_price'];
             $paramOrderDetails = [
+              'order_id' => $orderID,
               'product_id' =>  $item['product_id'],
               'product_name' =>  $item['product_name'],
               'product_price' =>  $item['product_price'],
@@ -38,36 +70,71 @@ if(isset($_SESSION['cart_items']) || !empty($_SESSION['cart_items']))
             //     'user_id' => $row1['user_id']
             //    ];
                
-            $sqlDetails = 'insert into order_details (prd_id, prd_name, prd_price, prd_qty, user_id, email, username, stat, contact_no, payment_mthd, payment_stat) 
-            values(:product_id,:product_name,:product_price,:qty,:user_id,:email,:username,:stat,:contact_no,:payment_mthd,:payment_stat) ';
-            // $sqlDetails1 = 'insert into order_detail (user_id) values(:user_id)';
-
-            // $orderDetailStmt = $conn->prepare($sqlDetails1);
-            // $orderDetailStmt->execute($test1);
+            $sqlDetails = 'insert into order_details (request_id,prd_id, prd_name, prd_price, prd_qty, user_id, email, username, stat, contact_no, payment_mthd, payment_stat) 
+            values(:order_id,:product_id,:product_name,:product_price,:qty,:user_id,:email,:username,:stat,:contact_no,:payment_mthd,:payment_stat) ';
 
             $orderDetailStmt = $conn->prepare($sqlDetails);
             
             $orderDetailStmt->execute($paramOrderDetails);
           }
-                        
-          //  $updateSql = 'update orders set total_price = :total where id = :id';
-
-            // $rs = $db->prepare($updateSql);
-            // $prepareUpdate = [
-            // 'total' => $totalPrice,
-            // 'id' =>$getOrderID
-            //  ];
-
-            // $rs->execute($prepareUpdate);
-                        
+          $select = "SELECT * FROM order_details WHERE email = '$email' AND request_id='$orderID' ";
+          // $row2=$select->fetch(PDO::FETCH_ASSOC);
+          $statement = $conn->prepare($select);
+          $statement->execute();
+          $row2 = $statement->fetchAll(PDO::FETCH_ASSOC);
+                  
             unset($_SESSION['cart_items']);
-            // $_SESSION['confirm_order'] = true;
-            // header('location:thank-you.php');
-            // exit();
+                    }
+                    //email user that payment accepted.
+                    $mail = new PHPMailer(true);
+
+                    try {
+                        //Server settings
+                        $mail->SMTPDebug = 0;                                   //Enable verbose debug output
+                        $mail->isSMTP();                                        //Send using SMTP
+                        $mail->Host       = "smtp.gmail.com";                   //Set the SMTP server to send through
+                        $mail->SMTPAuth   = true;                               //Enable SMTP authentication
+                        $mail->Username   = 'ayamketupat02@gmail.com';          //SMTP username
+                        $mail->Password   = 'k4k5dpkk';                         //SMTP password
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     //Enable implicit TLS encryption
+                        $mail->Port       = 587;                                //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                        
+                
+                        //Recipients
+                        $mail->setFrom('ayamketupat02@gmail.com', 'beetriv.com');
+                        $mail->addAddress($email);                              //Add a recipient 
+                    
+                        //Content
+                        $mail->isHTML(true);                                  //Set email format to HTML
+                        $mail->Subject = 'Beetriv[Online Receipt]';
+                        $mail->Body    = '<h1> Thanks for shopping with us! </h1>'.
+                        '<table style="width:90%; height: 100px;border-collapse:collapse;">
+                          <tr>
+                          
+                          <th style="border-bottom: 1px solid black; text-align:left; padding:10px;">Item ID </th>
+                          <th style="border-bottom: 1px solid black; text-align:left; padding:10px;">Item Name</th>
+                          <th style="border-bottom: 1px solid black; text-align:left; padding:10px;">Item Price</th>
+                          <th style="border-bottom: 1px solid black; text-align:left; padding:10px;">Item Quantity</th>
+                          </tr>';
+                          
+                          foreach($row2 as $items){
+                          $mail->Body .= 
+                          '<tr>'.
+                          '<td style="border: 1px solid black; padding:15px;">' .$items['prd_id']. '</td>'.
+                          '<td style="border: 1px solid black; padding:15px;">' .$items['prd_name']. '</td>'.
+                          '<td style="border: 1px solid black; padding:15px;">'."$" .$items['prd_price']. '</td>'.
+                          '<td style="border: 1px solid black; padding:15px;">' .$items['prd_qty']. '</td>'.
+                          '</tr>'
+                          ;
+                    }
+                                      
+                        
+                        $mail->send();
+                    } catch (Exception $e) {
+                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                     }
                   
-                  
-
+                  }
 ?>
 
 <!DOCTYPE html>
