@@ -117,7 +117,7 @@ require_once "connection.php";
                 header('location: admin/home.php');
             }else{
             $_SESSION['email'] = $email;      
-            header('location: store.php');
+            header('location: loginType.php');
             }
         } else{
             echo '<script>alert("Email or Password does not match")</script>';
