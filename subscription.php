@@ -73,7 +73,7 @@ $email = $_SESSION['email'];
             </div>
         </nav>
 
-    <!-- This snippet uses Font Awesome 5 Free as a dependency. You can download it at fontawesome.io! -->
+
 
 <section class="pricing py-3">
   <div class="container">
