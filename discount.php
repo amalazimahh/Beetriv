@@ -3,7 +3,22 @@ ob_start();
 session_start();
 require_once "connection.php";
 
+//make sure login first, so that can fetch email, echo email to see if you logged in
 $email = $_SESSION['email'];
+//echo $email;
+
+$select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
+$statement = $conn->prepare($select);
+$statement->execute();
+$row = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+// display item sell
+$selectproduct = "SELECT * FROM product WHERE display_name = '$email'";
+$result = $conn->query($selectproduct);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +39,7 @@ $email = $_SESSION['email'];
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <link href="css/discount.css" rel="stylesheet">
         <style>
             .paypal-button{
             text-align: center;
@@ -76,52 +92,67 @@ $email = $_SESSION['email'];
     <!-- This snippet uses Font Awesome 5 Free as a dependency. You can download it at fontawesome.io! -->
 
 <section class="pricing py-3">
-  <div class="container">
-      <div><h2 class="text-center">Manage Your Store!</h2></div>
+  <div class="wishlist">
+      <div><h2 class="text-center">Discounts and Promotions</h2></div>
     <div class="row justify-content-center p-5">
-      <!-- Free Tier -->
-      <div class="col-lg-4">
-        <div class="card mb-5 mb-lg-0">
-          <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Add New Item</h5>
-            <div class="d-grid">
-              <a href="addproduct.php" class="btn btn-warning text-uppercase" name="add_item">Add</a>
-            </div>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Pro Tier -->
-      <div class="col-lg-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Edit Banner</h5>
-            <div class="d-grid">
-              <a href="banner.php" type="button" class="btn btn-warning text-uppercase" name="edit_item">Edit</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row justify-content-center p-5">
-  <div class="col-lg-4">
-        <div class="card mb-5 mb-lg-0">
-          <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Discount and Promotions</h5>
-            <div class="d-grid">
-              <a href="discount.php" class="btn btn-warning text-uppercase" name="discountpromo">SALE!</a>
-            </div>
-          </div>
-        </div>
-      </div>
-</section>
+    <div class="container mt-3 px-2 pb-5">
+      <h4 class="pb-3"><strong>Item List</strong></h4>
+    <div class="thead-dark">
+        <table class="table table-responsive table-borderless">
+            <thead>
+                <tr class="bg-light">
+                    
+                    <th scope="col" width="10%">Product ID</th>
+                    <th scope="col" width="10%">Product Name</th>
+                    <th scope="col" width="10%">Product Image</th>
+                    <th scope="col" width="10%">Category</th>
+                    <th scope="col" width="10%">Price</th>
+                    <th scope="col" width="10%">Quantity</th>
+                    <th scope="col" width="10%">Condition</th>
+                    <th scope="col" width="10%">Description</th>
+                    <th scope="col" width="10%">Rating</th>
+                    <th scope="col" width="10%">Location</th>
+                    <th scope="col" width="10%">Add Discounts</th>
+                    <th scope="col" width="10%">Discount All</th>
+                    
+                </tr>
+            </thead>
+                <tbody class="align-middle">
+                <tr>
+                <!-- display sell item     -->
+               
+                <?php
+                foreach($result as $rowProduct){
 
-        <!-- Bootstrap JS -->
-        <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
-<!-- Footer-->
+                ?>
+                <tr>
+                <td><?php echo $rowProduct['prd_id']; ?></td>
+                <td><?php echo $rowProduct['prd_name']; ?></td>
+                <th scope="row"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($rowProduct['prd_img']); ?>" class="rounded" style="width:150px;"></th>
+                <td><?php echo $rowProduct['prd_category']; ?></td>
+                <td>$<?php echo $rowProduct['prd_price']; ?></td>
+                <td><?php echo $rowProduct['prd_qty']; ?></td>
+                <td><?php echo $rowProduct['prd_condition']; ?></td>
+                <td><?php echo $rowProduct['prd_desc']; ?></td>
+                <td><?php echo $rowProduct['prd_rating']; ?></td>
+                <td><?php echo $rowProduct['prd_location']; ?></td>
+                <td><a href="discountpromo.php?id=<?php echo $rowProduct['prd_id'];?>">
+				<button class="btn btn-warning btn-lg float-right">Edit</button></a>
+                <td><a href="discountall.php?idAll=<?php echo $rowProduct['prd_id'];?>">
+				<button class="btn btn-warning btn-lg float-right">Edit ALL</button></a></tr>
+                <?php } ?>
+            </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </section>
+        <!-- Footer-->
 <footer class="site-footer">
-
 <div class="container">
     <div class="row">
         <!-- first section -->
@@ -167,7 +198,6 @@ $email = $_SESSION['email'];
         </div>
     </div>
 </div>
-
 </footer>
 </body>
 </html>

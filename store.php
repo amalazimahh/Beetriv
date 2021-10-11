@@ -20,10 +20,16 @@ else if (isset($_POST['logout']))
 }
 
 // Get image data from database
-$result = "SELECT * FROM product";
+$result = "SELECT * FROM product where prd_category!= 'Freebies'";
 $handle = $conn->prepare($result);
 $handle->execute();
 $row = $handle->fetchAll(PDO::FETCH_ASSOC);
+
+// promo product
+$result2 = "SELECT * FROM product WHERE prd_category= 'Freebies'";
+$handle = $conn->prepare($result2);
+$handle->execute();
+$rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -339,26 +345,26 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                         switch(document.getElementById('category').value)
                                         {
                                         case "Home":
-                                        window.location="homeliving.php";
+                                        window.location="category/homeliving.php";
                                         break;
 
                                         case "Fashion":
-                                        window.location="fashion.php";
+                                        window.location="category/fashion.php";
                                         break;
 
                                         case "Mobiles":
-                                        window.location="mobile.php";
+                                        window.location="category/mobiles.php";
                                         break;
                                         case "Hobbies":
-                                        window.location="hobbies.php";
+                                        window.location="category/hobbies.php";
                                         break;
 
                                         case "Cars":
-                                        window.location="cars.php";
+                                        window.location="category/car.php";
                                         break;
 
                                         case "Freebies":
-                                        window.location="freebies.php";
+                                        window.location="category/freebies.php";
                                         break;
 
                                         default:
@@ -506,14 +512,30 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                             // Without JQuery
                                             // var slider = new Slider('#sl2', {});
                                         </script> -->
+                                        <form method="post">
                                         <div class="data-slider"><span>From
-                                            <input type="number" value="50" min="0" max="1000"/>	To
-                                            <input type="number" value="500" min="0" max="1000"/></span>
+                                            <input type="number" value="50" name="min_range" min="0" max="1000"/>	To
+                                            <input type="number" value="500" name="max_range" min="0" max="1000"/></span>
                                             <input value="50" min="0" max="1000" step="10" type="range"/>
                                             <input value="500" min="0" max="1000" step="10" type="range"/>
                                             <svg width="100%" height="24">
                                                 <line x1="4" y1="0" x2="300" y2="0" stroke="#212121" stroke-width="12" stroke-dasharray="1 28"></line>
                                             </svg>
+                                            <div class="pt-5">
+                                            <button type="submit" name="filter" class="btn btn-outline-dark">Filter</button>
+                                            </div>
+                                        </form>
+                                        <?php 
+                                        if(isset($_POST['filter'])){
+                                            $min = $_POST['min_range'];
+                                            $max = $_POST['max_range'];
+                                        // $stmt = $conn->query("SELECT * FROM product WHERE prd_price BETWEEN '$min' AND '$max'");
+                                        // $res = $stmt->fetch(PDO::FETCH_ASSOC);
+                                        $result = "SELECT * FROM product WHERE prd_price BETWEEN '$min' AND '$max'";
+                                        $handle = $conn->prepare($result);
+                                        $handle->execute();
+                                        $row = $handle->fetchAll(PDO::FETCH_ASSOC);
+                                        } ?>
 
                                             <!-- Javascript for price slider -->
                                             <script>
@@ -572,7 +594,15 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                     <!-- </div> -->
                 </div>
 
+                
+
                 <div class="prd-flex-2">
+                <?php if (isset($_POST['filter']) && !$row ): ?>
+                        <div class="container">         
+                            <div class="pt-5 text-center"><h1>No items found!</h1></div>
+                        </div>
+                <?php endif; ?>
+
                     <div class="product">
                         <?php foreach($row as $product){ 
                              if (empty($product['bid_expiry'])) { ?>
@@ -585,12 +615,27 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                     <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
                                     <button class="buy-prd btn-warning">Add to cart</button>
                                 </form>  
+                                
                             </div>
+                            
                         <?php } }?>
-                    </div>
+               <?php foreach($rowPromo as $promo){ ?>
+              <div class="content">
+                  <form method="POST"></form>
+              <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($promo['prd_img']); ?>">
+              <input type="hidden" name="ide" value=<?php echo $promo['prd_id'];?> >
+               <h4><?php echo $promo['prd_name']; ?></h4>
+              <h6 class="text-muted text-decoration-line-through">$<?php echo $promo['new_price']; ?></h6><h6>$<?php echo $promo['prd_price']; ?></h6>
+              <a class="text-warning" href="product-details.php?product=<?php echo $promo['prd_id'];?>">View</a>
+                   <button class="buy-prd btn-warning">Add to cart</button>
+               </form>  
+                 </div>
+                <?php } ?>
+               </div>
                 </div>
             </div>
         </section>
+        
 
         <!-- Footer-->
         <footer class="site-footer">

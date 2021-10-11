@@ -32,6 +32,11 @@
     $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
     $row = $result->fetch(PDO::FETCH_ASSOC);
 
+    // Fetch seller_review 
+    $rateQuery = $conn->prepare("SELECT * FROM seller_review LEFT JOIN users ON users.user_id=seller_review.user_id WHERE prd_id = '$id' ");
+    $rateQuery->execute();
+    $rates = $rateQuery->fetchAll(PDO::FETCH_ASSOC);
+
     // Update bid
     // if(isset($_POST['place_bid'])){
     //     $current_bid = $_POST['current_bid'];
@@ -396,7 +401,7 @@ else
     // echo $dateTime->format('Y-m-d H:i:s');
     $combinedDT = date('Y-m-d H:i:s', strtotime("$expireday $expiretime"));
     // echo $combinedDT;
-    if ($combinedDT < $dateTime->format('Y-m-d H:i:s')) {
+    if ( $row['bid_status'] == "yes" && $combinedDT < $dateTime->format('Y-m-d H:i:s')) {
         $current_bidder = $res['current_bidder'];
         $expired = 'expired';
         // $pdoQuery = ("UPDATE product_bid SET bid_result = '$current_bidder', bid_time = '$expired' WHERE prd_id = '$id' ");
@@ -491,6 +496,70 @@ else
                 width: 470px; 
                 height: 530px;
                 text-align: center;
+            }
+            .wrap-input100 {
+            width: 100%;
+            position: relative;
+            border: 1px solid #e6e6e6;
+            border-radius: 13px;
+            padding: 10px 30px 9px 22px;
+            margin-bottom: 20px;
+            }
+
+            .rs1-wrap-input100 {
+            width: calc((100% - 30px) / 2);
+            }
+
+            .label-input100 {
+            font-family: Roboto,Helvetica,Arial,sans-serif;
+            font-size: 12px;
+            color: #393939;
+            line-height: 1.5;
+            text-transform: uppercase;
+            }
+
+            .input100 {
+            display: block;
+            width: 100%;
+            background: transparent;
+            font-family: Roboto,Helvetica,Arial,sans-serif;
+            font-size: 18px;
+            color: #555555;
+            line-height: 1.2;
+            padding-right: 15px;
+            }
+
+            /* Rate Star CSS */
+            .result-container{
+                width: 120px; 
+                height: 24px;
+                background-color: #ccc;
+                vertical-align: middle;
+                display: inline-block;
+                position: relative;
+                top: -4px;
+            }
+            .rate-stars{
+                width: 120px; 
+                height: 24px;
+                background: url(img/rate-stars.png) no-repeat;
+                background-size: cover;
+                position: absolute;
+            }
+            .rate-bg{
+                height: 24px;
+                background-color: #ffbe10;
+                position: absolute;
+            }
+
+            /* Display Rate Count */
+            .reviewCount, .reviewScore {
+                font-size: 14px; 
+                color: #666666; 
+                margin-left: 5px;
+            }
+            .reviewScore {
+                font-weight: 600;
             }
         </style>
     </head>
@@ -731,9 +800,9 @@ else
             <?php endif; ?>
 
                         <!-- show for winning bid -->
-            <?php if( isset($row['bid_expiry']) ): ?>
+            <?php if( $row['bid_status'] == "yes" && isset($row['bid_expiry']) && $res['current_bidder'] == $email ): ?>
                 <div class="d-grid gap-2">
-                    <button class="btn btn-success" type="button">Get Bid Item Here</button>
+                    <button class="btn btn-success" onclick="location.href = 'paybid.php';"  type="button">Get Bid Item Here</button>
                 </div>
                 <?php endif; ?>
 
@@ -789,6 +858,21 @@ else
                             </div>
                         </div>
                     </div>
+                    
+                    <h2>Reviews</h2>
+                    <?php foreach($rates as $review){ ?>
+                        <div class="wrap-input100" style="margin-top: 10px">
+                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($review['img']); ?>" class="rounded" style="width:40px;">
+                            <div class="result-container">
+                                <?php $reviewAvgCalc = $review['prd_quality'] + $review['seller_service'];
+                                        $reviewAvg = ($reviewAvgCalc/2)*10; ?>
+                                <div class="rate-bg" style="width:<?php echo $reviewAvg; ?>%"></div>
+                                <div class="rate-stars"></div>
+                            </div>  
+                            <p><?php echo $review['feedback']; ?></p>
+                            <p>by <?php echo $review['username']; ?></p>
+                        </div>
+                    <?php }?>
 
         </section>
         <!-- Related items section-->

@@ -10,6 +10,15 @@
     //     header('location:cart.php');
     //     exit();
     // }
+
+    $stmt = $conn->prepare("SELECT * FROM order_details LEFT JOIN product ON product.prd_id=order_details.prd_id WHERE email=:email AND stat ='completed' AND payment_stat ='paid' ");
+    $stmt->execute(['email'=>$email]);
+    $stmtRow = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // foreach($stmtRow as $purchase){
+        // $subtotal = $trow['prd_price']*$trow['prd_qty'];
+        // $rtotal += $subtotal;
+    // }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +36,14 @@
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <style>
+            .newbutton{
+                position: absolute;
+                top: 100px;
+                right: 10%;
+                left: 75%;
+            }
+        </style>
     </head>
     <body>
         <!-- Navigation-->
@@ -73,64 +90,79 @@
             <div class="row mt-3">
                 <div class="col-md-12">
                     <section class="container px-4 px-lg-5 my-5" >
-                        <!-- Show lists of items purchased -->
-                        <!-- <table class="table">
-                            <tr>
-                                <td>
-                                    <p>Your puchases is empty. Shop now !</p>
-                                </td>
-                            </tr>
-                        </table> -->
+                    <div class="newbutton">
+                        <a class="btn btn-outline-dark flex-shrink-0" href="cart.php">
+                            <i class="bi bi-bag-fill me-1"></i>
+                            My Shopping Cart
+                        </a>
+                    </div>
+                    <br><br><br>
 
                         <table class="table">
                         <thead>
                                 <tr>
                                     <th>Product</th>
-                                    <th>Shop</th>
+                                    <th>Name</th>
                                     <th>Price</th>
                                     <th>Qty</th>
                                     <th>Total</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php foreach($stmtRow as $purchase){?>
                                     <tr>
                                         <td>
-                                            <img src="data:image/jpg;charset=utf8;base64" class="rounded img-thumbnail mr-2" style="width:40px;">
-                                            <p>Example</p>
+                                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($purchase['prd_img']); ?>" class="rounded" style="width:80px;">
+
                                         </td>
                                         <td>
-                                            [Vendors]
+                                            <?php echo $purchase['prd_name'];?>
                                         </td>
                                         <td>
-                                            $12.00
+                                            $<?php echo $purchase['prd_price']; ?>
                                         </td>
                                         <td>
-                                            1
+                                            <?php echo $purchase['prd_qty']; ?>
                                         </td>
-                                        <td>
-                                            $12.00
+                                        <td>$<?php $rtotal = 0;
+                                                    $subtotal = $purchase['prd_price']*$purchase['prd_qty'];
+                                                    $rtotal += $subtotal; 
+                                                echo $rtotal; ?>
                                         </td>
-                                        <td>
-                                            <button class="btn btn-outline-dark flex-shrink-0">
-                                                <a class="nav-item nav-link" style='color:black' aria-current="page" href="seller-review.php">
-                                                    <i class="bi bi-pen-fill"></i>
-                                                    Review
-                                                </a>
-                                                
-                                            </button>
+                                        <td><?php   $prdId = $purchase['prd_id'];
+                                                    $select = "SELECT * FROM seller_review WHERE prd_id =$prdId"; 
+                                                    $handle = $conn->prepare($select);
+                                                    $handle->execute();
+                                                    $purchase2 = $handle->fetch(PDO::FETCH_BOTH);
+
+                                                    if($purchase['stat'] == 'completed' && (empty($purchase2['time']))){ ?>
+                                                    <a class="btn btn-outline-dark flex-shrink-0" href="seller-review.php?id=<?php echo $purchase['prd_id'];?>">
+                                                        <i class="bi bi-pen-fill me-1"></i>
+                                                            Review
+                                                    </a>
+                                            <?php } ?>
+                                            <?php // foreach($purchase2 as $timeUpload){
+                                                    if(isset($purchase2['time'])){
+                                                            $next1 = strtotime('+1 hour', strtotime($purchase2['time']));
+                                                            $current = time();
+                                                        
+                                                            if($current >= $next1){ ?>
+
+                                                                <button class="btn btn-outline-dark flex-shrink-0" disabled>
+                                                                    Review Confirmed
+                                                                </button>
+                                                            <?php } else{?>
+                                                                <a class="btn btn-outline-dark flex-shrink-0" href="seller-review.php?id=<?php echo $purchase['prd_id'];?>">
+                                                                    <i class="bi bi-pen-fill me-1"></i>
+                                                                        Edit
+                                                                </a>
+                                                            <?php }?>
+                                                    <?php }?>
+        
                                         </td>
                                     </tr>
-                                <!-- <tr class="border-top border-bottom">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <strong>
-                                        
-                                        </strong>
-                                    </td>
-                                </tr>  -->
-                                </tr>
+                                <?php }?>
                             </tbody> 
                         </table>
 

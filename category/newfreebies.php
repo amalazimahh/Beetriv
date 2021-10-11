@@ -20,7 +20,7 @@ else if (isset($_POST['logout']))
 }
 
 // Get image data from database
-$result = "SELECT * FROM product WHERE prd_category= 'Mobile' && prd_condition= 'New'";
+$result = "SELECT * FROM product WHERE prd_category= 'Freebies' && prd_condition= 'New'";
 $handle = $conn->prepare($result);
 $handle->execute();
 $row = $handle->fetchAll(PDO::FETCH_ASSOC);
@@ -218,9 +218,9 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         }
 
         </style>
-        <title>Beetriv | Mobiles and Electronics</title>
+        <title>Beetriv</title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Search bar -->
@@ -346,7 +346,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                         break;
 
                                         case "Mobiles":
-                                        window.location="mobiles.php";
+                                        window.location="mobile.php";
                                         break;
                                         case "Hobbies":
                                         window.location="hobbies.php";
@@ -412,7 +412,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
         });
         </script>
 
-        <div class="prd-div"><h3>Mobiles and Electronics - New</h3></div>
+        <div class="prd-div"><h3>Discount and Promotions</h3></div>
 
         <!-- Product preview -->
         <section>
@@ -468,8 +468,8 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                     <h2>Item Condition</h2>
                                     <div class="brands-name">
                                         <ul class="nav nav-pills nav-stacked">
-                                            <li><a href="newmobiles.php"> <span class="pull-right"></span>New</a></li>
-                                            <li><a href="usedmobiles.php"> <span class="pull-right"></span>Used</a></li>
+                                            <li><a href="newfreebies.php"> <span class="pull-right"></span>New</a></li>
+                                            <li><a href="usedfreebies.php"> <span class="pull-right"></span>Used</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -506,7 +506,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                             $max = $_POST['max_range'];
                                         // $stmt = $conn->query("SELECT * FROM product WHERE prd_price BETWEEN '$min' AND '$max'");
                                         // $res = $stmt->fetch(PDO::FETCH_ASSOC);
-                                        $result = "SELECT * FROM product WHERE prd_price BETWEEN '$min' AND '$max' AND prd_category= 'Mobile' && prd_condition= 'New'";
+                                        $result = "SELECT * FROM product WHERE prd_price BETWEEN '$min' AND '$max' AND prd_category= 'Home'";
                                         $handle = $conn->prepare($result);
                                         $handle->execute();
                                         $row = $handle->fetchAll(PDO::FETCH_ASSOC);
@@ -570,31 +570,24 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <div class="prd-flex-2">
-                <?php if (isset($_POST['filter']) && !$row ): ?>
-                        <div class="container">         
-                            <div class="pt-5 text-center"><h1>No items found!</h1></div>
-                        </div>
+                <?php if (isset($row['prd_id']) ): ?>
+                    <div class="container">         
+                            <div class=" text-center"><h1>No items found!</h1></div>
+                    </div>
                 <?php endif; ?>
-                
-                <div class="product">
-                        <?php if ( empty($row['prd_id'])) {
-                        foreach($row as $product){ ?>
+                    <div class="product">
+                        <?php foreach($row as $product){ ?>
                             <div class="content">
                                 <form method="POST"></form>
                                     <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
                                     <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
                                     <h3><?php echo $product['prd_name']; ?></h3>
-                                    <h6>$<?php echo $product['prd_price']; ?></h6>
+                                    <h6 class="text-muted text-decoration-line-through">$<?php echo $product['new_price']; ?></h6><h6>$<?php echo $product['prd_price']; ?></h6>
                                     <a class="text-warning" href="../product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
                                     <button class="buy-prd btn-warning">Add to cart</button>
                                 </form>  
                             </div>
-                        <?php }     
-                            } else { ?>
-                        <div class="container">         
-                            <div class=" text-center"><h1>No items found!</h1></div>
-                        </div>
-                    <?php } ?>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
