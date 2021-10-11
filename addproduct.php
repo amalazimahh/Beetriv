@@ -6,6 +6,9 @@ require_once "connection.php";
 $email = $_SESSION['email'];
 //echo $email;
 
+$result = $conn->query("SELECT * FROM users WHERE email = '$email'");
+$row    = $result->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -166,8 +169,8 @@ input::-webkit-inner-spin-button {
         <label for="name">Display Name</label>
       </div>
       <div class="col-75">
-      <input type="hidden" name="email" value="<?php echo $email; ?>">
-        <input type="text" name="display_name" placeholder="<?php echo $email; ?>" disabled>
+        <input type="hidden" name="email" value="<?php echo $row['username']; ?>">
+        <input type="text" name="display_name" placeholder="<?php echo $row['username']; ?>" disabled>
       </div>
     </div>
     <div class="row">
@@ -242,9 +245,16 @@ input::-webkit-inner-spin-button {
         <label for="prd_location">Meet-up Location</label>
       </div>
       <div class="col-75">
-        <input type="text" name="prd_location">
-      </div>
+      <select name="prd_location">
+        <option value="Select">Select</option>
+          <option value="KB">Kuala Belait</option>
+          <option value="Tutong">Tutong</option>
+          <option value="BSB">Bandar Seri Begawan</option>
+          <option value="Temburong">Temburong</option>
+        </select>
+      
     </div>
+        </div>
 
     <!-- bid details -->
     <div class="add-prd"><h3>Bid Details</h3></div>
@@ -587,7 +597,7 @@ input::-webkit-inner-spin-button {
                     $statusMsg = "Only JPG, JPEG, PNG, & GIF files are allowed.";
                 }
             } else {
-                $statusMsg = "Select a file.";
+                // $statusMsg = "Select a file.";
             }
 
             echo $statusMsg;
