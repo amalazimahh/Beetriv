@@ -5,36 +5,40 @@ $email=$_SESSION['email'];
 // echo $email;
 require_once "connection.php";
 
-// get product id
-$id = $_GET['id'];
+// get all product id
+// $id = $_GET['idAll'];
 
 
 // echo $id;
 
-$selectproduct = "SELECT * FROM product WHERE prd_id = '$id' LIMIT 1";
+$selectproduct = "SELECT * FROM product WHERE display_name='$email'";
 $result = $conn->query($selectproduct);
 $result->execute();
 $rowProduct = $result->fetchAll(PDO::FETCH_ASSOC);
 
 
-if(isset($_POST['saves'])){
 
+
+if(isset($_POST['saves'])){
+    
     $prd_price      = $_POST['prd_price'];
     $new_price      = $_POST['new_price'];
     $prd_category   = $_POST['prd_category'];
-    $prd_discount   = $_POST['prd_discount'];
+    $prd_discount   = $_POST['discountall'];
     $start_promo    = $_POST['start_promo'];
     $end_promo      = $_POST['end_promo'];
-  
+
+    // $formula  = int($prd_price/100) * $prd_discount;
+    // $newprice = $prd_price - $formula;
     
     $pdoQuery = ("UPDATE product SET prd_price = '$new_price', new_price = '$prd_price', prd_category = '$prd_category', 
-    prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE prd_id = '$id' ");
+    prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE display_name='$email'");
     $pdoQuery_run = $conn->prepare($pdoQuery);
     $pdoQuery_run->execute();
-    header('location: seller-dashboard.php ');
+    // header('location: seller-dashboard.php ');
 
-    
     }
+    
     
 ?>
 <!DOCTYPE html>
@@ -118,13 +122,12 @@ if(isset($_POST['saves'])){
         </nav>
 
         <!-- Edit Product -->
-        <?php foreach($rowProduct as $product){ ?> 
-            <form action="" method="post" enctype="multipart/form-data">
+        <form action="" method="post" enctype="multipart/form-data">
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
-        <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-            <img class="rounded-circle mt-5" width="150px" id="output" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']);?>" onerror="this.src='img/profile-img.png';"><br></label></div>
+        <div class="col-md-1">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"></div>
+            <!-- <img class="rounded-circle mt-5" width="150px" id="output" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']);?>" onerror="this.src='img/profile-img.png';"><br></label></div> -->
             <script>
                 var loadFile = function(event) {
                 var output = document.getElementById('output');
@@ -135,54 +138,33 @@ if(isset($_POST['saves'])){
             };
             </script>
         </div>
+        
         <div class="col-md-9 border-right">
             <div class="p-3 py-5">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Product Details</h4>
+                    <h4 class="text-right">Add discount to all product</h4>
                 </div>
                 <hr>
-                <!-- <form action="seller-profile.php" method="post" enctype="multipart/form-data"> -->
+                <form action="seller-profile.php" method="post" enctype="multipart/form-data">
                 <div class="row mt-2">
                     <input type="hidden" name="product" value="<?php echo $id; ?>">
-                    <div class="col-md-12"><label class="labels">Product Name</label><input type="text" class="form-control" placeholder="<?php echo $product['prd_name']; ?>" id="prd_name" name="prd_name" disabled></div>
+                    <div class="col-md-12"><label class="labels">Discount Percentage To All</label><input type="text" class="form-control" placeholder="" id="discountall" name="discountall" require></div>
+                    <?php foreach ($rowProduct as $product){?>
+                    <input type="hidden" name="prd_price" value="<?php echo $rowProduct['prd_price']?>">
+                    <input type="hidden" name="new_price" value="<?php echo $rowProduct['new_price']?>">
+                    <!-- <input type="hidden" name="prd_price">
+                    <input type="hidden" name="new_price"> -->
+                    
+                    <?php } ?>
                     <div class="col-md-12"><label class="labels">Category</label>
                     <select name="prd_category" class="form-control">
-                        <!-- <option value="Select">Select Category</option>
-                        <option value="Home">Home and Living</option>
-                        <option value="Fashion">Fashion</option>
-                        <option value="Mobile">Mobile and Electronics</option>
-                        <option value="Hobbies">Hobbies and Games</option>
-                        <option value="Cars">Cars and Property</option> -->
                         <option value="Freebies">Freebies, Deals and More!</option>
                         </select>
+                        <div class="col-md-12"><label class="labels">Start Promotions</label><input type="date" class="form-control" placeholder="Start Date" id="start_promo" name="start_promo" autocomplete="off" require></div>
+                <div class="col-md-12"><label class="labels">End Promotions</label><input type="date" class="form-control" placeholder="End Date" id="end_promo" name="end_promo" autocomplete="off" require></div>
+                        <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="submit" value="Save Product" name="saves" ></div>
                     </div>
-                    <div class="col-md-12"><label class="labels">Price</label><input type="number" class="form-control" id="prd_price" name="prd_price" placeholder="<?php echo $product['prd_price']; ?>"  disabled></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Product Quantity</label>
-                    <input type="number" class="form-control" id="prd_qty" name="prd_qty" placeholder="<?php echo $product['prd_qty']; ?>"   disabled></div>
-
-                    <div class="col-md-12"><label class="labels">Product Condition</label>
-                    <div class="col-md-12">
-                    <input type="radio" name="prd_condition" value="New" disabled/>
-                    <label for="New">New</label>
-                    <input type="radio" name="prd_condition" value="Used" disabled>
-                    <label for="Used" >Used</label>
-                    </div>
-
-                    <div class="col-md-12"><label class="labels">Product Description</label>
-                    <input type="text" class="form-control" id="prd_desc" name="prd_desc" placeholder="<?php echo $product['prd_desc']; ?>"  disabled></div>
-
-                    <div class="col-md-12"><label class="labels">Product Numeric Rating</label>
-                    <input type="number" class="form-control" id="prd_rating" name="prd_rating" placeholder="<?php echo $product['prd_rating']; ?>" id="prd_rating" name="prd_rating"  disabled></div>
-                    
-                    <div class="col-md-12"><label class="labels">Meet up location</label>
-                    <input type="text" class="form-control" id="prd_location" name="prd_location" placeholder="<?php echo $product['prd_location']; ?>"  disabled></div>
-                </div>
-
-                <!-- discount calculation -->
-                
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
             <script>
         $(document).on("keyup", "#prd_discount", function() {
             var oriPrice = "<?php echo $product['prd_price']; ?>";
@@ -197,31 +179,12 @@ if(isset($_POST['saves'])){
             console.log(discount);
         });
     </script>
-            <!-- discount form -->
-            <form action="" method="POST">
-            <input type="hidden" name="prd_price" value="<?php echo $product['prd_price']?>">
-            <input type="hidden" name="new_price" value="<?php echo $product['new_price']?>">
-                <div class="row mt-3">
-                <h4 class="text-right">Discount Promotion</h4><hr>
-                <div class="col-md-12"><label class="labels">Discount Percentage</label><input  type="number" class="form-control" placeholder="Discount Percentage" id="prd_discount" name="prd_discount" ></div>
-                <div class="col-md-12"><label class="labels">Original Price</label><input  type="number" class="form-control" value="<?php echo $product['prd_price']; ?>" id="prd_price" name="prd_price" disabled></div> 
-
-            </div>
-            <div class="col-md-12"><label class="labels">New Price</label><input type="number" class="form-control" placeholder="New Price" id="new_price" name="new_price" step="0.1" disabled></div>
-
-                <div class="col-md-12"><label class="labels">Start Promotions</label><input type="date" class="form-control" placeholder="Start Date" id="start_promo" name="start_promo" autocomplete="off" require></div>
-                <div class="col-md-12"><label class="labels">End Promotions</label><input type="date" class="form-control" placeholder="End Date" id="end_promo" name="end_promo" autocomplete="off" require></div>
-            </div>
-                <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="submit" value="Save Product" name="saves" ></div>
-                <!-- onclick="return confirm('Once product updated you are not allowed to update in 30 Days');" -->
-                
-            </form>
+        </form>
+                    </div>
         </div>
-    </div>
-</div>
-</div>
-</div>
-<?php } ?>
+        </div>
+        </div>
+        </div>
 
 <!-- Footer-->
 <footer class="site-footer">
