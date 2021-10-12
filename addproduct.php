@@ -169,10 +169,19 @@ input::-webkit-inner-spin-button {
         <label for="name">Display Name</label>
       </div>
       <div class="col-75">
+        <input type="hidden" name="email" value="<?php echo $email; ?>">
+        <input type="text" name="display_name" placeholder="<?php echo $email; ?>" disabled>
+      </div>
+</div>
+      <div class="row">
+    <div class="col-25">
+        <label for="name">Username</label>
+      </div>
+    <div class="col-75">
         <input type="hidden" name="email" value="<?php echo $row['username']; ?>">
         <input type="text" name="display_name" placeholder="<?php echo $row['username']; ?>" disabled>
       </div>
-    </div>
+</div>
     <div class="row">
       <div class="col-25">
         <label for="price">Product Name</label>
