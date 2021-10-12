@@ -156,8 +156,8 @@ else
                 'product_img'   =>$row['prd_img']
             ];
     
-            header ('location: chat.php');
-            die ('Login required');
+            header("Location: chat.php?product=" . $row['prd_id']);
+            exit;
         }
     
     // fetching bidding data
