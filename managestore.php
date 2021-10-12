@@ -77,7 +77,7 @@ $email = $_SESSION['email'];
 
     
 <!-- add new item -->
-<form action="" method="POST">
+
 <section class="pricing py-3">
   <div class="container">
       <div><h2 class="text-center">Manage Your Store!</h2></div>
@@ -141,7 +141,6 @@ $email = $_SESSION['email'];
           </div>
         </div>
       </div>
-          </form>
 </section>
 
 
