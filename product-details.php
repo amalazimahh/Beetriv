@@ -160,23 +160,34 @@ else
             die ('Login required');
         }
     
+    // fetching bidding data
     $stmt = $conn->query("SELECT * FROM product_bid WHERE prd_id = '$id'");
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
     //$count = $stmt->fetchColumn();
 
+    // fetching paypal details
     $statement = $conn->query("SELECT * FROM paypal_details WHERE user_paypal = '$email'");
     $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+    // fetching item seller
+    $display_name = $row['display_name'];
+    $sellers = $conn->query("SELECT * FROM users WHERE email = '$display_name'");
+    $seller = $sellers->fetch(PDO::FETCH_ASSOC);
 
     // add into product_bid
     if(isset($_POST['placebid'])){
         // if ($count) {
+            $seller = $row['display_name'];
             $current_bid   = $_POST['current_bid'];
             if ( $current_bid <= $row['starting_bid'] || $current_bid < ($res['current_bid'] + $row['bid_increment']) || $current_bid <= $res['current_bid'] ) {
                  echo '<script>alert("Bid needs to be higher!")</script>';
+                 echo "<meta http-equiv='refresh' content='0'>";
+                 
                 //echo "<script>Qual.error('Unsuccessful Bid','Bid needs to be higher.')</script>";
                 
             } else {
-            if ( $res > 0) {
+            if ( isset($res) ) {
+                    //$seller = $row['display_name'];
                 // Update bid
                     $prd_id         = ($_POST['prd_id']);
                     // $current_bid   = $_POST['current_bid'];
@@ -186,12 +197,6 @@ else
                     $pdoQuery = ("UPDATE product_bid SET current_bid = '$current_bid', current_bidder = '$email', prev_bidder = '$current_bidder' WHERE prd_id = '$prd_id' ");
                     $pdoQuery_run = $conn->prepare($pdoQuery);
                     $pdoQuery_run->execute();
-
-                    if (empty($result)) {
-                    $select1 = "SELECT * FROM paypal_details WHERE 1";
-                    $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
-                    }
-                    echo "<meta http-equiv='refresh' content='0'>";
                     
                 
                     //Mail Set up
@@ -244,6 +249,12 @@ else
                 $mail->send();
 
                 $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+                if (empty($result)) {
+                    $select1 = "SELECT * FROM paypal_details WHERE 1";
+                    $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
+                    }
+                    echo "<meta http-equiv='refresh' content='0'>";
 
 
             }catch (Exception $e){
@@ -303,11 +314,65 @@ else
                     echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
                 }
 
+                try {
+
+                    //Mail Set up
+                    $mail= new PHPMailer(true);
+                    
+                    //Enable debug output
+                    $mail->SMTPDebug = 0;
+    
+                    //Send using SMTP
+                    $mail->isSMTP();
+    
+                    //Set the SMTP server 
+                    $mail->Host = 'smtp.gmail.com';
+    
+                    //Enable SMTP authentication
+                    $mail->SMTPAuth = true;
+    
+                    //SMTP username
+                    $mail->Username = 'ayamketupat02@gmail.com';
+    
+                    //SMTP password
+                    $mail->Password = 'k4k5dpkk';
+    
+                    //SMTP username
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    
+                    //SMTP PORT
+                    $mail->Port = 587;
+    
+                    //Recipients
+                    $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+    
+                    //add recipient
+                    $mail->addAddress($seller,$username);
+    
+                    //Set email format to HTML
+                    $mail->isHTML(true);
+    
+                    //converting text to html
+                    // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+                    $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/product-details.php?product=$id";
+                    $mail->Subject = 'New bid on your item!';
+                    $mail->Body    = '<p>Someone bid on your item!</p><br><p><b>'.$res['current_bidder'].'</b> is currently the highest bid on your item <b>'.$row['prd_name'].'</b> with a bid of BND'.$current_bid;
+                    //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+    
+                    $mail->send();
+    
+                    $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+    
+                }catch (Exception $e){
+                    echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+                }
+
 
                     } else {
                         $prd_id         = ($_POST['prd_id']);
             // $current_bidder = ($_POST['email']);
             // $current_bid    = ($_POST['current_bid']);
+            // $seller = $row['display_name'];
             $paypal_email    = ($_POST['paypal_email']);
             $paypal_psw    = ($_POST['paypal_psw']);
 
@@ -384,6 +449,59 @@ else
 
             }
 
+            try {
+
+                //Mail Set up
+                $mail= new PHPMailer(true);
+                
+                //Enable debug output
+                $mail->SMTPDebug = 0;
+
+                //Send using SMTP
+                $mail->isSMTP();
+
+                //Set the SMTP server 
+                $mail->Host = 'smtp.gmail.com';
+
+                //Enable SMTP authentication
+                $mail->SMTPAuth = true;
+
+                //SMTP username
+                $mail->Username = 'ayamketupat02@gmail.com';
+
+                //SMTP password
+                $mail->Password = 'k4k5dpkk';
+
+                //SMTP username
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+                //SMTP PORT
+                $mail->Port = 587;
+
+                //Recipients
+                $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+                //add recipient
+                $mail->addAddress($seller,$username);
+
+                //Set email format to HTML
+                $mail->isHTML(true);
+
+                //converting text to html
+                // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+                $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/product-details.php?product=$id";
+                $mail->Subject = 'New bid on your item!';
+                $mail->Body    = '<p>Someone bid on your item!</p><br><p><b>'.$res['current_bidder'].'</b> is currently the highest bid on your item <b>'.$row['prd_name'].'</b> with a bid of BND'.$current_bid;
+                //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+                $mail->send();
+
+                $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+            }catch (Exception $e){
+                echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+            }
+
 
                     }
                             }
@@ -402,6 +520,7 @@ else
     $combinedDT = date('Y-m-d H:i:s', strtotime("$expireday $expiretime"));
     // echo $combinedDT;
     if ( $row['bid_status'] == "yes" && $combinedDT < $dateTime->format('Y-m-d H:i:s')) {
+        $seller = $row['display_name'];
         $current_bidder = $res['current_bidder'];
         $expired = 'expired';
         // $pdoQuery = ("UPDATE product_bid SET bid_result = '$current_bidder', bid_time = '$expired' WHERE prd_id = '$id' ");
@@ -468,10 +587,64 @@ else
             }catch (Exception $e){
                 echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
             }
+
+            try {
+
+                //Mail Set up
+                $mail= new PHPMailer(true);
+                
+                //Enable debug output
+                $mail->SMTPDebug = 0;
+
+                //Send using SMTP
+                $mail->isSMTP();
+
+                //Set the SMTP server 
+                $mail->Host = 'smtp.gmail.com';
+
+                //Enable SMTP authentication
+                $mail->SMTPAuth = true;
+
+                //SMTP username
+                $mail->Username = 'ayamketupat02@gmail.com';
+
+                //SMTP password
+                $mail->Password = 'k4k5dpkk';
+
+                //SMTP username
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+                //SMTP PORT
+                $mail->Port = 587;
+
+                //Recipients
+                $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+                //add recipient
+                $mail->addAddress($seller,$username);
+
+                //Set email format to HTML
+                $mail->isHTML(true);
+
+                //converting text to html
+                // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+                $url = "http://" . $_SERVER ["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/product-details.php?product=$id";
+                $mail->Subject = 'Your bid time is over!';
+                $mail->Body    = '<p>Congratulation!</p><br><p>Highest bid on your item <b>'.$row['prd_name'].'</b> is won by <b>'.$res['current_bidder'].'</b> with a bid of '.$current_bid.'You will be notified again!';
+                //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+                $mail->send();
+
+                $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+            }catch (Exception $e){
+                echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+            }
+            
         }
     }
 
-    
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -640,7 +813,7 @@ else
                         <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
                             <span>BND$<?php echo $row['prd_price']?></span><br>
-                            <h10 class="lead"> [Seller name] </h10>
+                            <h10 class="lead"><?php echo $seller['fname']." ".$seller['lname']; ?></h10>
                         </div>
                         <div class="pb-5">
                         <h9 class="lead"><?php echo $row['prd_desc']?></h9>
