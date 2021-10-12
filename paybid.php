@@ -167,6 +167,12 @@ function input_data($data){
       text-decoration: none;
       color: #fff;
     }
+
+    .paypal-button{
+      text-align: center;
+      margin: 30px;
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
@@ -341,72 +347,12 @@ function input_data($data){
 
             <hr class="mb-2">
 
-            <div class="col-md-5 mb-2">
-              <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-            </div>
-
-            <div class="row">
-
-              <div class="col-md-4 mb-4">
-                <label for="street1">Street 1</label>
-                <input type="text" class="form-control" id="street 1" name="street 1" placeholder="">
-                <span></span>
-              </div>
-
-              <div class="col-md-4 mb-4">
-                <label for="street2">Street 2</label>
-                <input type="text" class="form-control" id="street2" name="street2" placeholder="">
-                <span></span>
-              </div>
-
-              <div class="col-md-2 mb-2">
-                <label for="zip">Postcode / Zipcode</label>
-                <input type="text" class="form-control" id="zip" name="zipcode" placeholder="Zipcode" value="<?php echo (isset($zipCodeValue) && !empty($zipCodeValue)) ? $zipCodeValue:'' ?>" >
-                <span class = "error"> <?php echo $zipcode_error; ?></span>
-              </div>
-
-            </div>
-
-            <div class="row">
-              <div class="col-md-3 mb-2">
-                  <label for="country">Country</label>
-                  <select class="custom-select d-block w-100" name="country" id="country">
-                    <option value="United States" >Brunei Darussalam</option>
-                  </select>
-                </div>
-
-                <div class="col-md-3 mb-2">
-                  <label for="state">State / Province</label>
-                  <select class="custom-select d-block w-100" name="state" id="state" >
-                    <option value="">Select Province</option>
-                    <option value="Temburong">Temburong</option>
-                    <option value="Bandar Seri Begawan">Bandar Seri Begawan</option>
-                    <option value="Tutong">Tutong</option>
-                    <option value="Kuala Belait">Kuala Belait</option>
-                  </select>
-                </div>
-            </div>
-
-            <hr class="mb-2">
-            <div class="row mt-3">
-        
-
-            <h4 class="mb-2">Payment</h4>
-            <p>Select your prefered way of payment :</p>
-
-            <div class="d-block my-2">
-              <div class="custom-control custom-radio">
-                <input id="cashOnDelivery" name="payment-method" type="radio" class="custom-control-input" <?php if(isset($payment_method) && $payment_method == "cashondelivery") echo "checked"; ?> value="cashondelivery"> Cash on Delivery <br><br>
-                  <!-- <label class="custom-control-label" for="cashOnDelivery">Cash on Delivery</label> <br><br> -->
-                  <input id="cashOnDelivery" name="payment-method" type="radio"  class="custom-control-input" <?php if(isset($payment_method) && $payment_method == "paypal") echo "checked"; ?> value="paypal"> Paypal <br><br>
-                <!-- <label class="custom-control-label" for="paypal">Paypal</label> -->
-                <!-- <span class="error"> </span> -->
-              </div>
-            </div>
+            
            
-            <div class="checkout-btn">
-              <button type="submit" name="submit" value="submit">PLACE ORDER</a></button>
-            </div>
+            <div class="paypal-button">
+        <div id="paypal-payment-button">
+        </div>
+        </div>
           </form>
 
           </div>
@@ -467,5 +413,34 @@ function input_data($data){
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <script src="https://www.paypal.com/sdk/js?client-id=AXuQ2h0um_ALgb9wZNHXwi7eEIXRIdnaNXKcfn7GQw7v5SnUuXRpL71Ysjr5h6Y8Ac-5OwDRqLtB975P&disable-funding=credit,card"></script>
+        <script>
+          paypal.Buttons({
+          style: {
+              color:'gold',
+              shape: 'pill',
+              height: 50
+          },
+          createOrder:function(data, actions){
+              return actions.order.create({
+                  purchase_units:[{
+                      amount: {
+                          value: '<?php echo $result['current_bid'];?>'
+                      }
+                  }]
+              });
+          },
+          onApprove:function(data, actions){
+              return actions.order.capture().then(function(details){
+                  console.log(details)
+                  window.location.href='order-complete.php?pay='+details.id;
+              })
+          },
+          onCancel:function(data){
+              window.location.href='payment-fail.php';
+          }
+         }).render('#paypal-payment-button');
+        </script>
 </body>
 </html>
+
