@@ -39,7 +39,7 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
       text-align: center;
     }
     
-    ul li{
+    .dot{
       display: inline-block;
       width: 200px;
       position: relative;
@@ -97,6 +97,19 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
       margin: 30px;
       padding: 10px;
     }
+    #nnv{
+        text-align: center;
+        font-size: 24px;
+        color: #000000;
+        width: 100%;
+        padding: 15px;
+        border:0px;
+        outline: none;
+        cursor: pointer;
+        margin-top: 5px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        }
   </style>
 </head>
 <body>
@@ -129,14 +142,16 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
                             </ul>
                         </li>
                     </ul>
-                    <ul class="nav justify-content-end">
-                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
-                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
-                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a>
-                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a>
-                    </a>
+                    <form action = "store.php" method = "post">
+                        <ul class="nav justify-content-end">
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php"> -->
+                    <li><button id="nnv" type="submit" name="wishlist" class="bi bi-heart" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i></li>
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php"> -->
+                    <li><button id="nnv" type="submit" name="cart" class="bi bi-cart4" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i></button></li>
+                    <li><button id="nnv" type="submit" name="profile" class="nav-item" style='background-color:transparent'><i class="bi-person-circle"></i></button></li>
+                    <li><button id="nnv" type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button></li>
+                    </ul>
+                    </form>
                     </ul>
                 </div>
             </div>
@@ -144,22 +159,22 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="checkout-progress">
         <ul>
-          <li>
+          <li class="dot">
             <i class="fas fa-check-circle"></i>
             <p>Shopping Cart</p>
           </li>
 
-          <li>
-            <i class="fas fa-check-circle"></i>
-            <p>Place Order</p>
-          </li>
-
-          <li>
+          <li class="dot">
             <i class="fas fa-times-circle"></i>
-            <p><b>Pay</b></p>
+            <p><b>Place Order</b></p>
           </li>
 
-          <li>
+          <li class="dot">
+            <i class="fas fa-times-circle"></i>
+            <p>Pay</p>
+          </li>
+
+          <li class="dot">
             <i class="fas fa-times-circle"></i>
             <p>Order Completed</p>
           </li>

@@ -14,8 +14,8 @@
 
 
 
-    //Selecting user with Cash only
-    $result1 = $conn->query("SELECT * FROM order_details WHERE id ='$id' AND payment_mthd ='Cash'");
+    //Selecting user
+    $result1 = $conn->query("SELECT * FROM order_details WHERE id ='$id'");
     $row1 = $result1->fetch(PDO::FETCH_ASSOC);
     $name = $row1['stat'];
     $name2 = $row1['email'];

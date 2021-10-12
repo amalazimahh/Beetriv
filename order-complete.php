@@ -163,7 +163,7 @@ if($statement1->rowCount() == 1)
       text-align: center;
     }
     
-    ul li{
+    .dot{
       display: inline-block;
       width: 200px;
       position: relative;
@@ -220,6 +220,19 @@ if($statement1->rowCount() == 1)
       background-color: #f2f2f2;
       padding: 20px;
     }
+    #nnv{
+        text-align: center;
+        font-size: 24px;
+        color: #000000;
+        width: 100%;
+        padding: 15px;
+        border:0px;
+        outline: none;
+        cursor: pointer;
+        margin-top: 5px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        }
   </style>
 </head>
 <body>
@@ -267,24 +280,24 @@ if($statement1->rowCount() == 1)
 
         <div class="checkout-progress">
         <ul>
-          <li>
+          <li class="dot">
             <i class="fas fa-check-circle"></i>
             <p>Shopping Cart</p>
           </li>
 
-          <li>
-            <i class="fas fa-check-circle"></i>
-            <p>Place Order</p>
+          <li class="dot">
+            <i class="fas fa-times-circle"></i>
+            <p><b>Place Order</b></p>
           </li>
 
-          <li>
-            <i class="fas fa-check-circle"></i>
+          <li class="dot">
+            <i class="fas fa-times-circle"></i>
             <p>Pay</p>
           </li>
 
-          <li>
-            <i class="fas fa-check-circle"></i>
-            <p><b>Order Completed</b></p>
+          <li class="dot">
+            <i class="fas fa-times-circle"></i>
+            <p>Order Completed</p>
           </li>
         </ul>
       </div>

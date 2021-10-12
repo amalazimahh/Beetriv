@@ -130,15 +130,15 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
       margin: 0;
       padding-left: 20px;
       }
-      ul{
+      /* ul{
       list-style-type: none;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 0px;
-      }
+      } */
       li{
-      padding: 5px;
+      padding: 3px;
       }
       .fa{
       color: #ff9f43;

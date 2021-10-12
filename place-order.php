@@ -94,16 +94,16 @@ function input_data($data){
       margin: 80px auto;
     }
 
-    ul{
+     ul{
       text-align: center;
     }
     
-    ul li{
+    .dot {
       display: inline-block;
       width: 200px;
       position: relative;
       
-    }
+    } 
 
     ul li .fas{
         background: #000;
@@ -162,6 +162,19 @@ function input_data($data){
       border-radius: 10px;
       border: #000;
     }
+    #nnv{
+        text-align: center;
+        font-size: 24px;
+        color: #000000;
+        width: 100%;
+        padding: 15px;
+        border:0px;
+        outline: none;
+        cursor: pointer;
+        margin-top: 5px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        }
 
     .checkout-btn a{
       text-decoration: none;
@@ -199,16 +212,16 @@ function input_data($data){
                             </ul>
                         </li>
                     </ul>
-                    <ul class="nav justify-content-end">
-                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
-                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
-                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    <a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
-                    <form action = "product-details.php" method = "post">
-                    <a type="submit" name="logout" class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a>
+                    <form action = "store.php" method = "post">
+                        <ul class="nav justify-content-end">
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php"> -->
+                    <li><button id="nnv" type="submit" name="wishlist" class="bi bi-heart" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i></li>
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php"> -->
+                    <li><button id="nnv" type="submit" name="cart" class="bi bi-cart4" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i></button></li>
+                    <li><button id="nnv" type="submit" name="profile" class="nav-item" style='background-color:transparent'><i class="bi-person-circle"></i></button></li>
+                    <li><button id="nnv" type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button></li>
+                    </ul>
                     </form>
-                    </a>
                     </ul>
                 </div>
             </div>
@@ -216,22 +229,22 @@ function input_data($data){
 
         <div class="checkout-progress">
         <ul>
-          <li>
+          <li class="dot">
             <i class="fas fa-check-circle"></i>
             <p>Shopping Cart</p>
           </li>
 
-          <li>
+          <li class="dot">
             <i class="fas fa-times-circle"></i>
             <p><b>Place Order</b></p>
           </li>
 
-          <li>
+          <li class="dot">
             <i class="fas fa-times-circle"></i>
             <p>Pay</p>
           </li>
 
-          <li>
+          <li class="dot">
             <i class="fas fa-times-circle"></i>
             <p>Order Completed</p>
           </li>

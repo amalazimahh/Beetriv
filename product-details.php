@@ -8,6 +8,29 @@
     // logout
     $session=$_SESSION['email'];
 
+    //Selecting different type of users
+    $selectprofile = $conn->query("SELECT * FROM users WHERE email='$email'");
+    $row1 = $selectprofile->fetch(PDO::FETCH_ASSOC);
+    $type = $row1['type'];
+    if (isset($_POST['profile'])){
+    if(($type) == 'seller'){
+        header('location: seller-dashboard.php');
+    }
+    else if(($type) == 'customer'){
+        header('location: user-profile.php');
+    }
+    else if(($type) == 'runner'){
+        header('location: runner-order.php');
+    }
+
+}
+if (isset($_POST['cart'])){
+    header('location: cart.php');
+}
+if (isset($_POST['wishlist'])){
+    header('location: wishlist.php');
+}
+
     //cara install phpmailer
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
@@ -492,6 +515,31 @@ else
         <!-- alert -->
         <script src="https://cdn.jsdelivr.net/gh/cosmogicofficial/quantumalert@latest/minfile/quantumalert.js" charset="utf-8"></script>
         <style>
+
+        #nnv{
+        text-align: center;
+        font-size: 24px;
+        color: #000000;
+        width: 100%;
+        padding: 15px;
+        border:0px;
+        outline: none;
+        cursor: pointer;
+        margin-top: 5px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        }
+
+        /* ul{
+        list-style-type: none;
+        display: flex;
+        /* justify-content: center; */
+        /* align-items: center; */
+        /* padding: 0px; */
+        /* } */
+        li{
+        padding: 3px;
+        }
             .prd_img img{
                 width: 470px; 
                 height: 530px;
@@ -572,7 +620,7 @@ else
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link" aria-current="page" href="store.php">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -592,16 +640,23 @@ else
                             </ul>
                         </li>
                     </ul>
-                    <ul class="nav justify-content-end">
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
-                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
-                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
-                    <form action = "product-details.php" method = "post">
-                    <li><a type="submit" name="logout" class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    <!-- <ul class="nav justify-content-end"> -->
+                   
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li> -->
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right" name="logout" method="post"></i></a></li> -->
+                    <!-- <form action = "store.php" method ="POST">
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" ><i class="bi bi-box-arrow-right" name="logout"></i></a></li>
+                   </form> -->
+                    <form action = "store.php" method = "post">
+                        <ul class="nav justify-content-end">
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php"> -->
+                    <li><button id="nnv" type="submit" name="wishlist" class="bi bi-heart" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i></li>
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php"> -->
+                    <li><button id="nnv" type="submit" name="cart" class="bi bi-cart4" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i></button></li>
+                    <li><button id="nnv" type="submit" name="profile" class="nav-item" style='background-color:transparent'><i class="bi-person-circle"></i></button></li>
+                    <li><button id="nnv" type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button></li>
+                    </ul>
                     </form>
-                    </a></li>
                     </ul>
                 </div>
             </div>
@@ -985,54 +1040,53 @@ else
         <!-- Footer-->
         <footer class="site-footer">
 
-        <div class="container">
-            <div class="row">
-                <!-- first section -->
-                <div class="col-xs-6 col-md-3">
-                <h6>CORPORATE</h6>
-                <ul class="footer-links">
-                    <li><a href="footer/about.php">About Beetriv</a></li>
-                    <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
-                    <li><a href="footer/termsco.php">Terms and Conditions</a></li>
-                </ul>
-                </div>
-
-                <!-- second section -->
-                <div class="col-xs-6 col-md-3">
-                <h6>DEALS, PAYMENT & DELIVERY</h6>
-                <ul class="footer-links">
-                    <li><a href="footer/deals.php">Our Deals</a></li>
-                    <li><a href="footer/delivery.php">Delivery Services</a></li>
-                    <li><a href="footer/payment.php">Payment</a></li>
-                </ul>
-                </div>
-
-                <!-- third section -->
-                <div class="col-xs-6 col-md-3">
-                <h6>CUSTOMER CARE</h6>
-                <ul class="footer-links">
-                    <li><a href="footer/be-seller.php">Become Our Seller</a></li>
-                    <li><a href="footer/faq.php">FAQ</a></li>
-                    <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
-                    <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
-                    <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
-                    <li><a href="footer/customer-protection.php">Customer Protection</a></li>
-                </ul>
-                </div>
-
-                <!-- fourth section -->
-                <div class="col-xs-6 col-md-3">
-                <h6>CONTACT US</h6>
-                <p>Phone: 257 3663</p>
-                <p>Email: beetrivteam@gmail.com</p>
-                <p>Instagram: @beetriv</p>
-                <p>Facebook: @beetriv</p>
-                </div>
-            </div>
+<div class="container">
+    <div class="row">
+        <!-- first section -->
+        <div class="col-xs-6 col-md-3">
+        <h6>CORPORATE</h6>
+        <ul class="footer-links">
+            <li><a href="footer/about.php">About Beetriv</a></li>
+            <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
+            <li><a href="footer/termsco.php">Terms and Conditions</a></li>
+        </ul>
         </div>
 
-        </footer>
+        <!-- second section -->
+        <div class="col-xs-6 col-md-3">
+        <h6>DEALS, PAYMENT & DELIVERY</h6>
+        <ul class="footer-links">
+            <li><a href="footer/deals.php">Our Deals</a></li>
+            <li><a href="footer/delivery.php">Delivery Services</a></li>
+            <li><a href="footer/payment.php">Payment</a></li>
+        </ul>
+        </div>
 
+        <!-- third section -->
+        <div class="col-xs-6 col-md-3">
+        <h6>CUSTOMER CARE</h6>
+        <ul class="footer-links">
+            <li><a href="footer/be-seller.php">Become Our Seller</a></li>
+            <li><a href="footer/faq.php">FAQ</a></li>
+            <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
+            <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
+            <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
+            <li><a href="footer/customer-protection.php">Customer Protection</a></li>
+        </ul>
+        </div>
+
+        <!-- fourth section -->
+        <div class="col-xs-6 col-md-3">
+        <h6>CONTACT US</h6>
+        <p>Phone: 257 3663</p>
+        <p>Email: beetrivteam@gmail.com</p>
+        <p>Instagram: @beetriv</p>
+        <p>Facebook: @beetriv</p>
+        </div>
+    </div>
+</div>
+
+</footer>
         <script>
             if ( window.history.replaceState ) {
             window.history.replaceState( null, null, window.location.href );
