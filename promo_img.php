@@ -50,4 +50,5 @@ if(isset($_POST['submit'])){
 }
 
 //echo $statusMsg;
+header("Location:managestore.php");
 ?>
