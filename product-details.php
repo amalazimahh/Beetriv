@@ -192,13 +192,12 @@ else
     $statement = $conn->query("SELECT * FROM paypal_details WHERE user_paypal = '$email'");
     $result = $statement->fetch(PDO::FETCH_ASSOC);
 
-    // fetching item seller
+    // add into product_bid
+    if(isset($_POST['placebid'])){
+        // fetching item seller
     $display_name = $row['display_name'];
     $sellers = $conn->query("SELECT * FROM users WHERE email = '$display_name'");
     $seller = $sellers->fetch(PDO::FETCH_ASSOC);
-
-    // add into product_bid
-    if(isset($_POST['placebid'])){
         // if ($count) {
             $seller = $row['display_name'];
             $current_bid   = $_POST['current_bid'];
@@ -667,7 +666,10 @@ else
         }
     }
 
-
+    // fetching item seller
+    $display_name = $row['display_name'];
+    $sellers = $conn->query("SELECT * FROM users WHERE email = '$display_name'");
+    $seller = $sellers->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -868,7 +870,7 @@ else
                         <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
                             <span>BND$<?php echo $row['prd_price']?></span><br>
-                            <h10 class="lead"><?php echo $seller['fname']." ".$seller['lname']; ?></h10>
+                            <h10 class="lead"><?php echo $seller['fname']." ".$seller['lname'] ?></h10>
                         </div>
                         <div class="pb-5">
                         <h9 class="lead"><?php echo $row['prd_desc']?></h9>
