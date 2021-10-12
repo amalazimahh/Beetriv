@@ -1,0 +1,141 @@
+  a {
+    color: #0000ff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  #boarder,
+  #chat {
+    margin: 0 auto;
+    padding-bottom: 25px;
+    background: #eee;
+    width: 500px;
+    height: 500px;
+    max-width: 100%;
+    border: 2px solid #ffcd39;
+    border-radius: 4px;
+  }
+  
+  #msgtext {
+    text-align: left;
+    margin: 0 auto;
+    margin-bottom: 25px;
+    padding: 10px;
+    background: #fff;
+    height: 300px;
+    width: 400px;
+    border: 1px solid #a7a7a7;
+    overflow: auto;
+    border-radius: 4px;
+    border-bottom: 4px solid #a7a7a7;
+  }
+
+  #msgtext2 {
+    text-align: right;
+    margin: 0 auto;
+    margin-bottom: 25px;
+    padding: 10px;
+    background: #fff;
+    height: 300px;
+    width: 530px;
+    border: 1px solid #a7a7a7;
+    overflow: auto;
+    border-radius: 4px;
+    border-bottom: 4px solid #a7a7a7;
+  }
+  
+  #inputmsg {
+    flex: 1;
+    border-radius: 40px;
+    height: 20px;
+    border: 1px solid #ffcd39;
+    padding: 50px;
+    text-align: center;
+    margin-top: -10px;
+    margin-left: 100px;
+  }
+  
+  #name {
+    border-radius: 4px;
+    border: 1px solid #ffcd39;
+    padding: 2px 8px;
+  }
+  
+  #submit,
+  #enter{
+    background: #ffcd39;
+    border: 2px solid #ffcd39;
+    color: white;
+    padding: 4px 10px;
+    font-weight: bold;
+    border-radius: 4px;
+  }
+  
+  .error {
+    color: #ff0000;
+  }
+  
+  #menu {
+    padding: 15px 25px;
+    display: flex;
+  }
+  
+  #menu p.welcome {
+    flex: 1;
+  }
+  
+  a#exit {
+    color: white;
+    background: #ffcd39;
+    border-radius: 10px;
+    padding: 4px 8px;
+    font-weight: bold;
+  }
+  
+  .msgln {
+    margin: 0 0 10px 0;
+  }
+  
+  .msgln span.left-info {
+    color: #ffcd39;
+  }
+  
+  .msgln span.chat-time {
+    color: #666;
+    font-size: 60%;
+    vertical-align: super;
+  }
+  
+  .msgln b.user-name, .msgln b.user-name-left {
+    font-weight: bold;
+    background: #ffcd39;
+    color: white;
+    padding: 2px 4px;
+    font-size: 90%;
+    border-radius: 4px;
+    margin: 0 5px 0 0;
+  }
+  
+  .msgln b.user-name-left {
+    background: #ffcd39;
+  }
+
+  .image_upload
+{
+ position: absolute;
+ top:3px;
+ right:3px;
+}
+.image_upload > form > input
+{
+    display: none;
+}
+
+.image_upload img
+{
+    width: 24px;
+    cursor: pointer;
+}
