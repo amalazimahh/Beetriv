@@ -670,6 +670,19 @@ else
     $display_name = $row['display_name'];
     $sellers = $conn->query("SELECT * FROM users WHERE email = '$display_name'");
     $seller = $sellers->fetch(PDO::FETCH_ASSOC);
+
+    $ending = date('Y-m-d H:i:s', strtotime("$expireday $expiretime -1 day"));
+    if ($row['bid_status'] == "yes" && $dateTime->format('Y-m-d H:i:s') > $ending && $combinedDT > $dateTime->format('Y-m-d H:i:s')) {
+        $ending = 'ending soon';
+
+        $pdoQuery1 = ("UPDATE product SET bid_expiry = '$ending' WHERE prd_id = '$id' ");
+        $pdoQuery_run1 = $conn->prepare($pdoQuery1);
+        $pdoQuery_run1->execute();
+
+        $pdoQuery = ("UPDATE product_bid SET bid_time = '$ending' WHERE prd_id = '$id' ");
+        $pdoQuery_run = $conn->prepare($pdoQuery);
+        $pdoQuery_run->execute();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -875,7 +888,7 @@ else
                         <div class="pb-5">
                         <h9 class="lead"><?php echo $row['prd_desc']?></h9>
                         </div>
-                        <?php if( empty($row['bid_expiry']) ): ?>
+                        <?php // if( empty($row['bid_expiry']) ): ?>
                         <form method="POST">
                         <div class="d-flex pb-4" >
                             <div class="large col-2">Quantity</div>
@@ -897,9 +910,9 @@ else
                                 </button>
                             </div>
                         </form>
-                        <?php endif; ?>
+                        <?php // endif; ?>
 
-                        <?php if( $row['bid_status'] == "yes" && empty($row['bid_expiry']) ): ?>
+                        <?php if( $row['bid_status'] == "yes" && empty($row['bid_expiry']) || $row['bid_expiry'] == 'ending' ): ?>
                         <!-- bidding -->
                         <div class="d-flex pb-4" >
                         <div class="p-2 flex-fill bd-highlight">
