@@ -890,7 +890,7 @@ else
                             <h10 class="lead"><?php echo $seller['fname']." ".$seller['lname'] ?></h10>
                         </div>
                         <div class="pb-5">
-                        <h9 class="lead"><?php echo $row['prd_desc']?></h9>
+                        <textarea class="lead" style="width:700px;height:200px;background-color:transparent;border:0px;" disabled><?php echo $row['prd_desc']?></textarea>
                         </div>
                         <?php // if( empty($row['bid_expiry']) ): ?>
                         <form method="POST">
