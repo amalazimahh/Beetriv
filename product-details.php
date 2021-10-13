@@ -201,14 +201,14 @@ else
         // if ($count) {
             $seller = $row['display_name'];
             $current_bid   = $_POST['current_bid'];
-            if ( $current_bid <= $row['starting_bid'] || $current_bid < ($res['current_bid'] + $row['bid_increment']) || $current_bid <= $res['current_bid'] ) {
+            if ( $current_bid <= $row['starting_bid'] || $current_bid < (isset($res['current_bid']) + $row['bid_increment']) || $current_bid <= isset($res['current_bid']) ) {
                  echo '<script>alert("Bid needs to be higher!")</script>';
                  echo "<meta http-equiv='refresh' content='0'>";
                  
                 //echo "<script>Qual.error('Unsuccessful Bid','Bid needs to be higher.')</script>";
                 
             } else {
-            if ( isset($res) ) {
+            if ( isset($res['prd_id']) ) {
                     //$seller = $row['display_name'];
                 // Update bid
                     $prd_id         = ($_POST['prd_id']);
@@ -276,7 +276,7 @@ else
                     $select1 = "SELECT * FROM paypal_details WHERE 1";
                     $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
                     }
-                    echo "<meta http-equiv='refresh' content='0'>";
+                    //echo "<meta http-equiv='refresh' content='0'>";
 
 
             }catch (Exception $e){
@@ -335,7 +335,8 @@ else
                 }catch (Exception $e){
                     echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
                 }
-
+                
+                if (isset($res['current_bidder']) ){
                 try {
 
                     //Mail Set up
@@ -388,7 +389,7 @@ else
                 }catch (Exception $e){
                     echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
                 }
-
+            }
 
                     } else {
                         $prd_id         = ($_POST['prd_id']);
@@ -397,6 +398,15 @@ else
             // $seller = $row['display_name'];
             $paypal_email    = ($_POST['paypal_email']);
             $paypal_psw    = ($_POST['paypal_psw']);
+
+            $select = "SELECT * FROM product_bid WHERE 1";
+
+                $insert = $conn->query ("INSERT INTO product_bid (prd_id,current_bidder, current_bid) VALUES ('$prd_id','$email','$current_bid')");
+
+                if (empty($result)) {
+                    $select1 = "SELECT * FROM paypal_details WHERE 1";
+                    $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
+                    }
 
             //Mail Set up
             $mail= new PHPMailer(true);
@@ -447,14 +457,6 @@ else
 
                 $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
 
-                $select = "SELECT * FROM product_bid WHERE 1";
-
-                $insert = $conn->query ("INSERT INTO product_bid (prd_id,current_bidder, current_bid) VALUES ('$prd_id','$email','$current_bid')");
-
-                if (empty($result)) {
-                    $select1 = "SELECT * FROM paypal_details WHERE 1";
-                    $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
-                    }
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
 
@@ -471,6 +473,7 @@ else
 
             }
 
+            if (isset($res['current_bidder']) ){
             try {
 
                 //Mail Set up
@@ -523,6 +526,7 @@ else
             }catch (Exception $e){
                 echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
             }
+        }
 
 
                     }
@@ -988,7 +992,10 @@ else
                     <div class="d-flex p-2 bd-highlight">
                     <span class="input-group-text">BND$</span>
                     <input type="hidden" name="prd_id" value="<?php echo $row['prd_id']?>">
-                    <input type="hidden" name="current_bidder" value="<?php echo $res['current_bidder']?>">
+                    <input type="hidden" name="current_bidder" value="<?php if (isset($res['current_bidder']) ){
+                                                    //Exists
+                                                    echo $res['current_bidder'];
+                                                } ?>">
                     <input type="number" class="form-control" name="current_bid" step="any" id="current_bid"> 
                     <script>
                     // function verifyBid() {
