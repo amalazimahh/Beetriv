@@ -18,7 +18,27 @@ else if (isset($_POST['logout']))
     echo "Logout successfull. ";
     header ('location: login.php');
 }
+$selectprofile = $conn->query("SELECT * FROM users WHERE email='$email'");
+    $row1 = $selectprofile->fetch(PDO::FETCH_ASSOC);
+    $type = $row1['type'];
+    if (isset($_POST['profile'])){
+    if(($type) == 'seller'){
+        header('location: ../seller-profile.php');
+    }
+    else if(($type) == 'customer'){
+        header('location: ../user-profile.php');
+    }
+    else if(($type) == 'runner'){
+        header('location: ../runner-order.php');
+    }
 
+}
+if (isset($_POST['cart'])){
+    header('location: ../cart.php');
+}
+if (isset($_POST['wishlist'])){
+    header('location: ../wishlist.php');
+}
 // Get image data from database
 $result = "SELECT * FROM product WHERE prd_category= 'Freebies' && prd_condition= 'Used'";
 $handle = $conn->prepare($result);
@@ -274,7 +294,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                             </ul>
                         </li>
                     </ul>
-                    <form action = "store.php" method = "post">
+                    <form action = "usedfreebies.php" method = "post">
                         <ul class="nav justify-content-end">
                     <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php"> -->
                     <li><button id="nnv" type="submit" name="wishlist" class="bi bi-heart" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i></li>

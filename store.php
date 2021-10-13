@@ -24,7 +24,7 @@ $row1 = $selectprofile->fetch(PDO::FETCH_ASSOC);
 $type = $row1['type'];
 if (isset($_POST['profile'])){
     if(($type) == 'seller'){
-        header('location: seller-dashboard.php');
+        header('location: seller-profile.php');
     }
     else if(($type) == 'customer'){
         header('location: user-profile.php');
