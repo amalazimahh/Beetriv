@@ -31,7 +31,7 @@ if(isset($_POST['saves'])){
     prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE prd_id = '$id' ");
     $pdoQuery_run = $conn->prepare($pdoQuery);
     $pdoQuery_run->execute();
-    header('location: seller-dashboard.php ');
+    header('location: seller-profile.php ');
 
     
     }

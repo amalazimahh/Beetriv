@@ -5,6 +5,8 @@ require_once "connection.php";
 
 //make sure login first, so that can fetch email, echo email to see if you logged in
 $email = $_SESSION['email'];
+// $displayname = $_GET['display_name'];
+
 //echo $email;
 
 $select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
@@ -43,6 +45,19 @@ $result = $conn->query($selectproduct);
 body {
     font-family: 'Open Sans', sans-serif
 }
+#nnv{
+        text-align: center;
+        font-size: 24px;
+        color: #000000;
+        width: 100%;
+        padding: 15px;
+        border:0px;
+        outline: none;
+        cursor: pointer;
+        margin-top: 5px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        }
 
 .search {
     top: 6px;
@@ -95,14 +110,16 @@ body {
                             </ul>
                         </li>
                     </ul>
-                    <ul class="nav justify-content-end">
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
-                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
-                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
-                    </a></li>
+                    <form action = "store.php" method = "post">
+                        <ul class="nav justify-content-end">
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php"> -->
+                    <li><button id="nnv" type="submit" name="wishlist" class="bi bi-heart" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i></li>
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php"> -->
+                    <li><button id="nnv" type="submit" name="cart" class="bi bi-cart4" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i></button></li>
+                    <li><button id="nnv" type="submit" name="profile" class="nav-item" style='background-color:transparent'><i class="bi-person-circle"></i></button></li>
+                    <li><button id="nnv" type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button></li>
+                    </ul>
+                    </form>
                     </ul>
                 </div>
             </div>
@@ -148,7 +165,7 @@ body {
                   <i class="ni education_hat mr-2"></i><strong>IC Colour</strong> <?php echo $seller['ic_color'];?>
                 </div>
                 <hr class="my-4">
-                <p class="text-align-center">Beetriv</p>
+                <p class="text-align-center">Disclaimer & Policies</p>
               </div>
             </div>
           </div>
@@ -166,15 +183,16 @@ body {
             <thead>
                 <tr class="bg-light">
                     
-                    <th scope="col" width="5%">Product ID</th>
+                    <th scope="col" width="10%">Product ID</th>
                     <th scope="col" width="15%">Product Name</th>
-                    <th scope="col" width="15%">Product Category</th>
+                    <th scope="col" width="10%">Product Image</th>
+                    <th scope="col" width="10%">Product Category</th>
                     <th scope="col" width="10%">Price</th>
-                    <th scope="col" width="5%">Product Quantity</th>
+                    <th scope="col" width="10%">Product Quantity</th>
                     <th scope="col" width="10%">Product Condition</th>
-                    <th scope="col" width="15%">Product Description</th>
-                    <th scope="col" width="5%">Product Rating</th>
-                    <th scope="col" width="20%">Meet Up Location</th>
+                    <th scope="col" width="10%">Product Description</th>
+                    <th scope="col" width="10%">Product Rating</th>
+                    <th scope="col" width="10%">Meet Up Location</th>
                     <th scope="col" width="10%">Edit Product</th>
                     
                 </tr>
@@ -182,22 +200,26 @@ body {
             <tbody>
                 <tr>
                 <!-- display sell item     -->
-               
+                
                 <?php
-                foreach($result as $rowProduct)
-                   
-                echo '<td>'.$rowProduct["prd_id"].'</td>
-                    <td>'.$rowProduct["prd_name"].'</td>
-                    <td>'.$rowProduct["prd_category"].'</td>
-                    <td>'.$rowProduct["prd_price"].'</td>
-                    <td>'.$rowProduct["prd_qty"].'</td>
-                    <td>'.$rowProduct["prd_condition"].'</td>
-                    <td>'.$rowProduct["prd_desc"].'</td>
-                    <td>'.$rowProduct["prd_rating"].'</td>
-                    <td>'.$rowProduct["prd_location"].'</td>
-                    <td><a href="edit-product.php?id='.$rowProduct['prd_id'].'">Edit</a></td>
-                    </tr>'
+                foreach($result as $rowProduct){
+
                 ?>
+                <tr>
+                <td><?php echo $rowProduct['prd_id']; ?></td>
+                <td><?php echo $rowProduct['prd_name']; ?></td>
+                <th scope="row"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($rowProduct['prd_img']); ?>" class="rounded" style="width:150px; height:150px"></th>
+                <td><?php echo $rowProduct['prd_category']; ?></td>
+                <td>$<?php echo $rowProduct['prd_price']; ?></td>
+                <td><?php echo $rowProduct['prd_qty']; ?></td>
+                <td><?php echo $rowProduct['prd_condition']; ?></td>
+                <td><?php echo $rowProduct['prd_desc']; ?></td>
+                <td><?php echo $rowProduct['prd_rating']; ?></td>
+                <td><?php echo $rowProduct['prd_location']; ?></td>
+                <td><a href="edit-product.php?id=<?php echo $rowProduct['prd_id'];?>">
+					        <button class="btn btn-warning btn-lg float-right">Edit</button></a></tr>
+                <?php } ?>
+                
             </tbody>
         </table>
     </div>
