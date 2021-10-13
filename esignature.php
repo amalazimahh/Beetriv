@@ -59,16 +59,20 @@
             // file_put_contents($file2, $image_base64_2);
 
             //insert into receipt table
-            $insert =$conn->query("INSERT INTO receipts (prd_id,prd_name,prd_qty,prd_price,prd_stats,payment_mthd,custSigned,runSigned,sales_date)
-            VALUE ('$prdID','$prdName','$prdQty','$prdPrice','$prdStat','$paymentMthd','$image_type1','$image_type2','$today')");
-            //update order_details table
-            $update = "UPDATE order_details SET stat='completed' WHERE id='$id'";
-            $runUpdate = $conn->prepare($update);
-            $runUpdate->execute();
+            // $insert =$conn->query("INSERT INTO receipts (prd_id,prd_name,prd_qty,prd_price,prd_stats,payment_mthd,custSigned,runSigned,sales_date)
+            // VALUE ('$prdID','$prdName','$prdQty','$prdPrice','$prdStat','$paymentMthd','$image_type1','$image_type2','$today')");
 
-            $update1 = "UPDATE order_details SET payment_stat='paid' WHERE id='$id'";
-            $runUpdate1 = $conn->prepare($update1);
-            $runUpdate1->execute();
+            $update="UPDATE order_details SET stat='completed', payment_stat='paid', custSigned='$image_type1', runSigned='$image_type2', sales_date='$today' WHERE id='$id' ";
+            $runUpdate=$conn->prepare($update);
+            $runUpdate->execute();
+            //update order_details table
+            // $update = "UPDATE order_details SET stat='completed' WHERE id='$id'";
+            // $runUpdate = $conn->prepare($update);
+            // $runUpdate->execute();
+
+            // $update1 = "UPDATE order_details SET payment_stat='paid' WHERE id='$id'";
+            // $runUpdate1 = $conn->prepare($update1);
+            // $runUpdate1->execute();
 
             // $result = "DELETE FROM order_details where id='$id'";
             // $statement = $conn->prepare($result);
