@@ -47,11 +47,6 @@ $handle = $conn->prepare($result);
 $handle->execute();
 $row = $handle->fetchAll(PDO::FETCH_ASSOC);
 
-// promo product
-$result2 = "SELECT * FROM product WHERE prd_category= 'Freebies'";
-$handle = $conn->prepare($result2);
-$handle->execute();
-$rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -279,10 +274,10 @@ $rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bid</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                            <li><a class="dropdown-item" href="bid-store.php">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Active Bid</a></li>
-                                <li><a class="dropdown-item" href="#!">Ending Soon</a></li>
+                                <li><a class="dropdown-item" href="bid-store.php">Active Bid</a></li>
+                                <li><a class="dropdown-item" href="bid-ending.php">Ending Soon</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -629,9 +624,10 @@ $rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                 <?php endif; ?>
 
+                <h1>All Bid Items</h1>
                     <div class="product">
                         <?php foreach($row as $product){ 
-                            if (empty($product['bid_expiry'])) { ?>
+                            if (empty($product['bid_expiry']) || $product['bid_expiry'] == 'ending soon') { ?>
                             <div class="content">
                                 <form method="POST"></form>
                                     <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
