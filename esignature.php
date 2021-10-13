@@ -39,7 +39,7 @@
             $prdQty         =$_POST['product_qty'];
             $prdPrice       =$_POST['product_price'];
             $prdStat        =$_POST['product_stat'];
-            $paymentMthd    =$_POST['payment_mthd'];
+            $paymentMthd    =$_POST['product_mthd'];
 
             // $folderPath     = "img/esignature/";
             // For customer signature
