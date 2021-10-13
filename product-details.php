@@ -81,12 +81,13 @@ if (isset($_POST['wishlist'])){
         $calculateTotalPrice = number_format($productQty * $row['prd_price'],2);
         
         $cartArray = [
-            'product_id' =>$productID,
-            'qty' => $productQty,
-            'product_name' =>$row['prd_name'],
+            'product_id'    =>$productID,
+            'qty'           => $productQty,
+            'product_name'  =>$row['prd_name'],
             'product_price' => $row['prd_price'],
-            'total_price' => $calculateTotalPrice,
-            'product_img' =>$row['prd_img']
+            'total_price'   => $calculateTotalPrice,
+            'product_img'   =>$row['prd_img'],
+            'username'      =>$row['username']
         ];
         
         if(isset($_SESSION['cart_items']) && !empty($_SESSION['cart_items']))
@@ -177,6 +178,7 @@ else
                 'product_name'  =>$row['prd_name'],
                 'product_price' =>$row['prd_price'],
                 'product_img'   =>$row['prd_img']
+                
             ];
     
             header("Location: chat.php?product=" . $row['prd_id']);

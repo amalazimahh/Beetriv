@@ -169,7 +169,7 @@ if (isset($_POST['wishlist'])){
 
                         </td>
                         <td>
-                            [Vendors]
+                            <?php echo $item['username'];?>
                         </td>
                         <td>
                             $<?php echo $item['product_price'];?>

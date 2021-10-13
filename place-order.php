@@ -265,7 +265,7 @@ function input_data($data){
            <thead>
                 <tr>
                     <th>Product</th>
-                    <td>Shop</td>
+                    <th>Shop</th>
                     <th>Price</th>
                     <th>Qty</th>
                     <th>Total</th>
@@ -289,7 +289,7 @@ function input_data($data){
                             <?php echo $item['product_name'];?>               
                         </td>
                         <td>
-                            [Vendors]
+                            <?php echo $item['username'];?>
                         </td>
                         <td>
                             $<?php echo $item['product_price'];?>
