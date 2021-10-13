@@ -666,7 +666,7 @@ else
         }
     }
 
-    // fetching item seller
+    // fetching item from seller
     $display_name = $row['display_name'];
     $sellers = $conn->query("SELECT * FROM users WHERE email = '$display_name'");
     $seller = $sellers->fetch(PDO::FETCH_ASSOC);
