@@ -9,8 +9,12 @@ require_once "../connection.php";
     // $handle = $conn->prepare($result);
     // $handle->execute();
     // $row = $handle->fetchAll(PDO::FETCH_ASSOC);
+    $select = "SELECT * FROM users WHERE email = 'admin@beetriv.com' ";
+    $statement = $conn->prepare($select);
+    $statement->execute();
+    $rowAdmin = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt = $conn->prepare("SELECT * FROM receipts LEFT JOIN order_details ON order_details.id=receipts.id");
+    $stmt = $conn->prepare("SELECT * FROM order_details WHERE stat='completed' && payment_stat='paid' ");
     $stmt->execute();
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -44,6 +48,11 @@ require_once "../connection.php";
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <style>
+        .bg-gradient{
+            background-color: #ffcd39;
+        }
+    </style>
 
 </head>
 
@@ -53,7 +62,7 @@ require_once "../connection.php";
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -147,26 +156,16 @@ require_once "../connection.php";
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <?php foreach($rowAdmin as $admin){?>
+                                    <img class="img-profile rounded-circle"
+                                    src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($admin['img']);?>">
+                                <?php }?>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
+                                
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -185,8 +184,7 @@ require_once "../connection.php";
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Sales History</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                        
                     </div>
 
                     <!-- Content Row -->
@@ -201,20 +199,20 @@ require_once "../connection.php";
                                     <th scope="col">Buyer Name</th>
                                     <th scope="col">Transaction #</th>
                                     <th scope="col">Amount</th>
-                                    <th scope="col">Full Details</th>
+                                    
                                     </tr>
                                 </thead>
                                 <?php foreach($row as $receipt){?>
                                 <tbody>
                                     <tr>
                                     <th scope="row"><?php echo date('M d, Y', strtotime($receipt['sales_date']));?></th>
-                                    <td><?php echo $receipt['username']; ?></td>
+                                    <td><?php echo $receipt['email']; ?></td>
                                     <td><?php echo $receipt['payId']; ?></td>
                                     <td>$<?php $total = 0;
                                                 $totalSum = $receipt['prd_price']*$receipt['prd_qty'];
                                                 $total += $totalSum; 
                                                 echo $total; ?></td>
-                                    <td>@mdo</td>
+                                    
                                     </tr>
                                     <tr>
                                 </tbody>

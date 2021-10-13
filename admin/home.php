@@ -6,6 +6,17 @@ require_once "../connection.php";
 $email = $_SESSION['email'];
 
 $today = date('Y-m-d');
+
+$select = "SELECT * FROM users WHERE email = 'admin@beetriv.com' ";
+$statement = $conn->prepare($select);
+$statement->execute();
+$row = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+$salesData = $conn->prepare("SELECT * FROM order_details WHERE sales_date=:sales_date");
+$salesData->execute();
+$salesRow=$salesData->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +40,11 @@ $today = date('Y-m-d');
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <style>
+        .bg-gradient{
+            background-color: #ffcd39;
+        }
+    </style>
 
 </head>
 
@@ -38,7 +54,7 @@ $today = date('Y-m-d');
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -135,26 +151,16 @@ $today = date('Y-m-d');
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <?php foreach($row as $admin){?>
+                                    <img class="img-profile rounded-circle"
+                                    src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($admin['img']);?>">
+                                <?php }?>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
+                                
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -173,8 +179,8 @@ $today = date('Y-m-d');
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
                     </div>
 
                     <!-- Content Row -->
@@ -221,7 +227,7 @@ $today = date('Y-m-d');
                                                 Total Sales Today</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <?php
-                                                $stmt = $conn->prepare("SELECT * FROM receipts WHERE sales_date=:sales_date");
+                                                $stmt = $conn->prepare("SELECT * FROM order_details WHERE sales_date=:sales_date");
                                                 $stmt->execute(['sales_date'=>$today]);
                                 
                                                 $rtotal = 0;
@@ -281,7 +287,7 @@ $today = date('Y-m-d');
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                 <?php
 
-                                                    $stmt = $conn->prepare("SELECT *, COUNT(*) AS numuser FROM users ");
+                                                    $stmt = $conn->prepare("SELECT *, COUNT(*) AS numuser FROM users WHERE email != 'admin@beetriv.com'");
                                                     $stmt->execute();
                                                     $urow =  $stmt->fetch();
 
@@ -330,7 +336,99 @@ $today = date('Y-m-d');
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
+                                        <canvas id="myAreaChart">
+                                            <script>
+                                                // Area Chart Example
+                                                var ctx = document.getElementById("myAreaChart");
+                                                var myLineChart = new Chart(ctx, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                                    datasets: [{
+                                                    label: "Earnings",
+                                                    lineTension: 0.3,
+                                                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                                                    borderColor: "rgba(78, 115, 223, 1)",
+                                                    pointRadius: 3,
+                                                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                                                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                                                    pointHoverRadius: 3,
+                                                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                                                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                                                    pointHitRadius: 10,
+                                                    pointBorderWidth: 2,
+                                                    data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
+                                                    }],
+                                                },
+                                                options: {
+                                                    maintainAspectRatio: false,
+                                                    layout: {
+                                                    padding: {
+                                                        left: 10,
+                                                        right: 25,
+                                                        top: 25,
+                                                        bottom: 0
+                                                    }
+                                                    },
+                                                    scales: {
+                                                    xAxes: [{
+                                                        time: {
+                                                        unit: 'date'
+                                                        },
+                                                        gridLines: {
+                                                        display: false,
+                                                        drawBorder: false
+                                                        },
+                                                        ticks: {
+                                                        maxTicksLimit: 7
+                                                        }
+                                                    }],
+                                                    yAxes: [{
+                                                        ticks: {
+                                                        maxTicksLimit: 5,
+                                                        padding: 10,
+                                                        // Include a dollar sign in the ticks
+                                                        callback: function(value, index, values) {
+                                                            return '$' + number_format(value);
+                                                        }
+                                                        },
+                                                        gridLines: {
+                                                        color: "rgb(234, 236, 244)",
+                                                        zeroLineColor: "rgb(234, 236, 244)",
+                                                        drawBorder: false,
+                                                        borderDash: [2],
+                                                        zeroLineBorderDash: [2]
+                                                        }
+                                                    }],
+                                                    },
+                                                    legend: {
+                                                    display: false
+                                                    },
+                                                    tooltips: {
+                                                    backgroundColor: "rgb(255,255,255)",
+                                                    bodyFontColor: "#858796",
+                                                    titleMarginBottom: 10,
+                                                    titleFontColor: '#6e707e',
+                                                    titleFontSize: 14,
+                                                    borderColor: '#dddfeb',
+                                                    borderWidth: 1,
+                                                    xPadding: 15,
+                                                    yPadding: 15,
+                                                    displayColors: false,
+                                                    intersect: false,
+                                                    mode: 'index',
+                                                    caretPadding: 10,
+                                                    callbacks: {
+                                                        label: function(tooltipItem, chart) {
+                                                        var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                                                        return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                                                        }
+                                                    }
+                                                    }
+                                                }
+                                                });
+                                            </script>
+                                        </canvas>
                                     </div>
                                 </div>
                             </div>

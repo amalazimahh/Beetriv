@@ -5,10 +5,24 @@ session_start();
 require_once "../connection.php";
     $email = $_SESSION['email'];
 
-    $result = "SELECT * FROM users";
+    $select = "SELECT * FROM users WHERE email = 'admin@beetriv.com' ";
+    $statement = $conn->prepare($select);
+    $statement->execute();
+    $rowAdmin = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    $result = "SELECT * FROM users WHERE email != 'admin@beetriv.com' ";
     $handle = $conn->prepare($result);
     $handle->execute();
     $row = $handle->fetchAll(PDO::FETCH_ASSOC);
+
+    if(isset($_POST['delete'])) {
+        $id = $_POST['id'];
+
+        $del = $conn->prepare("DELETE FROM users WHERE user_id = '$id'");
+        $del->execute();
+
+        echo "<meta http-equiv='refresh' content='0'>";
+    }
 
 ?>
 
@@ -23,7 +37,7 @@ require_once "../connection.php";
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Sales</title>
+    <title>Users</title>
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -33,6 +47,11 @@ require_once "../connection.php";
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <style>
+        .bg-gradient{
+            background-color: #ffcd39;
+        }
+    </style>
 
 </head>
 
@@ -42,7 +61,7 @@ require_once "../connection.php";
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -136,26 +155,16 @@ require_once "../connection.php";
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['img']); ?>">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <?php foreach($rowAdmin as $admin){?>
+                                    <img class="img-profile rounded-circle"
+                                    src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($admin['img']);?>">
+                                <?php }?>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
+                                
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -174,6 +183,19 @@ require_once "../connection.php";
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Users</h1>
+                        <!-- <div class="form-inline">
+                            <form method="post">
+                                <?php if( isset($_POST['add']) ): ?>
+                                    <input type="text" name="name" class="form-control">
+                                    <input type="text" name="name" class="form-control">
+                                <?php endif; ?>
+                                <button type="submit" class="btn btn-outline-success" name="add">Add New User 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div> -->
                     </div>
 
                     <!-- Content Row -->
@@ -187,7 +209,7 @@ require_once "../connection.php";
                                     <th scope="col"></th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Display Name</th>
-                                    <th scope="col">Verification Code</th>
+                                    <th scope="col">Type</th>
                                     <th scope="col">Date Joined</th>
                                     <th scope="col">Tools</th>
                                     </tr>
@@ -198,12 +220,24 @@ require_once "../connection.php";
                                     <th scope="row"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($user['img']); ?>" class="rounded" style="width:60px;"></th>
                                     <td><?php echo $user['email'];?></td>
                                     <td><?php echo $user['username'];?></td>
-                                    <td><?php echo $user['vcode'];?></td>
+                                    <td><?php echo $user['type'];?></td>
                                     <td><?php echo date('M d, Y', strtotime($user['created_at']));?></td>
-                                    <td>@mdo</td>
+                                    <td>
+                                        <form method="post">
+                                            <input type="hidden" value="<?php echo $user['user_id']; ?>" name="id">
+                                            <button type="submit" class="btn btn-outline-danger" name="delete">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </td>
                                     </tr>
+
+                                    <?php }?>
+                                    
                                 </tbody>
-                                <?php }?>
                                 </table>
                             </div>
                         </div>
