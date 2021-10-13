@@ -276,7 +276,7 @@ else
                     $select1 = "SELECT * FROM paypal_details WHERE 1";
                     $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
                     }
-                    //echo "<meta http-equiv='refresh' content='0'>";
+                    echo "<meta http-equiv='refresh' content='0'>";
 
 
             }catch (Exception $e){
