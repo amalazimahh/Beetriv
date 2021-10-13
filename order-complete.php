@@ -4,6 +4,8 @@ session_start();
 require_once "connection.php";
 $email = $_SESSION['email'];
 
+$payId = $_GET['pay'];
+
     //cara install phpmailer
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
@@ -64,14 +66,15 @@ if($statement1->rowCount() == 1)
               'stat' => $status,
               'contact_no' => $row1['phone_number'],
               'payment_mthd' => $payment_mthd,
-              'payment_stat' => $paymentStat
+              'payment_stat' => $paymentStat,
+              'payId' => $payId
                ];
             // $test1 = [
             //     'user_id' => $row1['user_id']
             //    ];
                
-            $sqlDetails = 'insert into order_details (request_id,prd_id, prd_name, prd_price, prd_qty, user_id, email, username, stat, contact_no, payment_mthd, payment_stat) 
-            values(:order_id,:product_id,:product_name,:product_price,:qty,:user_id,:email,:username,:stat,:contact_no,:payment_mthd,:payment_stat) ';
+            $sqlDetails = 'insert into order_details (request_id,prd_id, prd_name, prd_price, prd_qty, user_id, email, username, stat, contact_no, payment_mthd, payment_stat, payId) 
+            values(:order_id,:product_id,:product_name,:product_price,:qty,:user_id,:email,:username,:stat,:contact_no,:payment_mthd,:payment_stat, :payId) ';
 
             $orderDetailStmt = $conn->prepare($sqlDetails);
             
