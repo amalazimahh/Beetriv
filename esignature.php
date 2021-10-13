@@ -30,7 +30,7 @@
 
     $today = date('Y-m-d');
 
-    echo $name2;
+    //echo $name2;
     if(($name) == 'pending'){
     //add code to save details to receipt table
         if(isset($_POST['submit'])){
@@ -193,6 +193,17 @@
     <title>Digital Signature for Deliveries</title>
 
     <style>
+        @media (max-width: 800px) {
+            .prd-flex-2{
+                flex-direction: column;
+            }
+            .prd-flex{
+                flex-direction: column;
+            }
+            .prd-grid{
+                flex-direction: column;
+            }
+        }
         .prd-grid{
         display: flex;
         /* width: 60%; */
@@ -217,6 +228,13 @@
         #sigRun canvas{
             width: 100% !important;
             height: auto;
+        }
+
+        .submitBtn{
+            text-align: center;
+            margin: auto;
+            width: 50%;
+            padding: 10px;
         }
     </style>
 </head>
@@ -283,11 +301,11 @@
                         <tr>
                             <?php foreach($row as $product){?>
                             <td>
-                                <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;">
+                                <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>" class="img-thumbnail" style="width:90px;">
                                 <?php echo $product['prd_name'];?>         
                             </td>
                             <td>
-                                [Seller Name]
+                                <?php echo $product['display_name']; ?>
                             </td>
                             <td>
                                 $<?php echo $product['prd_price'];?>
@@ -301,16 +319,7 @@
                             </td>
                             <?php }?>
                         </tr>
-                        <tr class="border-top border-bottom">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <strong>
-                                </strong>
-                            </td>
-                            <td><strong>$<?php echo $totalSum; ?></strong></td>
-                        </tr> 
+                         
                     </tbody>
                 </table>
 
@@ -322,31 +331,32 @@
                 <input type="hidden" name="product_mthd" value="<?php echo $row1['payment_mthd']?>">
                 <input type="hidden" name="product_stat" value="Completed">
 
-            <!-- Retrieve customer's signature -->
-            <div class="prd-grid">
-            <div class="prd-flex">
-                <label class="" for="">Customer Signature:</label>
-                <br/>
-                <div id="sigCust" ></div>
-                <br/>
-                <button id="erase">Clear Signature</button>
-                <textarea id="signature65" name="custSigned" style="display: none"></textarea>
-            </div>
+                <!-- Retrieve customer's signature -->
+                <div class="prd-grid">
+                    <div class="prd-flex">
+                        <label class="" for="">Customer Signature:</label>
+                        <br/>
+                        <div id="sigCust" ></div>
+                        <br/>
+                        <button class="btn btn-outline-dark flex-shrink-0" id="erase">Clear Signature</button>
+                        <textarea id="signature65" name="custSigned" style="display: none"></textarea>
+                    </div>
 
-            <!-- Retrieve runner's signature -->
-            <div class="prd-flex-2">
-                <label class="" for="">Runner Signature:</label>
-                <br/>
-                <div id="sigRun" ></div>
-                <br/>
-                <button id="erase">Clear Signature</button>
-                <textarea id="signature64" name="runnerSigned" style="display: none"></textarea>
-            </div>
-            </div>
-            <br>
-            <button name="submit">Submit</button>
-        </form>
+                    <!-- Retrieve runner's signature -->
+                    <div class="prd-flex-2">
+                        <label class="" for="">Runner Signature:</label>
+                        <br/>
+                        <div id="sigRun" ></div>
+                        <br/>
+                        <button class="btn btn-outline-dark flex-shrink-0" id="erase1">Clear Signature</button>
+                        <textarea id="signature64" name="runnerSigned" style="display: none"></textarea>
+                    </div>
+                </div>
 
+                <div class="submitBtn">
+                        <button class="btn btn-outline-dark flex-shrink-0" name="submit">Submit</button>
+                    </div>
+            </form>
         </div>
 
             <script type="text/javascript">
@@ -366,7 +376,7 @@
                     syncField: '#signature64', 
                     syncFormat: 'PNG'
                 });
-                $('#erase').click(function(e) {
+                $('#erase1').click(function(e) {
                     e.preventDefault();
                     sigRun.signature('clear');
                     $("#signature64").val('');
