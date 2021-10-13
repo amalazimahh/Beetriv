@@ -12,7 +12,7 @@ $statement = $conn->prepare($select);
 $statement->execute();
 $row = $statement->fetchAll(PDO::FETCH_ASSOC);
 //Select Receipt for database
-$result = "SELECT * FROM order_details";
+$result = "SELECT * FROM order_details WHERE email='$email'";
 $statement = $conn->prepare($result);
 $statement->execute();
 $row1 = $statement->fetchAll(PDO::FETCH_ASSOC);
