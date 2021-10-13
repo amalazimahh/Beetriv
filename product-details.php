@@ -889,7 +889,7 @@ else
                         <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
                             <span>BND$<?php echo $row['prd_price']?></span><br>
-                            <h10 class="lead"><?php echo $seller['fname']." ".$seller['lname'] ?></h10>
+                            <h10 class="lead"><?php echo $seller['username'];?></h10>
                         </div>
                         <div class="pb-5">
                         <textarea class="lead" style="width:700px;height:200px;background-color:transparent;border:0px;" disabled><?php echo $row['prd_desc']?></textarea>
