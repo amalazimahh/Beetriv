@@ -276,7 +276,7 @@ else
                     $select1 = "SELECT * FROM paypal_details WHERE 1";
                     $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
                     }
-                    //echo "<meta http-equiv='refresh' content='0'>";
+                    echo "<meta http-equiv='refresh' content='0'>";
 
 
             }catch (Exception $e){
@@ -825,10 +825,10 @@ else
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bid</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                            <li><a class="dropdown-item" href="bid-store.php">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Active Bid</a></li>
-                                <li><a class="dropdown-item" href="#!">Ending Soon</a></li>
+                                <li><a class="dropdown-item" href="bid-store.php">Active Bid</a></li>
+                                <li><a class="dropdown-item" href="bid-ending.php">Ending Soon</a></li>
                             </ul>
                         </li>
                     </ul>
