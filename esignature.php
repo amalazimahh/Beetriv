@@ -40,6 +40,7 @@
             $prdPrice       =$_POST['product_price'];
             $prdStat        =$_POST['product_stat'];
             $paymentMthd    =$_POST['product_mthd'];
+            $notes          =$_POST['notes'];
 
             // $folderPath     = "img/esignature/";
             // For customer signature
@@ -62,7 +63,7 @@
             // $insert =$conn->query("INSERT INTO receipts (prd_id,prd_name,prd_qty,prd_price,prd_stats,payment_mthd,custSigned,runSigned,sales_date)
             // VALUE ('$prdID','$prdName','$prdQty','$prdPrice','$prdStat','$paymentMthd','$image_type1','$image_type2','$today')");
 
-            $update="UPDATE order_details SET stat='completed', payment_stat='paid', custSigned='$image_type1', runSigned='$image_type2', sales_date='$today' WHERE id='$id' ";
+            $update="UPDATE order_details SET stat='completed', payment_stat='paid', custSigned='$image_type1', runSigned='$image_type2', sales_date='$today', notes='$notes' WHERE id='$id' ";
             $runUpdate=$conn->prepare($update);
             $runUpdate->execute();
             //update order_details table
@@ -236,6 +237,60 @@
             width: 50%;
             padding: 10px;
         }
+
+        /* For additional notes textarea style */
+
+        .wrap-input100 {
+        width: 100%;
+        position: relative;
+        border: 1px solid #e6e6e6;
+        border-radius: 13px;
+        padding: 10px 30px 9px 22px;
+        margin-bottom: 20px;
+        }
+
+        .label-input100 {
+        font-family: Roboto,Helvetica,Arial,sans-serif;
+        font-size: 12px;
+        color: #393939;
+        line-height: 1.5;
+        text-transform: uppercase;
+        }
+
+        .input100 {
+        display: block;
+        width: 100%;
+        background: transparent;
+        font-family: Roboto,Helvetica,Arial,sans-serif;
+        font-size: 18px;
+        color: #555555;
+        line-height: 1.2;
+        padding-right: 15px;
+        }
+
+
+        /*---------------------------------------------*/
+        input.input100 {
+        height: 20px;
+        }
+
+
+        textarea.input100 {
+        min-height: 90px;
+        padding-top: 9px;
+        padding-bottom: 13px;
+        border: none;
+        outline: none;
+        }
+
+
+        .input100:focus + .focus-input100::before {
+        width: 100%;
+        }
+
+        .has-val.input100 + .focus-input100::before {
+        width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -351,6 +406,11 @@
                         <button class="btn btn-outline-dark flex-shrink-0" id="erase1">Clear Signature</button>
                         <textarea id="signature64" name="runnerSigned" style="display: none"></textarea>
                     </div>
+                </div>
+
+                <div class="wrap-input100">
+                    <span class="label-input100">Additional Notes</span>
+                    <textarea class="input100" name="notes" placeholder="Your leftover message here..."></textarea>
                 </div>
 
                 <div class="submitBtn">
