@@ -16,33 +16,44 @@ $result = $conn->query($selectproduct);
 $result->execute();
 $rowProduct = $result->fetchAll(PDO::FETCH_ASSOC);
 
+foreach($rowProduct as $item){
 
+$idd = $item['prd_id'];
 
 if(isset($_POST['saves'])){
     
     $prd_price      = $_POST['prd_price'];
-    $new_price      = $_POST['new_price'];
+    $old_price      = $_POST['old_price'];
     $prd_category   = $_POST['prd_category'];
     $prd_discount   = $_POST['prd_discount'];
     $start_promo    = $_POST['start_promo'];
     $end_promo      = $_POST['end_promo'];
 
-    // $formula  = int($prd_price/100) * $prd_discount;
-    // $newprice = $prd_price - $formula;
     
-    $pdoQuery = ("UPDATE product SET prd_price = '$new_price', new_price = '$prd_price', prd_category = '$prd_category', 
-    prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE display_name='$email'");
-    $pdoQuery_run = $conn->prepare($pdoQuery);
-    $pdoQuery_run->execute();
+    $formula  = ($item['prd_price']/100) * $prd_discount;
+    $newprice = $prd_price - $formula;
+
+
+    foreach ($item as $newItem){
+
+        $pdoQuery = ("UPDATE product SET prd_price = '$formula', old_price = '$prd_price', prd_category = '$prd_category', 
+        prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE prd_id='$idd'");
+        $pdoQuery_run = $conn->prepare($pdoQuery);
+        $pdoQuery_run->execute();   
+
+    // $pdoQuery = ("UPDATE product SET prd_price = '$old_price', old_price = '$prd_price', prd_category = '$prd_category', 
+    // prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE prd_id='$id'");
+    // $pdoQuery_run = $conn->prepare($pdoQuery);
+    // $pdoQuery_run->execute();
     // header('location: seller-dashboard.php ');
-
     }
-
-    
+}
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beetriv - Discount Promotion</title>
@@ -77,23 +88,9 @@ if(isset($_POST['saves'])){
 	   			});
 	  		});
           </script> -->
-          <style>
-               #nnv{
-        text-align: center;
-        font-size: 24px;
-        color: #000000;
-        width: 100%;
-        padding: 15px;
-        border:0px;
-        outline: none;
-        cursor: pointer;
-        margin-top: 5px;
-        border-bottom-right-radius: 10px;
-        border-bottom-left-radius: 10px;
-        }
-          </style>
 </head>
 <body>
+    
 <!-- Navigation-->
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
             <div class="container px-4 px-lg-5">
@@ -122,16 +119,14 @@ if(isset($_POST['saves'])){
                             </ul>
                         </li>
                     </ul>
-                    <form action = "store.php" method = "post">
-                        <ul class="nav justify-content-end">
-                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php"> -->
-                    <li><button id="nnv" type="submit" name="wishlist" class="bi bi-heart" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i></li>
-                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php"> -->
-                    <li><button id="nnv" type="submit" name="cart" class="bi bi-cart4" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i></button></li>
-                    <li><button id="nnv" type="submit" name="profile" class="nav-item" style='background-color:transparent'><i class="bi-person-circle"></i></button></li>
-                    <li><button id="nnv" type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button></li>
-                    </ul>
-                    </form>
+                    <ul class="nav justify-content-end">
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
+                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
+                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
+                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
+                    </a></li>
                     </ul>
                 </div>
             </div>
@@ -165,28 +160,33 @@ if(isset($_POST['saves'])){
                 <div class="row mt-2">
                     <input type="hidden" name="product" value="<?php echo $id; ?>">
                     <div class="col-md-12"><label class="labels">Discount Percentage To All</label><input type="text" class="form-control" placeholder="" id="prd_discount" name="prd_discount" require></div>
+                    <!-- <div class="col-md-12"><label class="labels">New Price</label><input type="number" class="form-control" placeholder="New Price" id="old_price" name="old_price" step="0.1" disabled></div> -->
                     <?php foreach ($rowProduct as $product){?>
+                        
                     <?php echo $product['prd_price']?>
+                    <?php echo $product['old_price']?>
                     <input type="hidden" name="prd_price" value="<?php echo $product['prd_price']?>">
-                    <input type="hidden" name="new_price" value="<?php echo $product['new_price']?>">
-                    <input  type="hidden" id="prd_price" name="prd_price" disabled></div> 
-                    <input type="hidden" placeholder="New Price" id="new_price" name="new_price" step="0.1" disabled></div>
-                    <script>
+                    <input type="hidden" name="old_price" value="<?php echo $product['old_price']?>">
+                    <!-- <input  type="hidden" id="prd_price" name="prd_price" disabled></div>  -->
+                    <!-- <input type="hidden" placeholder="New Price" id="old_price" name="old_price" step="0.1" disabled></div> -->
+                    
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                        <script>
                     $(document).on("keyup", "#prd_discount", function() {
                         var oriPrice = "<?php echo $product['prd_price']; ?>";
                         var percentage = $('#prd_discount').val();
                         var formula = (percentage / 100).toFixed(2); 
                         var multiply = oriPrice * formula;
                         var discount = oriPrice - multiply;
-                        $("input[name=new_price]").val(discount);
+                        $("input [name=old_price]").val(discount);
+                        
 
                         console.log(percentage);
                         console.log(oriPrice);
                         console.log(discount);
                     });
-                </script>
+                     </script>
                     <?php } ?>
-                    
                     
                     <div class="col-md-12"><label class="labels">Category</label>
                     <select name="prd_category" class="form-control">
@@ -196,7 +196,7 @@ if(isset($_POST['saves'])){
                 <div class="col-md-12"><label class="labels">End Promotions</label><input type="date" class="form-control" placeholder="End Date" id="end_promo" name="end_promo" autocomplete="off" require></div>
                         <div class="mt-5 text-center"><input class="btn btn-warning profile-button" type="submit" value="Save Product" name="saves" ></div>
                     </div>
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                    
             
         </form>
                     </div>
