@@ -651,7 +651,7 @@ $rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
               <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($promo['prd_img']); ?>">
               <input type="hidden" name="ide" value=<?php echo $promo['prd_id'];?> >
                <h4><?php echo $promo['prd_name']; ?></h4>
-              <h6 class="text-muted text-decoration-line-through">$<?php echo $promo['new_price']; ?></h6><h6>$<?php echo $promo['prd_price']; ?></h6>
+              <h6 class="text-muted text-decoration-line-through">$<?php echo $promo['old_price']; ?></h6><h6>$<?php echo $promo['prd_price']; ?></h6>
               <a class="text-warning" href="product-details.php?product=<?php echo $promo['prd_id'];?>">View</a>
                    <button class="buy-prd btn-warning">Add to cart</button>
                </form>  

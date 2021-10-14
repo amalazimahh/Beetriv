@@ -16,7 +16,7 @@
     $type = $row1['type'];
     if (isset($_POST['profile'])){
     if(($type) == 'seller'){
-        header('location: seller-dashboard.php');
+        header('location: seller-profile.php');
     }
     else if(($type) == 'customer'){
         header('location: user-profile.php');

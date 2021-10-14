@@ -17,6 +17,25 @@ $selectproduct = "SELECT * FROM product WHERE display_name = '$email'";
 
 $result = $conn->query($selectproduct);
 
+// disable seller features
+$sellers = $conn->query("SELECT * FROM users WHERE email = '$email'");
+    $seller = $sellers->fetch(PDO::FETCH_ASSOC);
+$time_register = $seller['seller_register'];
+$seller_period = date('Y-m-d H:i:s', strtotime("$time_register +1 month"));
+// echo $seller_period;
+//echo $seller_period;
+
+date_default_timezone_set('Asia/Brunei');
+$dateTime = new DateTime();
+
+if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
+    //$updte = $conn->query("UPDATE users SET type='customer', seller_period='expired' WHERE email='$email'");
+    $pdoQuery = ("UPDATE users SET type='customer', seller_period='expired' WHERE email='$email'");
+    $pdoQuery_run = $conn->prepare($pdoQuery);
+    $pdoQuery_run->execute();
+    
+  }
+
 ?>
 
 <!DOCTYPE html>
