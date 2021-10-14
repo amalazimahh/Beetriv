@@ -40,6 +40,71 @@ if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
     $pdoQuery = ("UPDATE users SET type='customer', seller_period='expired' WHERE email='$email'");
     $pdoQuery_run = $conn->prepare($pdoQuery);
     $pdoQuery_run->execute();
+
+    //Mail Set up
+    $mail= new PHPMailer(true);
+
+    try {
+        
+        //Enable debug output
+        $mail->SMTPDebug = 0;
+
+        //Send using SMTP
+        $mail->isSMTP();
+
+        //Set the SMTP server 
+        $mail->Host = 'smtp.gmail.com';
+
+        //Enable SMTP authentication
+        $mail->SMTPAuth = true;
+
+        //SMTP username
+        $mail->Username = 'ayamketupat02@gmail.com';
+
+        //SMTP password
+        $mail->Password = 'k4k5dpkk';
+
+        //SMTP username
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+        //SMTP PORT
+        $mail->Port = 587;
+
+        //Recipients
+        $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+
+        //add recipient
+        $mail->addAddress($email,$username);
+
+        //Set email format to HTML
+        $mail->isHTML(true);
+
+        //converting text to html
+        // $mail .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+        $mail->Subject = 'Seller Account Expired';
+        $mail->Body    = '<p>We are sorry to inform that your Seller account has expired but worry not, you may retrieve back your Seller account by upgrading your account. </p><p>Thank you for trusting us!</p>';
+        //<a href="http://localhost/Email%20Authentication/registration.php">Reset your password</a> 
+
+        $mail->send();
+
+        $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+        //mysql_query($conn, $sql);
+        // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
+
+        // if($result){
+        //     echo 'Success';
+        // }else{
+        //     echo 'Error';
+        // }
+
+    }catch (Exception $e){
+        echo "Message cannot send, Error Mail: {$mail->ErrorInfo}";
+
+    
+
+    }
+
     
   }
 
