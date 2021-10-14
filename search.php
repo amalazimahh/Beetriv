@@ -4,7 +4,7 @@ require_once "connection.php";
 
 
 
-if (isset($_POST['search_item'])){
+if (!empty($_POST['search_item'])){
     $search = $_POST["search"];
 
     // Get image data from database
@@ -12,8 +12,8 @@ if (isset($_POST['search_item'])){
     $handle = $conn->prepare($result);
     $handle->execute();
     $row = $handle->fetchAll(PDO::FETCH_ASSOC);
-
-    }
+    } 
+       
 
 ?>
 
@@ -335,7 +335,7 @@ if (isset($_POST['search_item'])){
         </div>
 	</div>
 </div>
-        <script>
+        <!-- <script>
         $(document).ready(function(e){
     $('.search-panel .dropdown-menu').find('a').click(function(e) {
 		e.preventDefault();
@@ -345,7 +345,7 @@ if (isset($_POST['search_item'])){
 		$('.input-group #search_param').val(param);
 	});
 });
-        </script>
+        </script> -->
 
         <!-- Section-->
         <section class="py-5">
@@ -355,10 +355,13 @@ if (isset($_POST['search_item'])){
            <!-- Search Function -->
                <?php 
                 
-                $searchs = $conn->query("SELECT * FROM product WHERE prd_name='$search' || prd_tag='$search'");
+                $searchs = $conn->query("SELECT * FROM product WHERE prd_name like '%".$search."%'");
                 $rows = $searchs->fetchAll(PDO::FETCH_ASSOC);
                 $searchs->execute();
-                 
+                if (!$rows) {
+                    echo "<h3>Item Not Found</h3";
+                } else {
+
                while($rows = $searchs->fetch()){ ?>
               <div class="content">
               <form method="POST"></form>
@@ -370,6 +373,7 @@ if (isset($_POST['search_item'])){
                    <button class="buy-prd btn-warning">Add to cart</button>
                </form>  
                  </div>
+                 <?php } ?>
                 <?php } ?>
                </div>
     </div>
