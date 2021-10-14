@@ -163,8 +163,7 @@ if(isset($_POST['saves'])){
                     <!-- <div class="col-md-12"><label class="labels">New Price</label><input type="number" class="form-control" placeholder="New Price" id="old_price" name="old_price" step="0.1" disabled></div> -->
                     <?php foreach ($rowProduct as $product){?>
                         
-                    <?php echo $product['prd_price']?>
-                    <?php echo $product['old_price']?>
+                   
                     <input type="hidden" name="prd_price" value="<?php echo $product['prd_price']?>">
                     <input type="hidden" name="old_price" value="<?php echo $product['old_price']?>">
                     <!-- <input  type="hidden" id="prd_price" name="prd_price" disabled></div>  -->
