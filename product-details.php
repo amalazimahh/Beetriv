@@ -11,10 +11,11 @@
     //Selecting different type of users
     $selectprofile = $conn->query("SELECT * FROM users WHERE email='$email'");
     $row1 = $selectprofile->fetch(PDO::FETCH_ASSOC);
+
     $type = $row1['type'];
     if (isset($_POST['profile'])){
     if(($type) == 'seller'){
-        header('location: seller-dashboard.php');
+        header('location: seller-profile.php');
     }
     else if(($type) == 'customer'){
         header('location: user-profile.php');
@@ -888,7 +889,8 @@ else
                         <div class="small mb-1"><?php echo $row['prd_category']?></div>
                         <h1 class="display-5 fw-bolder"><?php echo $row['prd_name']?></h1>
                         <div class="fs-5 mb-5">
-                            <span>BND$<?php echo $row['prd_price']?></span><br>
+                        <span class="text-muted text-decoration-line-through"><?php echo $row['old_price']?></span><br><span>BND$<?php echo $row['prd_price']?></span><br>
+
                             <h10 class="lead"><?php echo $seller['username'];?></h10>
                         </div>
                         <div class="pb-5">
@@ -910,9 +912,9 @@ else
                                     <i class="bi-bookmark-heart-fill"></i>
                                     Wishlist
                                 </button>
-                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="contact" value="contact">
+                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="contact" value="">
                                     <i class="bi-chat-fill"></i>
-                                    Contact
+                                    <?php echo $row['phone_number']?>
                                 </button>
                             </div>
                         </form>

@@ -9,7 +9,7 @@ $row1 = $result1->fetch(PDO::FETCH_ASSOC);
 $type = $row1['type'];
 
 if(($type) == 'seller'){
-    header('location: seller-dashboard.php');
+    header('location: seller-profile.php');
 }
 else if(($type) == 'runner'){
     header('location: runner-order.php');

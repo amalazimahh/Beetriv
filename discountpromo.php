@@ -20,14 +20,14 @@ $rowProduct = $result->fetchAll(PDO::FETCH_ASSOC);
 if(isset($_POST['saves'])){
 
     $prd_price      = $_POST['prd_price'];
-    $new_price      = $_POST['new_price'];
+    $old_price      = $_POST['old_price'];
     $prd_category   = $_POST['prd_category'];
     $prd_discount   = $_POST['prd_discount'];
     $start_promo    = $_POST['start_promo'];
     $end_promo      = $_POST['end_promo'];
   
     
-    $pdoQuery = ("UPDATE product SET prd_price = '$new_price', new_price = '$prd_price', prd_category = '$prd_category', 
+    $pdoQuery = ("UPDATE product SET prd_price = '$old_price', old_price = '$prd_price', prd_category = '$prd_category', 
     prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE prd_id = '$id' ");
     $pdoQuery_run = $conn->prepare($pdoQuery);
     $pdoQuery_run->execute();
@@ -190,7 +190,7 @@ if(isset($_POST['saves'])){
             var formula = (percentage / 100).toFixed(2); 
             var multiply = oriPrice * formula;
             var discount = oriPrice - multiply;
-            $("input[name=new_price]").val(discount);
+            $("input[name=old_price]").val(discount);
 
             console.log(percentage);
             console.log(oriPrice);
@@ -200,14 +200,14 @@ if(isset($_POST['saves'])){
             <!-- discount form -->
             <form action="" method="POST">
             <input type="hidden" name="prd_price" value="<?php echo $product['prd_price']?>">
-            <input type="hidden" name="new_price" value="<?php echo $product['new_price']?>">
+            <input type="hidden" name="old_price" value="<?php echo $product['old_price']?>">
                 <div class="row mt-3">
                 <h4 class="text-right">Discount Promotion</h4><hr>
                 <div class="col-md-12"><label class="labels">Discount Percentage</label><input  type="number" class="form-control" placeholder="Discount Percentage" id="prd_discount" name="prd_discount" ></div>
                 <div class="col-md-12"><label class="labels">Original Price</label><input  type="number" class="form-control" value="<?php echo $product['prd_price']; ?>" id="prd_price" name="prd_price" disabled></div> 
 
             </div>
-            <div class="col-md-12"><label class="labels">New Price</label><input type="number" class="form-control" placeholder="New Price" id="new_price" name="new_price" step="0.1" disabled></div>
+            <div class="col-md-12"><label class="labels">New Price</label><input type="number" class="form-control" placeholder="New Price" id="old_price" name="old_price" step="0.1" disabled></div>
 
                 <div class="col-md-12"><label class="labels">Start Promotions</label><input type="date" class="form-control" placeholder="Start Date" id="start_promo" name="start_promo" autocomplete="off" require></div>
                 <div class="col-md-12"><label class="labels">End Promotions</label><input type="date" class="form-control" placeholder="End Date" id="end_promo" name="end_promo" autocomplete="off" require></div>
