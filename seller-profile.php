@@ -14,10 +14,34 @@ $statement = $conn->prepare($select);
 $statement->execute();
 $row = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+  // Fetch seller_review 
+  $rateQuery = $conn->prepare("SELECT * FROM seller_review LEFT JOIN users ON users.user_id=seller_review.user_id WHERE email = '$email' ");
+  $rateQuery->execute();
+  $rates = $rateQuery->fetchAll(PDO::FETCH_ASSOC);
+
 // display item sell
 $selectproduct = "SELECT * FROM product WHERE display_name = '$email'";
 
 $result = $conn->query($selectproduct);
+
+// disable seller features
+$sellers = $conn->query("SELECT * FROM users WHERE email = '$email'");
+    $seller = $sellers->fetch(PDO::FETCH_ASSOC);
+$time_register = $seller['seller_register'];
+$seller_period = date('Y-m-d H:i:s', strtotime("$time_register +1 month"));
+// echo $seller_period;
+//echo $seller_period;
+
+date_default_timezone_set('Asia/Brunei');
+$dateTime = new DateTime();
+
+if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
+    //$updte = $conn->query("UPDATE users SET type='customer', seller_period='expired' WHERE email='$email'");
+    $pdoQuery = ("UPDATE users SET type='customer', seller_period='expired' WHERE email='$email'");
+    $pdoQuery_run = $conn->prepare($pdoQuery);
+    $pdoQuery_run->execute();
+    
+  }
 
 ?>
 
@@ -39,6 +63,7 @@ $result = $conn->query($selectproduct);
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
+        <link rel="stylesheet" href="css/feedback-form.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
 
@@ -77,10 +102,67 @@ body {
 .green {
     color: green
 }
+
+.rate2:not(:checked) > input {
+  position:absolute;
+  top:-9999px; 
+} 
+.rate2:not(:checked) > label {
+  float:center;
+  width:30px;
+  overflow:hidden;
+  white-space:nowrap;
+  cursor:pointer;
+  font-size:30px;
+  color:#ccc;
+}
+.rate2:not(:checked) > label:before {
+  content: '★ ';
+}
+.rate2 > input:checked ~ label {
+  color: #ffc700;    
+}
+.rate2:not(:checked) > label:hover,
+.rate2:not(:checked) > label:hover ~ label {
+  color: #deb217;  
+}
+.rate2 > input:checked + label:hover,
+.rate2 > input:checked + label:hover ~ label,
+.rate2 > input:checked ~ label:hover,
+.rate2 > input:checked ~ label:hover ~ label,
+.rate2 > label:hover ~ input:checked ~ label {
+  color: #c59b08;
+}
+
+h2.centerh2 {
+  text-align: center;
+}
+
+.rate-star{
+  width: 120px; 
+                height: 24px;
+                background: url(img/rate-stars.png) no-repeat;
+                background-size: cover;
+                position: absolute;
+}
+.rate-bg{
+                height: 15px;
+                background-color: #ffbe10;
+
+            }
+           
+<style>
+.checked {
+  color: orange;
+}
+
+ul, li {
+    display:inline
+}
     </style>
 </head>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <body>
     <!-- Navigation-->
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
@@ -159,22 +241,53 @@ body {
                 <div class="h5 mt-4">
                   <i class="ni business_briefcase-24 mr-2"></i><strong>Personal Information</strong>
                 </div>
-                <div>
                   <i class="ni education_hat mr-2"></i><strong>Phone Number</strong> <?php echo $seller['phone_number'];?>
                   <i class="ni education_hat mr-2"></i><strong>IC Number</strong> <?php echo $seller['ic_number'];?>
                   <i class="ni education_hat mr-2"></i><strong>IC Colour</strong> <?php echo $seller['ic_color'];?>
+                  <p class="text-align-center">Disclaimer & Policies</p>
                 </div>
                 <hr class="my-4">
-                <p class="text-align-center">Disclaimer & Policies</p>
+                
               </div>
+              <!-- feedback -->
+              <h2 class="centerh2">Feedbacks</h2>
+                    <?php foreach($rates as $review){ ?>
+                        <div class="wrap-input100" style="margin-top: 10px">
+                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($review['img']); ?>" class="rounded" style="width:40px;">
+                            <div class="result-container">
+                                <?php $reviewAvgCalc = $review['prd_quality'] + $review['seller_service'];
+                                        $reviewAvg = ($reviewAvgCalc/2)*10; ?>
+                            <p><?php echo $review['feedback']; ?></p>
+                            <p>by <?php echo $review['username']; ?></p>
+                                <div class="fa fa-star checked" 
+                                <?php 
+                                //counting stars
+                                for( $x = 0; $x < 4; $x++ )
+                                {
+                                    if( floor( $review['seller_service'] )-$x >= 2 )
+                                    { echo '<li><i class="fa fa-star checked"></i></li>'; }
+                                    elseif( $review['seller_service']-$x > 1 )
+                                    { echo '<li><i class="fa fa-star-half-o"></i></li>'; }
+                                    else
+                                    { echo '<li><i class="fa fa-star-o"></i></li>'; }
+                                }
+                                
+                                ; ?></div>
+                                
+                            </div>  
+                            <div class="rate-star">
+                        </div>
+                    <?php }?>
             </div>
+            
           </div>
         </div>
       </div>
+      
     </div>
   </div>
 <?php } ?>   
-
+                
 <!-- Selling Item -->
   <div class="container mt-3 px-2 pb-5">
       <h4 class="pb-3"><strong>Sell Item</strong></h4>
