@@ -54,6 +54,7 @@ if (isset($_POST['wishlist'])){
 
     $result = $conn->query("SELECT * FROM product WHERE prd_id = '$id'");
     $row = $result->fetch(PDO::FETCH_ASSOC);
+    $prod_qty = $row['prd_qty'];
 
     // Fetch seller_review 
     $rateQuery = $conn->prepare("SELECT * FROM seller_review LEFT JOIN users ON users.user_id=seller_review.user_id WHERE prd_id = '$id' ");
@@ -902,9 +903,17 @@ else
                         </div>    
                             <div class="d-flex pb-4" >
                                 <input type="hidden" name="product_id" value="<?php echo $row['prd_id']?>">
-                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart">
+                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart" <?php if ($prod_qty == '0'){ ?> disabled placeholder="outofstock"; <?php   } ?> onclick="addtocart(<?php echo $row['prd_id']?>)" >
+                                <!-- <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_cart" value="add to cart"> -->
+                                <?php if ($prod_qty == '0'){ ?>
+                                    <i class="bi-cart-fill me-1"></i>
+                                    Out of Stock
+                                    <?php }else{ ?> 
+
                                     <i class="bi-cart-fill me-1"></i>
                                     Add to cart
+                                    <?php } ?>
+                                    
                                 </button>
                                 <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="add_to_wishlist" value="add to wishlist">
                                     <i class="bi-bookmark-heart-fill"></i>
