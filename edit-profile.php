@@ -21,12 +21,19 @@ if(isset($_POST['save'])){
         $fileName = basename($_FILES['img']['name']);
         $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
+    // $userId  = $_POST['userId'];
     $fname      = $_POST['fname'];
     $lname      = $_POST['lname'];
     $username   = $_POST['username'];
     $emailEdit  = $_POST['email'];
     $phone      = $_POST['phone'];
     $bio        = $_POST['bio'];
+    $address    = $_POST['address'];
+    $province   = $_POST['province'];
+    $postcode   = $_POST['postcode'];
+    $disclaimer = $_POST['disclaimer'];
+    $policies   = $_POST['policies'];
+    $shipping   = $_POST['shipping'];
     $currentPwd = $_POST['currentPwd'];
     $newPwd     = $_POST['newPwd'];                             
     $confirmPwd = $_POST['confirmPwd'];
@@ -37,14 +44,29 @@ if(isset($_POST['save'])){
         $image = $_FILES['img']['tmp_name'];
         $imgContent = addslashes(file_get_contents($image));
     
+    
+        foreach($row as $userStatement){
+            if($userStatement['type'] == 'customer'){
+                $pdoQuery = ("UPDATE users SET email = '$emailEdit', username = '$username', phone_number = '$phone', 
+                fname = '$fname', lname = '$lname', bio = '$bio', img = '$imgContent', address = '$address', province = '$province', postcode = '$postcode' WHERE email = '$email' ");
+                $pdoQuery_run = $conn->prepare($pdoQuery);
+                $pdoQuery_run->execute();
+                header('location: edit-profile.php');
+            }
+            if($userStatement['type'] == 'seller'){
+                $updateSeller = ("UPDATE users SET email='$emailEdit', username= $username', phone_number='$phone', fname='$fname', lname='$lname', bio='$bio', img='$imgContent', disclaimer='$disclaimer', policies='$policies', shipping='$shipping' WHERE email='$email' ");
+                $updateSeller_run = $conn->prepare($updateSeller);
+                $updateSeller_run->execute();
+                header('location: seller-profile.php');
+            }
+        }
+    
     }
-    $pdoQuery = ("UPDATE users SET email = '$emailEdit', username = '$username', phone_number = '$phone', 
-    fname = '$fname', lname = '$lname', bio = '$bio', img = '$imgContent' WHERE email = '$email' ");
-    $pdoQuery_run = $conn->prepare($pdoQuery);
-    $pdoQuery_run->execute();
-    header('location: edit-profile.php');
-
     //notify function not yet
+
+    // Save address
+    // $insertAddress=$conn->query("INSERT INTO user_address (user_id, address, province, postcode) VALUES ('$userId','$address','$province', '$postcode')");
+
     }
 ?>
 <!DOCTYPE html>
@@ -134,6 +156,7 @@ if(isset($_POST['save'])){
                 <!-- <form action="edit-profile.php" method="post" enctype="multipart/form-data"> -->
                 <div class="row mt-2">
                     <input type="hidden" name="email" value="<?php echo $email; ?>">
+                    <input type="hidden" name="userId" value="<?php echo $user['user_id']; ?>">
                     <div class="col-md-6"><label class="labels">Firstname</label><input type="text" class="form-control" placeholder="Firstname" id="fname" name="fname" pattern="[a-zA-Z]{1,}" placeholder="First Name" required></div>
                     <div class="col-md-6"><label class="labels">Lastname</label><input type="text" class="form-control" placeholder="Lastname" id="lname" name="lname" pattern="[a-zA-Z]{1,}" placeholder="Last Name" required></div>
                 </div>
@@ -156,6 +179,28 @@ if(isset($_POST['save'])){
                     <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" class="form-control" id="phone" name="phone" placeholder="<?php echo $user['phone_number']; ?>" required></div>
                     <div class="col-md-12"><label class="labels">Add Bio</label><input type="textarea" class="form-control form-control-user" placeholder= "Bio" id="bio" name="bio" placeholder= "Bio" required/></div><br>
                 </div>
+                <?php if($user['type'] == 'customer'){?>
+                <h4 class="text-right">Shipping Address</h4><hr>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Address</label><input type="text" class="form-control" id="address" name="address" placeholder="Enter your address.." required></div>
+                    <div class="col-md-6"><label class="labels">Province</label><input type="text" class="form-control" list="province" name="province" placeholder="Select province" required>
+                    <datalist id="province">
+                                        <option value = "Bandar Seri Begawan">
+                                        <option value = "Tutong">
+                                        <option value = "Kuala Belait">
+                                        <option value = "Temburong">
+                    </datalist>
+                    </div>
+                    <div class="col-md-6"><label class="labels">Postcode</label><input type="text" class="form-control" id="postcode" name="postcode" placeholder="Enter your postcode.." required></div>
+                </div>
+                <?php }?>
+                <?php if($user['type'] == 'seller'){?>
+                <h4 class="text-right">Extra Fields</h4><hr>
+                    <div class="col-md-12"><label class="labels">Disclaimer</label><textarea type="text" class="form-control" id="disclaimer" name="disclaimer" placeholder="Enter disclaimer" required></textarea></div>
+                    <div class="col-md-12"><label class="labels">Policies</label><textarea type="text" class="form-control" id="policies" name="policies" placeholder="Enter policies" required></textarea>
+                    </div>
+                    <div class="col-md-12"><label class="labels">Shipping Information</label><textarea type="text" class="form-control" id="shipping" name="shipping" placeholder="Enter your shipping information" required></textarea></div>
+                <?php }?>
                 <div class="row mt-3">
                 <h4 class="text-right">Change Password</h4><hr>
                 <div class="col-md-12"><label class="labels">Current Password</label><input type="password" class="form-control" placeholder="Current Password" id="currentpwd" name="currentPwd" pattern=".{8,25}" title="Required atleast 8 to 25 characters" placeholder= "Current Password" ></div>
