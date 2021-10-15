@@ -235,29 +235,29 @@ else
                 //Enable debug output
                 $mail->SMTPDebug = 0;
 
-                //Send using SMTP
+                 //Send using SMTP
                 $mail->isSMTP();
 
                 //Set the SMTP server 
-                $mail->Host = 'smtp.gmail.com';
+                $mail->Host = 'mail.beetriv.com';
 
                 //Enable SMTP authentication
                 $mail->SMTPAuth = true;
 
                 //SMTP username
-                $mail->Username = 'ayamketupat02@gmail.com';
+                $mail->Username = 'admin@beetriv.com';
 
                 //SMTP password
-                $mail->Password = 'k4k5dpkk';
+                $mail->Password = '4bx~~ZJ8HJyq';
 
                 //SMTP username
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->SMTPSecure = 'ssl';
 
                 //SMTP PORT
-                $mail->Port = 587;
+                $mail->Port = '290';
 
                 //Recipients
-                $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+                $mail->setFrom('admin@beetriv.com','Admin Beetriv');
 
                 //add recipient
                 $mail->addAddress($email,$username);
