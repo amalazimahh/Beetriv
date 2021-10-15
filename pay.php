@@ -229,6 +229,26 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
                         </td>
                     </tr>
                 <?php }?>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>Delivery charge</td>
+                  <td>$<?php foreach($row as $user){
+                      if($user['province'] == 'Bandar Seri Begawan'){
+                        echo $charge = 4;
+                      }
+                      if($user['province'] == 'Tutong'){
+                        echo $charge = 5;
+                      }
+                      if($user['province'] == 'Kuala Belait'){
+                        echo $charge = 6;
+                      }
+                      if($user['province'] == 'Temburong'){
+                        echo $charge = 5;
+                      }?>
+
+                  </td>
+                </tr>
                 <tr class="border-top border-bottom">
                     <td></td>
                     <td></td>
@@ -238,7 +258,8 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
                                 echo ($itemCounter==1)?$itemCounter.' item':$itemCounter.' items'; ?>
                         </strong>
                     </td>
-                    <td><strong>$<?php echo $totalCounter;?></strong></td>
+                    <td><strong>$<?php $totalSum = $totalCounter+$charge;
+                                        echo $totalSum;?></strong></td>
                 </tr> 
                 </tr>
             </tbody> 
@@ -246,7 +267,6 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
             <?php }?>
         </section>
 
-        <?php foreach($row as $user){ ?>
       <div class="checkout-form">
         <form class="needs-validation" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="row">
@@ -266,15 +286,25 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
               </div>
             </div>
 
-            <div class="col-md-5 mb-2">
+            <div class="col-md-6 mb-2">
               <label for="email">Email</label>
               <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="<?php echo $email ?>" disabled>
               
             </div>
-
-            <div class="col-md-5 mb-2">
+            
+            <div class="row">
+            <div class="col-md-4 mb-2">
               <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" value="<?php echo (isset($addressValue) && !empty($addressValue)) ? $addressValue:'' ?>"disabled>
+              <input type="text" class="form-control" id="address" name="address" value="<?php echo $user['address']; ?>"disabled>
+            </div>
+            <div class="col-md-3 mb-2">
+              <label for="address">Postcode</label>
+              <input type="text" class="form-control" id="address" name="address" value="<?php echo $user['postcode']; ?>"disabled>
+            </div>
+            <div class="col-md-3 mb-2">
+              <label for="address">Province</label>
+              <input type="text" class="form-control" id="address" name="address" value="<?php echo $user['province']; ?>"disabled>
+            </div>
             </div>
 
           <?php } ?>
@@ -350,7 +380,7 @@ $row = $statement->fetchAll(PDO::FETCH_ASSOC);
               return actions.order.create({
                   purchase_units:[{
                       amount: {
-                          value: '<?php echo $totalCounter?>'
+                          value: '<?php echo $totalSum;?>'
                       }
                   }]
               });
