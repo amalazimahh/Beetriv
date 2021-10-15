@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 require_once "connection.php";
-//$email = $_SESSION['email'];
+$email = $_SESSION['email'];
 //select db
 $result = "SELECT * FROM order_details";
 $statement = $conn->prepare($result);
@@ -13,6 +13,13 @@ $result1 = $conn->query("SELECT * FROM order_details");
 $row1 = $result1->fetch(PDO::FETCH_ASSOC);
 $name = $row1['username'];
 
+//if customer tries to access runner-order page.
+$rest = $conn->query("SELECT * FROM users WHERE email='$email'");
+$acc = $rest->fetch(PDO::FETCH_ASSOC);
+$valid = $acc['type'];
+if($valid == 'customer'){
+    header("location: store.php");
+}
 //to display per customer
 ?>
 
