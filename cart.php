@@ -2,6 +2,8 @@
     session_start();
     require_once('connection.php');
     $email = $_SESSION['email'];
+    error_reporting(0);
+    ini_set('display_errors', 0);
     // echo $email;
 
     if(isset($_GET['action'],$_GET['item']) && $_GET['action'] == 'remove')
