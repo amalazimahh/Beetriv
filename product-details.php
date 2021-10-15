@@ -892,7 +892,7 @@ else
                         <div class="fs-5 mb-5">
                         <span class="text-muted text-decoration-line-through"><?php echo $row['old_price']?></span><br><span>BND$<?php echo $row['prd_price']?></span><br>
 
-                        <a href ="seller-viewpage.php?profile=<?php echo $seller['username'];?>">
+                        <a style="text-decoration: none;" href ="seller-viewpage.php?profile=<?php echo $seller['username'];?>">
                         <h10 class="lead"><?php echo $seller['username'];?></h10></a>
                         </div>
                         <div class="pb-5">
