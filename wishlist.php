@@ -18,7 +18,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Shop Item - Start Bootstrap Template</title>
+        <title>Wishlist</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -28,21 +28,22 @@
         <link rel="stylesheet" href="css/footer.css">
         <link rel="stylesheet" href="css/user-profile.css">
         <style>
-             #nnv{
-        text-align: center;
-        font-size: 24px;
-        color: #000000;
-        width: 100%;
-        padding: 15px;
-        border:0px;
-        outline: none;
-        cursor: pointer;
-        margin-top: 5px;
-        border-bottom-right-radius: 10px;
-        border-bottom-left-radius: 10px;
-        }
+            #nnv{
+                text-align: center;
+                font-size: 24px;
+                color: #000000;
+                width: 100%;
+                padding: 15px;
+                border:0px;
+                outline: none;
+                cursor: pointer;
+                margin-top: 5px;
+                border-bottom-right-radius: 10px;
+                border-bottom-left-radius: 10px;
+            }
         </style>
     </head>
+
     <body>
         <!-- Navigation-->
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style='color:black' > 
@@ -88,91 +89,76 @@
         </nav>
         
         <!-- Product section-->
-    <div class="row mt-3">
-     <div class="col-md-12">
-         <section class="container px-4 px-lg-5 my-5" >
-        <?php if(empty($_SESSION['wish_items'])){?>
-        <table class="table">
-            <tr>
-                <td>
-                    <p>Your wishlist is empty</p>
-                </td>
-            </tr>
-        </table>
-        <?php }?>
-        <?php if(isset($_SESSION['wish_items']) && count($_SESSION['wish_items']) > 0){?>
-        <table class="table">
-           <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <!-- <th>Quantity</th> -->
-                    <!-- <th>Total</th> -->
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                    $totalCounter = 0;
-                    $itemCounter = 0;
-                    foreach($_SESSION['wish_items'] as $key => $item){ 
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <section class="container px-4 px-lg-5 my-5">
+                    <!-- Display this is wishlist is empty -->
+                    <?php if(empty($_SESSION['wish_items'])){?>
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <p>Your wishlist is empty</p>
+                                </td>
+                            </tr>
+                        </table>
+                    <?php }?>
 
-                    $img = $item['product_img'];
-                    // $total = $item['product_price'] * $item['qty'];
-                    // $totalCounter+= $total;
-                    // $itemCounter+=$item['qty'];
-                    ?>
-                    <tr>
-                        <td>
-                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
-                            <?php echo $item['product_name'];?>
-                            
-                            <a href="wishlist.php?action=remove&item=<?php echo $key?>" class="text-danger">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
+                    <!-- Display this if wishlist is not empty -->
+                    <?php if(isset($_SESSION['wish_items']) && count($_SESSION['wish_items']) > 0){?>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
 
-                        </td>
-                        <td>
-                            $<?php echo $item['product_price'];?>
-                        </td>
-                        <td>
-                            <!-- <?php echo $item['qty'];?> -->
-                        </td>
-                        <td>
-                            <!-- <?php echo $total;?> -->
-                        </td>
-                    </tr>
-                <?php }?>
-                <tr class="border-top border-bottom">
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <strong>
-                            <?php 
-                                // echo ($itemCounter==1)?$itemCounter.' item':$itemCounter.' items'; ?>
-                        </strong>
-                    </td>
-                    <!-- <td><strong>$<?php echo $totalCounter;?></strong></td> -->
-            </tbody> 
-        </table>
-        <!-- <div class="row">
-            <div class="col-md-11">
-					<button class="btn btn-warning btn-lg float-right" name="wish_to_cart">Add to cart</button>
-				</a>
+                            <tbody>
+                                <?php 
+                                    $totalCounter = 0;
+                                    $itemCounter = 0;
+                                    foreach($_SESSION['wish_items'] as $key => $item){ 
+
+                                    $img = $item['product_img'];
+                                    // $total = $item['product_price'] * $item['qty'];
+                                    // $totalCounter+= $total;
+                                    // $itemCounter+=$item['qty'];
+                                ?>
+                                <tr>
+                                    <td>
+                                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($img); ?>"class="rounded img-thumbnail mr-2" style="width:40px;">
+                                        <?php echo $item['product_name'];?>
+                                        
+                                        <a href="wishlist.php?action=remove&item=<?php echo $key?>" class="text-danger">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+
+                                    </td>
+                                    <td>
+                                        $<?php echo $item['product_price'];?>
+                                    </td>
+                                    <td>
+                                        <!-- <?php echo $item['qty'];?> -->
+                                    </td>
+                                    <td>
+                                        <!-- <?php echo $total;?> -->
+                                    </td>
+                                </tr>
+                                <?php }?>
+                            </tbody> 
+                        </table>
+                    <?php }?>
+                </section>
             </div>
-        </div> -->
-        
-            <?php }?>
-        </section>
+        </div>
 
         <!-- Add wish item to cart -->
         <?php
-        if (isset($_POST['wish_to_cart'])){
-            
-
-        }
-?>
+            if (isset($_POST['wish_to_cart'])){
+            }
+        ?>
      
-     <br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br>
 
         <!-- Footer-->
         <footer class="site-footer">
