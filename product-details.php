@@ -203,9 +203,9 @@ else
     $sellers = $conn->query("SELECT * FROM users WHERE email = '$display_name'");
     $seller = $sellers->fetch(PDO::FETCH_ASSOC);
         // if ($count) {
-            $seller = $row['display_name'];
+            $item_seller = $row['display_name'];
             $current_bid   = $_POST['current_bid'];
-            if ( $current_bid <= $row['starting_bid'] || $current_bid < (isset($res['current_bid']) + $row['bid_increment']) || $current_bid <= isset($res['current_bid']) ) {
+            if ( $current_bid < $row['starting_bid'] || $current_bid < (isset($res['current_bid']) + $row['bid_increment']) || $current_bid < isset($res['current_bid']) ) {
                  echo '<script>alert("Bid needs to be higher!")</script>';
                  echo "<meta http-equiv='refresh' content='0'>";
                  
@@ -374,7 +374,7 @@ else
                     $mail->setFrom('admin@beetriv.com','Admin Beetriv');
     
                     //add recipient
-                    $mail->addAddress($seller,$username);
+                    $mail->addAddress($item_seller,$username);
     
                     //Set email format to HTML
                     $mail->isHTML(true);
@@ -511,7 +511,7 @@ else
                 $mail->setFrom('admin@beetriv.com','Admin Beetriv');
 
                 //add recipient
-                $mail->addAddress($seller,$username);
+                $mail->addAddress($item_seller,$username);
 
                 //Set email format to HTML
                 $mail->isHTML(true);
@@ -651,7 +651,7 @@ else
                 $mail->setFrom('admin@beetriv.com','Admin Beetriv');
 
                 //add recipient
-                $mail->addAddress($seller,$username);
+                $mail->addAddress($item_seller,$username);
 
                 //Set email format to HTML
                 $mail->isHTML(true);
@@ -1010,7 +1010,12 @@ else
                                                     //Exists
                                                     echo $res['current_bidder'];
                                                 } ?>">
-                    <input type="number" class="form-control" name="current_bid" step="any" id="current_bid"> 
+                                                <?php if ($row['display_name'] != $email) {?>
+                    <input type="number" class="form-control" name="current_bid" step="any" id="current_bid">
+                                                    <?php } ?>
+                                                    <?php if ($row['display_name'] == $email) {?>
+                    <input type="number" class="form-control" name="current_bid" step="any" id="current_bid" disabled>
+                                                    <?php } ?>
                     <script>
                     // function verifyBid() {
                     //     var current_bid = document.getElementById("current_bid").value;
