@@ -7,6 +7,8 @@ require_once "connection.php";
 $email = $_SESSION['email'];
 //echo $email;
 
+$today=date('Y-m-d');
+
 $select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
 $statement = $conn->prepare($select);
 $statement->execute();
@@ -48,6 +50,7 @@ if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -142,62 +145,127 @@ body {
             </div>
         </nav>
 
-  <div class="main-content">
-    <div class="container mt-7 p-5">
-      <!-- Table -->
-      <?php foreach($row as $seller){ ?>
-      <div class="row">
-        <div class="col-xl-10 m-auto order-xl-2 mb-5 mb-xl-0">
-          <div class="card card-profile shadow">
-            <div class="row justify-content-center">
-              <div class="col-lg-3 order-lg-2">
-                <div class="card-profile-image">
-                  <a href="#">
-                    <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($seller['img']);?>" class="rounded-circle">
-                  </a>
+        <div class="main-content">
+          <div class="container mt-7 p-5">
+            <!-- Table -->
+            <?php foreach($row as $seller){ ?>
+            <div class="row">
+              <div class="col-xl-10 m-auto order-xl-2 mb-5 mb-xl-0">
+                <div class="card card-profile shadow">
+                  <div class="row justify-content-center">
+                    <div class="col-lg-3 order-lg-2">
+                      <div class="card-profile-image">
+                        <a href="#">
+                          <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($seller['img']);?>" class="rounded-circle">
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                    <div class="d-flex justify-content-between">
+                      <a href="managestore.php" class="btn btn-sm btn-warning mr-4"><strong>Manage Store</strong></a>
+                      <a href="edit-profile.php" class="btn btn-sm  float-right"><strong>EDIT PROFILE</strong></a>
+                    </div>
+                  </div>
+                  <div class="card-body pt-0 pt-md-4">
+                    
+                    <div class="text-center pt-5">
+                      <h3>Hi
+                      <?php echo $seller['fname'];?> <?php echo $seller['lname'];?><span class="font-weight-light">, @<?php echo $seller['username'];?></span>
+                      </h3>
+                      <div class="h5 font-weight-300">
+                        <i class="ni location_pin mr-2"></i><?php echo $seller['email'];?>
+                      </div>
+                      <div class="h5 mt-4">
+                        <i class="ni business_briefcase-24 mr-2"></i><strong>Personal Information</strong>
+                      </div>
+                      <div>
+                        <i class="ni education_hat mr-2"></i><strong>Phone Number</strong> <?php echo $seller['phone_number'];?>
+                        <i class="ni education_hat mr-2"></i><strong>IC Number</strong> <?php echo $seller['ic_number'];?>
+                        <i class="ni education_hat mr-2"></i><strong>IC Colour</strong> <?php echo $seller['ic_color'];?>
+                      </div>
+                      <!-- <hr class="my-4"> -->
+                      <!-- <p class="text-align-center">Disclaimer & Policies</p> -->
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-              <div class="d-flex justify-content-between">
-                <a href="managestore.php" class="btn btn-sm btn-warning mr-4"><strong>Manage Store</strong></a>
-                <a href="edit-profile.php" class="btn btn-sm  float-right"><strong>EDIT PROFILE</strong></a>
-              </div>
-            </div>
-            <div class="card-body pt-0 pt-md-4">
-              
-              <div class="text-center pt-5">
-                <h3>Hi
-                <?php echo $seller['fname'];?> <?php echo $seller['lname'];?><span class="font-weight-light">, @<?php echo $seller['username'];?></span>
-                </h3>
-                <div class="h5 font-weight-300">
-                  <i class="ni location_pin mr-2"></i><?php echo $seller['email'];?>
-                </div>
-                <div class="h5 mt-4">
-                  <i class="ni business_briefcase-24 mr-2"></i><strong>Personal Information</strong>
-                </div>
-                <div>
-                  <i class="ni education_hat mr-2"></i><strong>Phone Number</strong> <?php echo $seller['phone_number'];?>
-                  <i class="ni education_hat mr-2"></i><strong>IC Number</strong> <?php echo $seller['ic_number'];?>
-                  <i class="ni education_hat mr-2"></i><strong>IC Colour</strong> <?php echo $seller['ic_color'];?>
-                </div>
-                <hr class="my-4">
-                <p class="text-align-center">Disclaimer & Policies</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>   
+        <?php } ?>   
 
-<!-- Selling Item -->
-  <div class="container mt-3 px-2 pb-5">
-      <h4 class="pb-3"><strong>Sell Item</strong></h4>
-    <div class="table-responsive">
-        <table class="table table-responsive table-borderless">
-            <thead>
+        <div class="row">
+          
+
+          <!-- Total Sales Card -->
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Sales</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <?php
+                          $stmt = $conn->prepare("SELECT * FROM order_details LEFT JOIN product ON product.prd_id=order_details.prd_id WHERE stat='completed' AND payment_stat='paid' AND display_name = '$email' ");
+                          $stmt->execute();
+
+                          $total = 0;
+                          foreach($stmt as $srow){
+                            $subtotal = $srow['prd_price']*$srow['prd_qty'];
+                            $total += $subtotal;
+                          }
+
+                          echo "$".number_format($total, 2);
+                        ?>
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Total Sales Today -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Sales Today</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                          <?php
+                            $stmt = $conn->prepare("SELECT * FROM order_details WHERE sales_date=:sales_date AND display_name='$email'");
+                            $stmt->execute(['sales_date'=>$today]);
+                                    
+                            $rtotal = 0;
+                            foreach($stmt as $trow){
+                              $subtotal = $trow['prd_price']*$trow['prd_qty'];
+                              $rtotal += $subtotal;
+                            }
+                                    
+                            echo "$".number_format($rtotal, 2);
+                          ?>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!-- Selling Item -->
+        <div class="container mt-3 px-2 pb-5">
+          <h4 class="pb-3"><strong>Product List</strong></h4>
+          <div class="table-responsive">
+            <table class="table table-responsive table-borderless">
+              <thead>
                 <tr class="bg-light">
                     
                     <th scope="col" width="10%">Product ID</th>
@@ -213,8 +281,8 @@ body {
                     <th scope="col" width="10%">Edit Product</th>
                     
                 </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
                 <tr>
                 <!-- display sell item     -->
                 
@@ -237,10 +305,10 @@ body {
 					        <button class="btn btn-warning btn-lg float-right">Edit</button></a></tr>
                 <?php } ?>
                 
-            </tbody>
-        </table>
-    </div>
-</div>
+              </tbody>
+            </table>
+          </div>
+        </div>
   
   <!-- Footer-->
 <footer class="site-footer">
