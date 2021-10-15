@@ -55,6 +55,9 @@ $handle = $conn->prepare($result2);
 $handle->execute();
 $rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
 
+
+
+
 // add to cart function here
 if(isset($_POST['cart1']))
     {
@@ -684,6 +687,7 @@ if(isset($_POST['cart1']))
 
                     <div class="product">
                         <?php foreach($row as $product){ 
+                            $prod_qty = $product['prd_qty'];
                              if (empty($product['bid_expiry'])) { ?>
                             <div class="content">
                                 <form method="POST">
@@ -693,7 +697,15 @@ if(isset($_POST['cart1']))
                                     <h6>$<?php echo $product['prd_price']; ?></h6>
                                     <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
                                     <input class="form-control text-center me-3" id="inputQuantity" type="hidden" value="1" style="max-width: 5rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
-                                    <button class="buy-prd btn-warning" name='cart1'>Add to cart</button>                                  
+                                    <button class="buy-prd btn-warning" name='cart1' value="add to cart" <?php if ($prod_qty == '0'){ ?> disabled placeholder="outofstock"; <?php   } ?> onclick="addtocart(<?php echo $row['prd_id']?>)" >
+                                    <?php if ($prod_qty == '0'){ ?>
+                                    <i class="bi-cart-fill me-1"></i>
+                                    Out of Stock
+                                    <?php }else{ ?> 
+
+                                    <i class="bi-cart-fill me-1"></i>
+                                    Add to cart
+                                    <?php } ?>                                  
                                 </form>                   
                                 
                             </div>
