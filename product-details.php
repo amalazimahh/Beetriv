@@ -862,10 +862,10 @@ else
         <!-- to cart -->
         <?php if(isset($successMsg) && $successMsg == true){?>
             <div class="row mt-3">
-                <div class="col-md-12">
-                    <div class="alert alert-success alert-dismissible">
+                <div class="col-md-12" >
+                    <div class="alert alert-success alert-dismissible" style="background-color: #99d98c;">
                          <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['prd_name']?> is added to cart. <a href="cart.php" class="alert-link">View Cart</a>
+                        <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['prd_img']); ?>" class="rounded img-thumbnail mr-2" style="width:40px;"><?php echo $row['prd_name']?> is added to cart.
                     </div>
                 </div>
             </div>
