@@ -302,6 +302,27 @@ function input_data($data){
                         </td>
                     </tr>
                 <?php }?>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>Delivery charge</td>
+                  <td>$<?php foreach($row as $user){ 
+                        if($user['province'] == 'Bandar Seri Begawan'){
+                          echo $charge = 4;
+                        }
+                        if($user['province'] == 'Tutong'){
+                          echo $charge = 5;
+                        }
+                        if($user['province'] == 'Kuala Belait'){
+                          echo $charge = 6;
+                        }
+                        if($user['province'] == 'Temburong'){
+                          echo $charge = 5;
+                        }
+                        ?>
+                  </td>
+                </tr>
                 <tr class="border-top border-bottom">
                     <td></td>
                     <td></td>
@@ -312,7 +333,8 @@ function input_data($data){
                                 echo ($itemCounter==1)?$itemCounter.' item':$itemCounter.' items'; ?>
                         </strong>
                     </td>
-                    <td><strong>$<?php echo $totalCounter;?></strong></td>
+                    <td><strong>$<?php $totalSum = $totalCounter+$charge;
+                                        echo $totalSum;?></strong></td>
                 </tr> 
                 </tr>
             </tbody> 
@@ -320,7 +342,7 @@ function input_data($data){
             <?php }?>
         </section>
 
-        <?php foreach($row as $user){ ?>
+        
       <div class="checkout-form">
         <form class="needs-validation" method="POST" action="">
             <div class="row">
@@ -340,65 +362,27 @@ function input_data($data){
               </div>
             </div>
 
-            <div class="col-md-5 mb-2">
+            <div class="col-md-6 mb-2">
               <label for="email">Email</label>
               <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="<?php echo $email ?>" disabled>
               
             </div>
 
-            <div class="col-md-5 mb-2">
+            <div class="row">
+            <div class="col-md-4 mb-2">
               <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" value="<?php echo (isset($addressValue) && !empty($addressValue)) ? $addressValue:'' ?>"disabled>
-              
+              <input type="text" class="form-control" id="address" name="address" value="<?php echo $user['address']; ?>"disabled>
             </div>
-
-            <hr class="mb-2">
-
-            <div class="col-md-5 mb-2">
-              <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+            <div class="col-md-3 mb-2">
+              <label for="address">Postcode</label>
+              <input type="text" class="form-control" id="address" name="address" value="<?php echo $user['postcode']; ?>"disabled>
             </div>
-
-            <div class="row">
-
-              <div class="col-md-4 mb-4">
-                <label for="street1">Street 1</label>
-                <input type="text" class="form-control" id="street 1" name="street 1" placeholder="">
-                <span></span>
-              </div>
-
-              <div class="col-md-4 mb-4">
-                <label for="street2">Street 2</label>
-                <input type="text" class="form-control" id="street2" name="street2" placeholder="">
-                <span></span>
-              </div>
-
-              <div class="col-md-2 mb-2">
-                <label for="zip">Postcode / Zipcode</label>
-                <input type="text" class="form-control" id="zip" name="zipcode" placeholder="Zipcode" value="<?php echo (isset($zipCodeValue) && !empty($zipCodeValue)) ? $zipCodeValue:'' ?>" >
-                <span class = "error"> <?php echo $zipcode_error; ?></span>
-              </div>
-
+            <div class="col-md-3 mb-2">
+              <label for="address">Province</label>
+              <input type="text" class="form-control" id="address" name="address" value="<?php echo $user['province']; ?>"disabled>
             </div>
-
-            <div class="row">
-              <div class="col-md-3 mb-2">
-                  <label for="country">Country</label>
-                  <select class="custom-select d-block w-100" name="country" id="country">
-                    <option value="United States" >Brunei Darussalam</option>
-                  </select>
-                </div>
-
-                <div class="col-md-3 mb-2">
-                  <label for="state">State / Province</label>
-                  <select class="custom-select d-block w-100" name="state" id="state" >
-                    <option value="">Select Province</option>
-                    <option value="Temburong">Temburong</option>
-                    <option value="Bandar Seri Begawan">Bandar Seri Begawan</option>
-                    <option value="Tutong">Tutong</option>
-                    <option value="Kuala Belait">Kuala Belait</option>
-                  </select>
-                </div>
             </div>
+            
 
             <hr class="mb-2">
             <div class="row mt-3">
