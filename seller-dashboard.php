@@ -236,7 +236,7 @@ body {
                       <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Sales Today</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                           <?php
-                            $stmt = $conn->prepare("SELECT * FROM order_details WHERE sales_date=:sales_date AND display_name='$email'");
+                            $stmt = $conn->prepare("SELECT * FROM order_details WHERE sales_date=:sales_date AND email='$email'");
                             $stmt->execute(['sales_date'=>$today]);
                                     
                             $rtotal = 0;
