@@ -126,7 +126,7 @@ require 'vendor/autoload.php';
                                     <div class="col-sm-6">
                                         <input type="date" class="form-control" name="birthdate" id="birthdate" required>
                                         <?php
-                                       
+                                        if(isset($_POST['birthdate'])){
                                             //validate age of 18
                                             $dateOfBirth = $_POST['birthdate'];
                                             $today = date("y-m-d");
@@ -134,6 +134,7 @@ require 'vendor/autoload.php';
                                             if ($diff->format('%y') < 18) {
                                                 echo "<font color=red>Minimum age of 18 is required.</font>";
                                             }
+                                        }
                                         ?>
                                     
                                     </div>
@@ -190,6 +191,15 @@ require 'vendor/autoload.php';
 
         //variable to be insert into database
         if(isset($_POST['submit'])){
+            // eligible date
+            $dateOfBirth = $_POST['birthdate'];
+            $today = date("y-m-d");
+            $diff = date_diff(date_create($dateOfBirth), date_create($today));
+        
+
+        //variable to be insert into database
+        if(isset($_POST['submit']) && $diff->format('%y') > 18 ){
+
             $email           = ($_POST['email']);
             $username        = ($_POST['username']);
             $ic              = ($_POST['ic']);
@@ -277,6 +287,7 @@ require 'vendor/autoload.php';
             
 
             }
+        }
 
 
 
