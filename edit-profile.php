@@ -86,6 +86,7 @@ if(isset($_POST['save'])){
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/user-profile.css">
 </head>
 <body>
 <!-- Navigation-->
