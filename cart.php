@@ -208,6 +208,8 @@ if (isset($_POST['wishlist'])){
             <?php }?>
         </section>
 
+        <br><br><br><br><br><br><br><br>
+
         <!-- Footer-->
         <footer class="site-footer">
 
