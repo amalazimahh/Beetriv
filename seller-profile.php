@@ -14,10 +14,10 @@ $statement = $conn->prepare($select);
 $statement->execute();
 $row = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-  // Fetch seller_review 
-  $rateQuery = $conn->prepare("SELECT * FROM seller_review LEFT JOIN users ON users.user_id=seller_review.user_id WHERE email = '$email' ");
-  $rateQuery->execute();
-  $rates = $rateQuery->fetchAll(PDO::FETCH_ASSOC);
+// Fetch seller_review 
+$rateQuery = $conn->prepare("SELECT * FROM seller_review LEFT JOIN users ON users.user_id=seller_review.user_id WHERE email = '$email' ");
+$rateQuery->execute();
+$rates = $rateQuery->fetchAll(PDO::FETCH_ASSOC);
 
 // display item sell
 $selectproduct = "SELECT * FROM product WHERE display_name = '$email'";
@@ -26,7 +26,7 @@ $result = $conn->query($selectproduct);
 
 // disable seller features
 $sellers = $conn->query("SELECT * FROM users WHERE email = '$email'");
-    $seller = $sellers->fetch(PDO::FETCH_ASSOC);
+$seller = $sellers->fetch(PDO::FETCH_ASSOC);
 $time_register = $seller['seller_register'];
 $seller_period = date('Y-m-d H:i:s', strtotime("$time_register +1 month"));
 // echo $seller_period;
@@ -122,20 +122,20 @@ if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
-        <link rel="stylesheet" href="css/footer.css">
-        <link rel="stylesheet" href="css/user-profile.css">
-        <link rel="stylesheet" href="css/feedback-form.css">
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/user-profile.css">
+    <link rel="stylesheet" href="css/feedback-form.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
 
-body {
-    font-family: 'Open Sans', sans-serif
-}
-#nnv{
+      body {
+        font-family: 'Open Sans', sans-serif
+      }
+      #nnv{
         text-align: center;
         font-size: 24px;
         color: #000000;
@@ -147,85 +147,84 @@ body {
         margin-top: 5px;
         border-bottom-right-radius: 10px;
         border-bottom-left-radius: 10px;
-        }
+      }
 
-.search {
-    top: 6px;
-    left: 10px
-}
+      .search{
+        top: 6px;
+        left: 10px
+      }
 
-.form-control {
-    border: none;
-    padding-left: 32px
-}
+      .form-control{
+        border: none;
+        padding-left: 32px
+      }
 
-.form-control:focus {
-    border: none;
-    box-shadow: none
-}
+      .form-control:focus {
+        border: none;
+        box-shadow: none
+      }
 
-.green {
-    color: green
-}
+      .green {
+        color: green
+      }
 
-.rate2:not(:checked) > input {
-  position:absolute;
-  top:-9999px; 
-} 
-.rate2:not(:checked) > label {
-  float:center;
-  width:30px;
-  overflow:hidden;
-  white-space:nowrap;
-  cursor:pointer;
-  font-size:30px;
-  color:#ccc;
-}
-.rate2:not(:checked) > label:before {
-  content: '★ ';
-}
-.rate2 > input:checked ~ label {
-  color: #ffc700;    
-}
-.rate2:not(:checked) > label:hover,
-.rate2:not(:checked) > label:hover ~ label {
-  color: #deb217;  
-}
-.rate2 > input:checked + label:hover,
-.rate2 > input:checked + label:hover ~ label,
-.rate2 > input:checked ~ label:hover,
-.rate2 > input:checked ~ label:hover ~ label,
-.rate2 > label:hover ~ input:checked ~ label {
-  color: #c59b08;
-}
+      /* For stars */
+      .rate2:not(:checked) > input {
+        position:absolute;
+        top:-9999px; 
+      } 
+      .rate2:not(:checked) > label {
+        float:center;
+        width:30px;
+        overflow:hidden;
+        white-space:nowrap;
+        cursor:pointer;
+        font-size:30px;
+        color:#ccc;
+      }
+      .rate2:not(:checked) > label:before {
+        content: '★ ';
+      }
+      .rate2 > input:checked ~ label {
+        color: #ffc700;    
+      }
+      .rate2:not(:checked) > label:hover,
+      .rate2:not(:checked) > label:hover ~ label {
+        color: #deb217;  
+      }
+      .rate2 > input:checked + label:hover,
+      .rate2 > input:checked + label:hover ~ label,
+      .rate2 > input:checked ~ label:hover,
+      .rate2 > input:checked ~ label:hover ~ label,
+      .rate2 > label:hover ~ input:checked ~ label {
+        color: #c59b08;
+      }
 
-h2.centerh2 {
-  text-align: center;
-}
+      h2.centerh2 {
+        text-align: center;
+      }
 
-.rate-star{
-  width: 120px; 
-                height: 24px;
-                background: url(img/rate-stars.png) no-repeat;
-                background-size: cover;
-                position: absolute;
-}
-.rate-bg{
-                height: 15px;
-                background-color: #ffbe10;
+      .rate-star{
+        width: 120px; 
+        height: 24px;
+        background: url(img/rate-stars.png) no-repeat;
+        background-size: cover;
+        position: absolute;
+      }
+      .rate-bg{
+        height: 15px;
+        background-color: #ffbe10;
+      }
+          
+      .checked {
+        color: orange;
+      }
 
-            }
-           
-<style>
-.checked {
-  color: orange;
-}
+      ul, li {
+          display:inline
+      }
 
-ul, li {
-    display:inline
-}
-
-.product{
+      .product{
         display: flex;
         flex-wrap: wrap;
         width: 100%;
@@ -233,8 +232,8 @@ ul, li {
         /* align-items: center; */
         margin: 20px 0;
         /* flex-basis: 100%; */
-        }
-        .content{
+      }
+      .content{
         width: 19%;
         margin: 15px;
         box-sizing: border-box;
@@ -246,27 +245,27 @@ ul, li {
         padding-top: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         transition: .4s;
-        }
-        .content:hover{
+      }
+      .content:hover{
         box-shadow: 0 0 11px rgba(33,33,33,.2);
         transform: translate(0px, -8px);
         transition: .6s;
-        }
-        img{
+      }
+      img{
         width: 150px;
         height: 150px;
         text-align: center;
         margin: 0 auto;
         display: block;
-        }
-        h6{
+      }
+      h6{
         font-size: 26px;
         text-align: left;
         color: #222f3e;
         margin: 0;
         padding-left: 20px;
-        }
-        button{
+      }
+      button{
         text-align: center;
         font-size: 24px;
         color: #000000;
@@ -278,10 +277,10 @@ ul, li {
         margin-top: 5px;
         border-bottom-right-radius: 10px;
         border-bottom-left-radius: 10px;
-        }
-        .buy-prd{
+      }
+      .buy-prd{
         font-size: 20px;
-        }
+      }
     </style>
 </head>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
@@ -330,230 +329,182 @@ ul, li {
             </div>
         </nav>
 
-  <div class="main-content">
-    <div class="container mt-7 p-5">
-      <!-- Table -->
-      <?php foreach($row as $seller){ ?>
-      <div class="row">
-        <div class="col-xl-10 m-auto order-xl-2 mb-5 mb-xl-0">
-          <div class="card card-profile shadow">
-            <div class="row justify-content-center">
-              <div class="col-lg-3 order-lg-2">
-                <div class="card-profile-image">
-                  <a href="#">
-                    <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($seller['img']);?>" class="rounded-circle">
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-              <div class="d-flex justify-content-between">
-                <a href="managestore.php" class="btn btn-sm btn-warning mr-2"><strong>Manage Store</strong></a>
-                <a href="edit-profile.php" class="btn btn-sm  float-right"><strong>EDIT PROFILE</strong></a>
-              </div>
-            </div>
-            <div class="card-body pt-0 pt-md-4">
-              
-              <div class="text-center pt-5">
-                <h3>Hi
-                <?php echo $seller['fname'];?> <?php echo $seller['lname'];?><span class="font-weight-light">, @<?php echo $seller['username'];?></span>
-                </h3>
-                <div class="h5 font-weight-300">
-                  <i class="ni location_pin mr-2"></i><?php echo $seller['email'];?>
-                </div>
-                <div class="h5 mt-4">
-                  <i class="ni business_briefcase-24 mr-2"></i><strong>Personal Information</strong>
-                </div>
-                  <i class="ni education_hat mr-2"></i><strong>Phone Number</strong> <?php echo $seller['phone_number'];?>
-                  <i class="ni education_hat mr-2"></i><strong>IC Number</strong> <?php echo $seller['ic_number'];?>
-                  <i class="ni education_hat mr-2"></i><strong>IC Colour</strong> <?php echo $seller['ic_color'];?>
+        <div class="main-content">
+          <div class="container mt-7 p-5">
+            <!-- Table -->
+            <?php foreach($row as $seller){ ?>
+            <div class="row">
+              <div class="col-xl-10 m-auto order-xl-2 mb-5 mb-xl-0">
+                <div class="card card-profile shadow">
+                  <div class="row justify-content-center">
+                    <div class="col-lg-3 order-lg-2">
+                      <div class="card-profile-image">
+                        <a href="#">
+                          <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($seller['img']);?>" class="rounded-circle">
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                    <div class="d-flex justify-content-between">
+                      <a href="managestore.php" class="btn btn-sm btn-warning mr-2"><strong>Manage Store</strong></a>
+                      <a href="edit-profile.php" class="btn btn-sm  float-right"><strong>EDIT PROFILE</strong></a>
+                    </div>
+                  </div>
+                  <div class="card-body pt-0 pt-md-4">
+                    
+                    <div class="text-center pt-5">
+                      
+                      <h3>Hi
+                        <?php echo $seller['fname'];?> <?php echo $seller['lname'];?><span class="font-weight-light">, @<?php echo $seller['username'];?></span>
+                      </h3>
+                      <div class="h5 font-weight-300">
+                        <i class="ni location_pin mr-2"></i><?php echo $seller['email'];?>
+                      </div>
+                      <div class="h5 mt-4">
+                        <i class="ni business_briefcase-24 mr-2"></i><strong>Personal Information</strong>
+                      </div>
+                        <i class="ni education_hat mr-2"></i><strong>Phone Number</strong> <?php echo $seller['phone_number'];?>
+                        <i class="ni education_hat mr-2"></i><strong>IC Number</strong> <?php echo $seller['ic_number'];?>
+                        <i class="ni education_hat mr-2"></i><strong>IC Colour</strong> <?php echo $seller['ic_color'];?>
+                        
+                        <p class="text-align-center"><b>Disclaimer</b> <br> <?php echo $seller['disclaimer']; ?></p>
+                        <p class="text-align-center"><b>Policies</b> <br> <?php echo $seller['policies']; ?></p>
+                        <p class="text-align-center"><b>Shipping</b> <br> <?php echo $seller['shipping']; ?></p>
+                      
+                      
+                      <a href="seller-dashboard.php" class="btn btn-sm btn-warning"><strong>Seller Dashboard</strong></a>
+                      <hr class="my-4">
+                    </div>
+                    <!-- feedback -->
+                    <h2 class="centerh2">Feedbacks</h2>
+                          <?php foreach($rates as $review){ ?>
+                              <div class="wrap-input100" style="margin-top: 10px">
+                                  <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($review['img']); ?>" class="rounded" style="width:40px;">
+                                  <div class="result-container">
+                                      <?php $reviewAvgCalc = $review['prd_quality'] + $review['seller_service'];
+                                              $reviewAvg = ($reviewAvgCalc/2)*10; ?>
+                                  <p><?php echo $review['feedback']; ?></p>
+                                  <p>by <?php echo $review['username']; ?></p>
+                                      <div class="fa fa-star checked" 
+                                      <?php 
+                                      //counting stars
+                                      for( $x = 0; $x < 4; $x++ )
+                                      {
+                                          if( floor( $review['seller_service'] )-$x >= 2 )
+                                          { echo '<li><i class="fa fa-star checked"></i></li>'; }
+                                          elseif( $review['seller_service']-$x > 1 )
+                                          { echo '<li><i class="fa fa-star-half-o"></i></li>'; }
+                                          else
+                                          { echo '<li><i class="fa fa-star-o"></i></li>'; }
+                                      }
+                                      
+                                      ;?>
+                                      </div>
+                                      
+                                  </div>  
+                                  <div class="rate-star">
+                              </div>
+                          <?php }?>
+                  </div>
                   
-                  <p class="text-align-center"><b>Disclaimer</b> <br> <?php echo $seller['disclaimer']; ?></p>
-                  <p class="text-align-center"><b>Policies</b> <br> <?php echo $seller['policies']; ?></p>
-                  <p class="text-align-center"><b>Shipping</b> <br> <?php echo $seller['shipping']; ?></p>
                 </div>
-                <hr class="my-4">
-
-                <a href="seller-dashboard.php" class="btn btn-sm btn-warning mr-2"><strong>Seller Dashboard</strong></a>
-                
               </div>
-              <!-- feedback -->
-              <h2 class="centerh2">Feedbacks</h2>
-                    <?php foreach($rates as $review){ ?>
-                        <div class="wrap-input100" style="margin-top: 10px">
-                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($review['img']); ?>" class="rounded" style="width:40px;">
-                            <div class="result-container">
-                                <?php $reviewAvgCalc = $review['prd_quality'] + $review['seller_service'];
-                                        $reviewAvg = ($reviewAvgCalc/2)*10; ?>
-                            <p><?php echo $review['feedback']; ?></p>
-                            <p>by <?php echo $review['username']; ?></p>
-                                <div class="fa fa-star checked" 
-                                <?php 
-                                //counting stars
-                                for( $x = 0; $x < 4; $x++ )
-                                {
-                                    if( floor( $review['seller_service'] )-$x >= 2 )
-                                    { echo '<li><i class="fa fa-star checked"></i></li>'; }
-                                    elseif( $review['seller_service']-$x > 1 )
-                                    { echo '<li><i class="fa fa-star-half-o"></i></li>'; }
-                                    else
-                                    { echo '<li><i class="fa fa-star-o"></i></li>'; }
-                                }
-                                
-                                 ;?>
-                                </div>
-                                
-                            </div>  
-                            <div class="rate-star">
-                        </div>
-                    <?php }?>
             </div>
             
           </div>
         </div>
+      <?php } ?>   
+                
+      <!-- Selling Item -->
+      <div class="container mt-3 px-2 pb-5">
+        <h4 class="pb-3"><strong>Sell Item</strong></h4>
+        <div class="product">
+          <?php foreach($result as $product){ 
+              if (empty($product['bid_expiry'])) { ?>
+                <div class="content">
+                  <form method="POST"></form>
+                    <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
+                    <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
+                    <h4><?php echo $product['prd_name']; ?></h4>
+                    <h6>$<?php echo $product['prd_price']; ?></h6>
+                    <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
+                  </form>  
+                </div>        
+          <?php } }?>
+        </div>
       </div>
-      
-    </div>
-  </div>
-<?php } ?>   
-                
-<!-- Selling Item -->
-  <div class="container mt-3 px-2 pb-5">
-      <h4 class="pb-3"><strong>Sell Item</strong></h4>
-      <div class="product">
-                        <?php foreach($result as $product){ 
-                             if (empty($product['bid_expiry'])) { ?>
-                            <div class="content">
-                                <form method="POST"></form>
-                                    <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
-                                    <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
-                                    <h4><?php echo $product['prd_name']; ?></h4>
-                                    <h6>$<?php echo $product['prd_price']; ?></h6>
-                                    <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
-                                    <button class="buy-prd btn-warning">Add to cart</button>
-                                </form>  
-                                
-                            </div>
-                            
-                        <?php } }?>
-    <!-- <div class="table-responsive">
-        <table class="table table-responsive table-borderless">
-            <thead>
-                <tr class="bg-light">
-                    
-                    <th scope="col" width="10%">Product ID</th>
-                    <th scope="col" width="15%">Product Name</th>
-                    <th scope="col" width="10%">Product Image</th>
-                    <th scope="col" width="10%">Product Category</th>
-                    <th scope="col" width="10%">Price</th>
-                    <th scope="col" width="10%">Product Quantity</th>
-                    <th scope="col" width="10%">Product Condition</th>
-                    <th scope="col" width="10%">Product Description</th>
-                    <th scope="col" width="10%">Product Rating</th>
-                    <th scope="col" width="10%">Meet Up Location</th>
-                    <th scope="col" width="10%">Edit Product</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                
-                
-                <?php
-                foreach($result as $rowProduct){
-
-                ?>
-                <tr>
-                <td><?php echo $rowProduct['prd_id']; ?></td>
-                <td><?php echo $rowProduct['prd_name']; ?></td>
-                <th scope="row"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($rowProduct['prd_img']); ?>" class="rounded" style="width:150px; height:150px"></th>
-                <td><?php echo $rowProduct['prd_category']; ?></td>
-                <td>$<?php echo $rowProduct['prd_price']; ?></td>
-                <td><?php echo $rowProduct['prd_qty']; ?></td>
-                <td><?php echo $rowProduct['prd_condition']; ?></td>
-                <td><?php echo $rowProduct['prd_desc']; ?></td>
-                <td><?php echo $rowProduct['prd_rating']; ?></td>
-                <td><?php echo $rowProduct['prd_location']; ?></td>
-                <td><a href="edit-product.php?id=<?php echo $rowProduct['prd_id'];?>">
-					        <button class="btn btn-warning btn-lg float-right">Edit</button></a></tr>
-                <?php } ?>
-                
-            </tbody>
-        </table>
-    </div> -->
-</div>
   
-  <!-- Footer-->
-<footer class="site-footer">
+      <!-- Footer-->
+      <footer class="site-footer">
 
-<div class="container">
-    <div class="row">
-        <!-- first section -->
-        <div class="col-xs-6 col-md-3">
-        <h6>CORPORATE</h6>
-        <ul class="footer-links">
-            <li><a href="footer/about.php">About Beetriv</a></li>
-            <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
-            <li><a href="footer/termsco.php">Terms and Conditions</a></li>
-        </ul>
+        <div class="container">
+            <div class="row">
+                <!-- first section -->
+                <div class="col-xs-6 col-md-3">
+                <h6>CORPORATE</h6>
+                <ul class="footer-links">
+                    <li><a href="footer/about.php">About Beetriv</a></li>
+                    <li><a href="footer/privacy-policy.php">Privacy Policy</a></li>
+                    <li><a href="footer/termsco.php">Terms and Conditions</a></li>
+                </ul>
+                </div>
+
+                <!-- second section -->
+                <div class="col-xs-6 col-md-3">
+                <h6>DEALS, PAYMENT & DELIVERY</h6>
+                <ul class="footer-links">
+                    <li><a href="footer/deals.php">Our Deals</a></li>
+                    <li><a href="footer/delivery.php">Delivery Services</a></li>
+                    <li><a href="footer/payment.php">Payment</a></li>
+                </ul>
+                </div>
+
+                <!-- third section -->
+                <div class="col-xs-6 col-md-3">
+                <h6>CUSTOMER CARE</h6>
+                <ul class="footer-links">
+                    <li><a href="footer/be-seller.php">Become Our Seller</a></li>
+                    <li><a href="footer/faq.php">FAQ</a></li>
+                    <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
+                    <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
+                    <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
+                    <li><a href="footer/customer-protection.php">Customer Protection</a></li>
+                </ul>
+                </div>
+
+                <!-- fourth section -->
+                <div class="col-xs-6 col-md-3">
+                <h6>CONTACT US</h6>
+                <p>Phone: 257 3663</p>
+                <p>Email: beetrivteam@gmail.com</p>
+                <p>Instagram: @beetriv</p>
+                <p>Facebook: @beetriv</p>
+                </div>
+            </div>
         </div>
 
-        <!-- second section -->
-        <div class="col-xs-6 col-md-3">
-        <h6>DEALS, PAYMENT & DELIVERY</h6>
-        <ul class="footer-links">
-            <li><a href="footer/deals.php">Our Deals</a></li>
-            <li><a href="footer/delivery.php">Delivery Services</a></li>
-            <li><a href="footer/payment.php">Payment</a></li>
-        </ul>
-        </div>
-
-        <!-- third section -->
-        <div class="col-xs-6 col-md-3">
-        <h6>CUSTOMER CARE</h6>
-        <ul class="footer-links">
-            <li><a href="footer/be-seller.php">Become Our Seller</a></li>
-            <li><a href="footer/faq.php">FAQ</a></li>
-            <li><a href="footer/buy-guides.php">How to Buy on Beetriv</a></li>
-            <li><a href="footer/sell-guides.php">How to Sell on Beetriv</a></li>
-            <li><a href="footer/bid-guides.php">How Bidding Works</a></li>
-            <li><a href="footer/customer-protection.php">Customer Protection</a></li>
-        </ul>
-        </div>
-
-        <!-- fourth section -->
-        <div class="col-xs-6 col-md-3">
-        <h6>CONTACT US</h6>
-        <p>Phone: 257 3663</p>
-        <p>Email: beetrivteam@gmail.com</p>
-        <p>Instagram: @beetriv</p>
-        <p>Facebook: @beetriv</p>
-        </div>
-    </div>
-</div>
-
-</footer>
+      </footer>
 </body>
 
 <script>
     var Tooltip = (function() {
+    // Variables
 
-// Variables
+    var $tooltip = $('[data-toggle="tooltip"]');
 
-var $tooltip = $('[data-toggle="tooltip"]');
-
-unction init() {
-  $tooltip.tooltip();
-}
+    unction init() {
+    $tooltip.tooltip();
+    }
 
 
-// Events
-// Methods
+    // Events
+    // Methods
 
-if ($tooltip.leng th) {
-  init()
-  f;
-}
+    if ($tooltip.leng th) {
+      init()
+      f;
+    }
 
 })();
 
