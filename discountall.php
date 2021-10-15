@@ -19,10 +19,11 @@ $rowProduct = $result->fetchAll(PDO::FETCH_ASSOC);
 foreach($rowProduct as $item){
 
 $idd = $item['prd_id'];
+$ole = $item['prd_price'];
 
 if(isset($_POST['saves'])){
     
-    $prd_price      = $_POST['prd_price'];
+    // $prd_price      = $_POST['prd_price'];
     $old_price      = $_POST['old_price'];
     $prd_category   = $_POST['prd_category'];
     $prd_discount   = $_POST['prd_discount'];
@@ -30,13 +31,9 @@ if(isset($_POST['saves'])){
     $end_promo      = $_POST['end_promo'];
 
     
-    $formula  = ($item['prd_price']/100) * $prd_discount;
-    $newprice = $prd_price - $formula;
+    $formula  = (($item['prd_price']) * (1 - ($prd_discount/100)));
 
-
-    foreach ($item as $newItem){
-
-        $pdoQuery = ("UPDATE product SET prd_price = '$formula', old_price = '$prd_price', prd_category = '$prd_category', 
+        $pdoQuery = ("UPDATE product SET old_price = '$ole', prd_price = '$formula', prd_category = '$prd_category', 
         prd_discount = '$prd_discount', start_promo = '$start_promo', end_promo = '$end_promo' WHERE prd_id='$idd'");
         $pdoQuery_run = $conn->prepare($pdoQuery);
         $pdoQuery_run->execute();   
@@ -46,7 +43,7 @@ if(isset($_POST['saves'])){
     // $pdoQuery_run = $conn->prepare($pdoQuery);
     // $pdoQuery_run->execute();
     // header('location: seller-dashboard.php ');
-    }
+
 }
 }
 ?>
