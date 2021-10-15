@@ -618,7 +618,7 @@ $row = $handle->fetchAll(PDO::FETCH_ASSOC);
                                     <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
                                     <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
                                     <h3><?php echo $product['prd_name']; ?></h3>
-                                    <h6 class="text-muted text-decoration-line-through">$<?php echo $product['new_price']; ?></h6><h6>$<?php echo $product['prd_price']; ?></h6>
+                                    <h6 class="text-muted text-decoration-line-through">$<?php echo $product['old_price']; ?></h6><h6>$<?php echo $product['prd_price']; ?></h6>
                                     <a class="text-warning" href="../product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
                                     <button class="buy-prd btn-warning">Add to cart</button>
                                 </form>  
