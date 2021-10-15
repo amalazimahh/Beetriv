@@ -6,10 +6,10 @@ require_once "connection.php";
 //make sure login first, so that can fetch email, echo email to see if you logged in
 $email = $_SESSION['email'];
 // $displayname = $_GET['id'];
-
+$profile = $_GET['profile'];
 //echo $email;
 
-$select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
+$select = "SELECT * FROM users WHERE username = '$profile' LIMIT 1";
 $statement = $conn->prepare($select);
 $statement->execute();
 $row = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -20,7 +20,7 @@ $rateQuery->execute();
 $rates = $rateQuery->fetchAll(PDO::FETCH_ASSOC);
 
 // display item sell
-$selectproduct = "SELECT * FROM product WHERE display_name = '$email'";
+$selectproduct = "SELECT * FROM product WHERE username = '$profile'";
 
 $result = $conn->query($selectproduct);
 
@@ -333,6 +333,7 @@ if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
           <div class="container mt-7 p-5">
             <!-- Table -->
             <?php foreach($row as $seller){ ?>
+        <input type="hidden" name="product" value="<?php echo $id; ?>">
             <div class="row">
               <div class="col-xl-10 m-auto order-xl-2 mb-5 mb-xl-0">
                 <div class="card card-profile shadow">
@@ -347,8 +348,6 @@ if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
                   </div>
                   <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                     <div class="d-flex justify-content-between">
-                      <a href="managestore.php" class="btn btn-sm btn-warning mr-2"><strong>Manage Store</strong></a>
-                      <a href="edit-profile.php" class="btn btn-sm  float-right"><strong>EDIT PROFILE</strong></a>
                     </div>
                   </div>
                   <div class="card-body pt-0 pt-md-4">
@@ -372,8 +371,7 @@ if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
                         <p class="text-align-center"><b>Policies</b> <br> <?php echo $seller['policies']; ?></p>
                         <p class="text-align-center"><b>Shipping</b> <br> <?php echo $seller['shipping']; ?></p>
                       
-                      
-                      <a href="seller-dashboard.php" class="btn btn-sm btn-warning"><strong>Seller Dashboard</strong></a>
+                    
                       <hr class="my-4">
                     </div>
                     <!-- feedback -->
@@ -430,8 +428,6 @@ if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
                     <h4><?php echo $product['prd_name']; ?></h4>
                     <h6>$<?php echo $product['prd_price']; ?></h6>
                     <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
-                    <a>/</a>
-                    <a class="text-warning" href="edit-product.php?id=<?php echo $product['prd_id'];?>">Edit</a>
                   </form>  
                 </div>        
           <?php } }?>

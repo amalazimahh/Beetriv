@@ -79,6 +79,7 @@ if(isset($_POST['save_product'])){
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/user-profile.css">
 
     <!-- disabled previous day -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">

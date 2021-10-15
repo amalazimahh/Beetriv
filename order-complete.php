@@ -95,12 +95,12 @@ if($statement1->rowCount() == 1)
                         //Server settings
                         $mail->SMTPDebug = 0;                                   //Enable verbose debug output
                         $mail->isSMTP();                                        //Send using SMTP
-                        $mail->Host       = "smtp.gmail.com";                   //Set the SMTP server to send through
-                        $mail->SMTPAuth   = true;                               //Enable SMTP authentication
-                        $mail->Username   = 'ayamketupat02@gmail.com';          //SMTP username
-                        $mail->Password   = 'k4k5dpkk';                         //SMTP password
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     //Enable implicit TLS encryption
-                        $mail->Port       = 587;                                //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                        $mail->Host       = 'mail.beetriv.com';             //Set the SMTP server to send through
+                        $mail->SMTPAuth   = true;                           //Enable SMTP authentication
+                        $mail->Username   = 'admin@beetriv.com';            //SMTP username
+                        $mail->Password   = '4bx~~ZJ8HJyq';                 //SMTP password
+                        $mail->SMTPSecure = 'ssl';                          //Enable implicit SSL encryption
+                        $mail->Port       = '290';                          //TCP port to connect to 290 as provided
                         
                 
                         //Recipients

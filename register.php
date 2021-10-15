@@ -94,7 +94,8 @@ require 'vendor/autoload.php';
                                     </div>
                                     </div>
                                 <!-- Phone number -->
-                                <div class="form-group">
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
                                     <input type="tel" class="form-control" id="phone" name="phone" 
                                     placeholder= "xxx xxxx" required/>
 
@@ -121,9 +122,26 @@ require 'vendor/autoload.php';
                                         echo $message;  
                                         }
                                         } ?>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="date" class="form-control" name="birthdate" id="birthdate" required>
+                                        <?php
+                                        if(isset($_POST['birthdate'])){
+                                            //validate age of 18
+                                            $dateOfBirth = $_POST['birthdate'];
+                                            $today = date("y-m-d");
+                                            $diff = date_diff(date_create($dateOfBirth), date_create($today));
+                                            if ($diff->format('%y') < 18) {
+                                                echo "<font color=red>Minimum age of 18 is required.</font>";
+                                            }
+                                        }
+                                        ?>
+                                    
+                                    </div>
                                         
 
                                 </div>
+                            
                                 <!-- Create Password -->
                                 <div class="form-group">
                                     <input type="password" class="form-control form-control-user" id="password" name="password" pattern=".{8,25}" title="Required atleast 8 to 25 characters"
@@ -173,11 +191,21 @@ require 'vendor/autoload.php';
 
         //variable to be insert into database
         if(isset($_POST['submit'])){
+            // eligible date
+            $dateOfBirth = $_POST['birthdate'];
+            $today = date("y-m-d");
+            $diff = date_diff(date_create($dateOfBirth), date_create($today));
+        
+
+        //variable to be insert into database
+        if(isset($_POST['submit']) && $diff->format('%y') > 18 ){
+
             $email           = ($_POST['email']);
             $username        = ($_POST['username']);
             $ic              = ($_POST['ic']);
             $ic2             = ($_POST['ic2']);
             $phone           = ($_POST['phone']);
+            $birthdate       = ($_POST['birthdate']);
             $password        = ($_POST['password']);
             $rpassword       = ($_POST['rpassword']);
             $typee           = ($_POST['type']);
@@ -195,25 +223,25 @@ require 'vendor/autoload.php';
                 $mail->isSMTP();
 
                 //Set the SMTP server 
-                $mail->Host = 'smtp.gmail.com';
+                $mail->Host = 'mail.beetriv.com';
 
                 //Enable SMTP authentication
                 $mail->SMTPAuth = true;
 
                 //SMTP username
-                $mail->Username = 'ayamketupat02@gmail.com';
+                $mail->Username = 'admin@beetriv.com';
 
                 //SMTP password
-                $mail->Password = 'k4k5dpkk';
+                $mail->Password = '4bx~~ZJ8HJyq';
 
                 //SMTP username
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->SMTPSecure = 'ssl';
 
                 //SMTP PORT
-                $mail->Port = 587;
+                $mail->Port = '290';
 
                 //Recipients
-                $mail->setFrom('haziqzulhazmi@gmail.com','beetriv.com');
+                $mail->setFrom('admin@beetriv.com','Admin Beetriv');
 
                 //add recipient
                 $mail->addAddress($email,$username);
@@ -235,8 +263,8 @@ require 'vendor/autoload.php';
 
                 $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
 
-                $sql = $conn->query ("INSERT INTO users (email, username, ic_number, ic_color, phone_number, password, vcode, type) VALUES ('$email','$username','$ic','$ic2','$phone'
-                ,'$password','$vcode', '$typee')");
+                $sql = $conn->query ("INSERT INTO users (email, username, ic_number, ic_color, phone_number, birthdate, password, vcode, type) VALUES ('$email','$username','$ic','$ic2','$phone'
+                , '$birthdate', '$password','$vcode', '$typee')");
                 //mysql_query($conn, $sql);
                 // $result = $stmtinsert->execute([$username,$password,$email,$vcode]);
 
@@ -259,6 +287,7 @@ require 'vendor/autoload.php';
             
 
             }
+        }
 
 
 

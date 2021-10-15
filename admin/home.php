@@ -6,6 +6,10 @@ require_once "../connection.php";
 $email = $_SESSION['email'];
 
 $today = date('Y-m-d');
+$thisYear = date('Y');
+if(isset($_GET['year'])){
+  $thisYear = $_GET['year'];
+}
 
 $select = "SELECT * FROM users WHERE email = 'admin@beetriv.com' ";
 $statement = $conn->prepare($select);
@@ -309,175 +313,47 @@ $salesRow=$salesData->fetchAll(PDO::FETCH_ASSOC);
 
                     <!-- Content Row -->
 
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart">
-                                            <script>
-                                                // Area Chart Example
-                                                var ctx = document.getElementById("myAreaChart");
-                                                var myLineChart = new Chart(ctx, {
-                                                type: 'line',
-                                                data: {
-                                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                                                    datasets: [{
-                                                    label: "Earnings",
-                                                    lineTension: 0.3,
-                                                    backgroundColor: "rgba(78, 115, 223, 0.05)",
-                                                    borderColor: "rgba(78, 115, 223, 1)",
-                                                    pointRadius: 3,
-                                                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                                                    pointBorderColor: "rgba(78, 115, 223, 1)",
-                                                    pointHoverRadius: 3,
-                                                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                                                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                                                    pointHitRadius: 10,
-                                                    pointBorderWidth: 2,
-                                                    data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
-                                                    }],
-                                                },
-                                                options: {
-                                                    maintainAspectRatio: false,
-                                                    layout: {
-                                                    padding: {
-                                                        left: 10,
-                                                        right: 25,
-                                                        top: 25,
-                                                        bottom: 0
-                                                    }
-                                                    },
-                                                    scales: {
-                                                    xAxes: [{
-                                                        time: {
-                                                        unit: 'date'
-                                                        },
-                                                        gridLines: {
-                                                        display: false,
-                                                        drawBorder: false
-                                                        },
-                                                        ticks: {
-                                                        maxTicksLimit: 7
-                                                        }
-                                                    }],
-                                                    yAxes: [{
-                                                        ticks: {
-                                                        maxTicksLimit: 5,
-                                                        padding: 10,
-                                                        // Include a dollar sign in the ticks
-                                                        callback: function(value, index, values) {
-                                                            return '$' + number_format(value);
-                                                        }
-                                                        },
-                                                        gridLines: {
-                                                        color: "rgb(234, 236, 244)",
-                                                        zeroLineColor: "rgb(234, 236, 244)",
-                                                        drawBorder: false,
-                                                        borderDash: [2],
-                                                        zeroLineBorderDash: [2]
-                                                        }
-                                                    }],
-                                                    },
-                                                    legend: {
-                                                    display: false
-                                                    },
-                                                    tooltips: {
-                                                    backgroundColor: "rgb(255,255,255)",
-                                                    bodyFontColor: "#858796",
-                                                    titleMarginBottom: 10,
-                                                    titleFontColor: '#6e707e',
-                                                    titleFontSize: 14,
-                                                    borderColor: '#dddfeb',
-                                                    borderWidth: 1,
-                                                    xPadding: 15,
-                                                    yPadding: 15,
-                                                    displayColors: false,
-                                                    intersect: false,
-                                                    mode: 'index',
-                                                    caretPadding: 10,
-                                                    callbacks: {
-                                                        label: function(tooltipItem, chart) {
-                                                        var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                                                        return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
-                                                        }
-                                                    }
-                                                    }
-                                                }
-                                                });
-                                            </script>
-                                        </canvas>
-                                    </div>
-                                </div>
+                        <div class="box-body">
+                            <div class="chart">
+                                <br>
+                                <div id="legend" class="text-center"></div>
+                                <canvas id="beetrivChart" style="height:350px"></canvas>
                             </div>
                         </div>
+                        
+                        <!-- Beetriv Chart Data retrieve from order details-->
+                        <?php
+                            $monthSales = array();
+                            $sales = array();
+                            //to display total sales in current year only
+                            for( $mth = 1; $mth <= 12; $mth++ ) {
+                                try{
+                                $stmt = $conn->prepare("SELECT * FROM order_details WHERE MONTH(sales_date)=:month AND YEAR(sales_date)=:year");
+                                $stmt->execute(['month'=>$mth, 'year'=>$thisYear]);
+                                $total = 0;
+                                foreach($stmt as $srow){
+                                    $subtotal = $srow['prd_price']*$srow['prd_qty'];
+                                    $total += $subtotal;    
+                                }
+                                array_push($sales, round($total, 2));
+                                }
+                                catch(PDOException $e){
+                                echo $e->getMessage();
+                                }
 
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                //str pad to pad a string to new length
+                                $num=str_pad( $mth, 2, 0, STR_PAD_LEFT );
+                                $month=date('M', mktime(0, 0, 0, $mth, 1));
+                                array_push($monthSales, $month);
+                            }
 
-            </div>
+                            $monthSales = json_encode($monthSales);
+                            $sales = json_encode($sales);
+
+                        ?>
+                        
+                        <!-- End Chart Data -->
+                    
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -531,12 +407,60 @@ $salesRow=$salesData->fetchAll(PDO::FETCH_ASSOC);
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
+    <!-- ChartJS -->
+    <!-- import bower chart -->
+    <script src="../js/chart.js/Chart.js"></script>
+    <script>
+        $(function(){
+        var barChartBeetriv = $('#beetrivChart').get(0).getContext('2d')
+        var chart = new Chart(barChartBeetriv)
+        var chartData = {
+            labels  : <?php echo $monthSales; ?>,
+            datasets: [
+            {
+                label               : 'SALES',
+                fillColor           : '#ffcd39',
+                strokeColor         : '#000',
+                pointColor          : '#3b8bba',
+                pointStrokeColor    : '#ffcd39',
+                pointHighlightFill  : '#fff',
+                pointHighlightStroke: 'rgba(60,141,188,1)',
+                data                : <?php echo $sales; ?>
+            }
+            ]
+        }
+        var chartOpt          = {
+            scaleBeginAtZero        : true,
+            //show grid lines across chart
+            scaleShowGridLines      : true,
+            //grid lines color
+            scaleGridLineColor      : 'rgba(0,0,0,.05)',
+            //grid lines width
+            scaleGridLineWidth      : 1,
+            //show horizontal lines, no X-axis
+            scaleShowHorizontalLines: true,
+            //show vertical lines, no Y-axis
+            scaleShowVerticalLines  : true,
+            //true for stroke on each bar
+            barShowStroke           : true,
+            //width of bar stroke
+            barStrokeWidth          : 2,
+            //space between each x value sets
+            barValueSpacing         : 5,
+            //space between data sets within x values
+            barDatasetSpacing       : 1,
+            //legend template from bower components
+            legendTemplate          : '<class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%><%}%>',
+            //make the chart responsive or not using boolean
+            responsive              : true,
+            maintainAspectRatio     : true
+        }
 
-    <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-area-demo.js"></script>
-    <script src="../js/demo/chart-pie-demo.js"></script>
+        chartOpt.datasetFill = false
+        var beetrivChart = chart.Bar(chartData, chartOpt)
+        document.getElementById('legend').innerHTML = beetrivChart.generateLegend();
+        });
+    </script>
 
 </body>
 
