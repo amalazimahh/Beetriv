@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once "connection.php";
+error_reporting(0);
+ini_set('display_errors', 0);
 
 $email = $_SESSION['email'];
 // echo $email;
@@ -52,6 +54,57 @@ $result2 = "SELECT * FROM product WHERE prd_category= 'Freebies'";
 $handle = $conn->prepare($result2);
 $handle->execute();
 $rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
+
+// add to cart function here
+if(isset($_POST['cart1']))
+    {
+        $cartId = ($_POST['ide']);
+    
+        
+        $result = $conn->query("SELECT * FROM product WHERE prd_id = '$cartId'");
+        $rowCart = $result->fetch(PDO::FETCH_ASSOC);
+        $productQty = intval($_POST['product_qty']);
+        $calculateTotalPrice = number_format($productQty * $rowCart['prd_price'],2);
+        
+        $cartArray = [
+            'product_id'    =>$cartId,
+            'qty'           => $productQty,
+            'product_name'  =>$rowCart['prd_name'],
+            'product_price' => $rowCart['prd_price'],
+            'total_price'   => $calculateTotalPrice,
+            'product_img'   =>$rowCart['prd_img'],
+            'username'      =>$rowCart['username']
+        ];
+        
+        if(isset($_SESSION['cart_items']) && !empty($_SESSION['cart_items']))
+        {
+            $productIDs = [];
+            foreach($_SESSION['cart_items'] as $cartKey => $cartItem)
+            {
+                $productIDs[] = $cartItem['product_id'];
+                if($cartItem['product_id'] == $productID)
+                {
+                    $_SESSION['cart_items'][$cartKey]['qty'] = $productQty;
+                    $_SESSION['cart_items'][$cartKey]['total_price'] = $calculateTotalPrice;
+                    break;
+                }
+            }
+        
+
+            if(!in_array($productID,$productIDs))
+            {
+                $_SESSION['cart_items'][]= $cartArray;
+            }
+
+        }
+        else
+        {
+            $_SESSION['cart_items'][]= $cartArray;
+        }
+    }
+
+    
+
 ?>
 
 <!DOCTYPE html>
@@ -633,21 +686,22 @@ $rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
                         <?php foreach($row as $product){ 
                              if (empty($product['bid_expiry'])) { ?>
                             <div class="content">
-                                <form method="POST"></form>
+                                <form method="POST">
                                     <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
                                     <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
                                     <h4><?php echo $product['prd_name']; ?></h4>
                                     <h6>$<?php echo $product['prd_price']; ?></h6>
                                     <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
-                                    <button class="buy-prd btn-warning">Add to cart</button>
-                                </form>  
+                                    <input class="form-control text-center me-3" id="inputQuantity" type="hidden" value="1" style="max-width: 5rem" name="product_qty" id="productQty" class="form-control" placeholder="Quantity" min="1" max="1000" />
+                                    <button class="buy-prd btn-warning" name='cart1'>Add to cart</button>                                  
+                                </form>                   
                                 
                             </div>
                             
                         <?php } }?>
                <?php foreach($rowPromo as $promo){ ?>
               <div class="content">
-                  <form method="POST"></form>
+                  <form method="POST" ></form>
               <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($promo['prd_img']); ?>">
               <input type="hidden" name="ide" value=<?php echo $promo['prd_id'];?> >
                <h4><?php echo $promo['prd_name']; ?></h4>
@@ -662,7 +716,11 @@ $rowPromo = $handle->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </section>
         
+<?php
 
+
+
+?>
         <!-- Footer-->
         <footer class="site-footer">
 
