@@ -371,8 +371,7 @@ if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
                         <p class="text-align-center"><b>Policies</b> <br> <?php echo $seller['policies']; ?></p>
                         <p class="text-align-center"><b>Shipping</b> <br> <?php echo $seller['shipping']; ?></p>
                       
-                      
-                      <a href="seller-dashboard.php" class="btn btn-sm btn-warning"><strong>Seller Dashboard</strong></a>
+                    
                       <hr class="my-4">
                     </div>
                     <!-- feedback -->
