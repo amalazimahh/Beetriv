@@ -4,12 +4,35 @@ session_start();
 $email=$_SESSION['email'];
 // echo $email;
 require_once "connection.php";
+$selectprofile = $conn->query("SELECT * FROM users WHERE email='$email'");
+$row1 = $selectprofile->fetch(PDO::FETCH_ASSOC);
 
+$type = $row1['type'];
+if (isset($_POST['profile'])){
+if(($type) == 'seller'){
+    header('location: seller-profile.php');
+}
+else if(($type) == 'customer'){
+    header('location: user-profile.php');
+}
+else if(($type) == 'runner'){
+    header('location: runner-order.php');
+}
+
+}
+if (isset($_POST['cart'])){
+header('location: cart.php');
+}
+if (isset($_POST['wishlist'])){
+header('location: wishlist.php');
+}
 
 //make sure login first, so that can fetch email, echo email to see if you logged in
 $email = $_SESSION['email'];
 // echo $email;
-
+$typer = $conn->query("SELECT * FROM users WHERE email = '$email'");
+$typer = $typer->fetch(PDO::FETCH_ASSOC);
+$pilih = $typer['type'];
 
 $select = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
 $statement = $conn->prepare($select);
@@ -54,7 +77,7 @@ if(isset($_POST['save'])){
                 header('location: edit-profile.php');
             }
             if($userStatement['type'] == 'seller'){
-                $updateSeller = ("UPDATE users SET email='$emailEdit', username= $username', phone_number='$phone', fname='$fname', lname='$lname', bio='$bio', img='$imgContent', disclaimer='$disclaimer', policies='$policies', shipping='$shipping' WHERE email='$email' ");
+                $updateSeller = ("UPDATE users SET email='$emailEdit', username= '$username', phone_number='$phone', fname='$fname', lname='$lname', bio='$bio', img='$imgContent', disclaimer='$disclaimer', policies='$policies', shipping='$shipping' WHERE email='$email' ");
                 $updateSeller_run = $conn->prepare($updateSeller);
                 $updateSeller_run->execute();
                 header('location: seller-profile.php');
@@ -87,6 +110,21 @@ if(isset($_POST['save'])){
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/user-profile.css">
+    <style>
+          #nnv{
+        text-align: center;
+        font-size: 24px;
+        color: #000000;
+        width: 100%;
+        padding: 15px;
+        border:0px;
+        outline: none;
+        cursor: pointer;
+        margin-top: 5px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        }
+    </style>
 </head>
 <body>
 <!-- Navigation-->
@@ -117,15 +155,16 @@ if(isset($_POST['save'])){
                             </ul>
                         </li>
                     </ul>
-                    <ul class="nav justify-content-end">
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php">
-                    <i class="bi bi-heart" style='color:black'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php">
-                    <i class="bi bi-cart4" style='color:black'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="user-profile.php"><i class="bi-person-circle"></i></a></li>
-                    <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="login.php"><i class="bi bi-box-arrow-right"></i></a></li>
-                    </a></li>
+                    <form action = "store.php" method = "post">
+                        <ul class="nav justify-content-end">
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="wishlist.php"> -->
+                    <li><button id="nnv" type="submit" name="wishlist" class="bi bi-heart" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['wish_items']) && count($_SESSION['wish_items'])) > 0 ? count($_SESSION['wish_items']):''; ?></i></li>
+                    <!-- <li><a class="nav-item nav-link" style='color:black' aria-current="page" href="cart.php"> -->
+                    <li><button id="nnv" type="submit" name="cart" class="bi bi-cart4" style='color:black;background-color:transparent'><?php echo (isset($_SESSION['cart_items']) && count($_SESSION['cart_items'])) > 0 ? count($_SESSION['cart_items']):''; ?></i></button></li>
+                    <li><button id="nnv" type="submit" name="profile" class="nav-item" style='background-color:transparent'><i class="bi-person-circle"></i></button></li>
+                    <li><button id="nnv" type="submit" name="logout" class="nav-item" style='background-color:transparent'><i class="bi bi-box-arrow-right"></i></button></li>
                     </ul>
+                    </form>
                 </div>
             </div>
         </nav>
