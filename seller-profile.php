@@ -430,6 +430,8 @@ if ( $seller_period < $dateTime->format('Y-m-d H:i:s') ) {
                     <h4><?php echo $product['prd_name']; ?></h4>
                     <h6>$<?php echo $product['prd_price']; ?></h6>
                     <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
+                    <a>/</a>
+                    <a class="text-warning" href="edit-product.php?id=<?php echo $product['prd_id'];?>">Edit</a>
                   </form>  
                 </div>        
           <?php } }?>
