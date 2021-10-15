@@ -23,6 +23,7 @@ $handle = $conn->prepare($result);
 $handle->execute();
 $rowOrder = $handle->fetchAll(PDO::FETCH_ASSOC);
 
+
 $statusMsg = '';
 if(isset($_POST["submit"])){
       $userId       = $_POST['user_id'];
@@ -32,6 +33,7 @@ if(isset($_POST["submit"])){
       $rate3        = $_POST['rate3'];
       $rate4        = $_POST['rate4'];
       $feedback     = $_POST['feedback'];
+      $status       = 'reviewed';
     if(!empty($_FILES["prd_img"]["name"])) {
       // Get the file info
       $fileName = basename($_FILES["prd_img"]["name"]);
@@ -47,14 +49,25 @@ if(isset($_POST["submit"])){
             $select = "SELECT * FROM seller_review WHERE 1";
                             
             // Insert image content into database
-            $insert = $conn->query("INSERT INTO seller_review(prd_id,user_id,prd_quality,seller_service,runner_service,overall_rate,feedback,prd_img,time) VALUES ('$prd_id','$userId','$rate','$rate2','$rate3','$rate4','$feedback','$imgContent','$today')");
-                
+            $insert = $conn->query("INSERT INTO seller_review(prd_id,user_id,prd_quality,seller_service,runner_service,overall_rate,feedback,prd_img,status,time) VALUES ('$prd_id','$userId','$rate','$rate2','$rate3','$rate4','$feedback','$imgContent','$status','$today')");
+            
+            // $update = $conn->prepare("UPDATE seller_review SET prd_quality='$rate', seller_service='$rate2', runner_service='$rate3', overall_rate='$rate4', feedback='$feedback' WHERE user_id='$userId' AND prd_id='$prd_id' AND status='reviewed' ");
+            // $update->execute();
+
             if($insert){
                 echo '<script>updated</script>';
                 header('location: purchase.php');
             }else{
                 echo '<script>failed</script>';
             }
+
+            // if($updated){
+            //   echo '<script>updated</script>';
+            //   header('location: purchase.php');
+            // }else{
+            //     echo '<script>failed</script>';
+            // }
+            
             // $status  = '<script>updated</script>';
             // $statusMsg = "<script>updated</script>";
         } else {
