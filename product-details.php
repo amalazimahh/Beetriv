@@ -892,7 +892,8 @@ else
                         <div class="fs-5 mb-5">
                         <span class="text-muted text-decoration-line-through"><?php echo $row['old_price']?></span><br><span>BND$<?php echo $row['prd_price']?></span><br>
 
-                            <h10 class="lead"><?php echo $seller['username'];?></h10>
+                        <a href ="seller-viewpage.php?profile=<?php echo $seller['username'];?>">
+                        <h10 class="lead"><?php echo $seller['username'];?></h10></a>
                         </div>
                         <div class="pb-5">
                         <textarea class="lead" style="width:700px;height:200px;background-color:transparent;border:0px;" disabled><?php echo $row['prd_desc']?></textarea>
