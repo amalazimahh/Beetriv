@@ -5,7 +5,7 @@ require_once "connection.php";
 
 //make sure login first, so that can fetch email, echo email to see if you logged in
 $email = $_SESSION['email'];
-// $displayname = $_GET['display_name'];
+// $displayname = $_GET['id'];
 
 //echo $email;
 
@@ -224,6 +224,64 @@ h2.centerh2 {
 ul, li {
     display:inline
 }
+
+.product{
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: space-evenly;
+        /* align-items: center; */
+        margin: 20px 0;
+        /* flex-basis: 100%; */
+        }
+        .content{
+        width: 19%;
+        margin: 15px;
+        box-sizing: border-box;
+        float: left;
+        text-align: center;
+        border-radius:10px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        padding-top: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: .4s;
+        }
+        .content:hover{
+        box-shadow: 0 0 11px rgba(33,33,33,.2);
+        transform: translate(0px, -8px);
+        transition: .6s;
+        }
+        img{
+        width: 150px;
+        height: 150px;
+        text-align: center;
+        margin: 0 auto;
+        display: block;
+        }
+        h6{
+        font-size: 26px;
+        text-align: left;
+        color: #222f3e;
+        margin: 0;
+        padding-left: 20px;
+        }
+        button{
+        text-align: center;
+        font-size: 24px;
+        color: #000000;
+        width: 100%;
+        padding: 15px;
+        border:0px;
+        outline: none;
+        cursor: pointer;
+        margin-top: 5px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        }
+        .buy-prd{
+        font-size: 20px;
+        }
     </style>
 </head>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
@@ -290,7 +348,7 @@ ul, li {
             </div>
             <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
               <div class="d-flex justify-content-between">
-                <a href="managestore.php" class="btn btn-sm btn-warning mr-4"><strong>Manage Store</strong></a>
+                <a href="managestore.php" class="btn btn-sm btn-warning mr-2"><strong>Manage Store</strong></a>
                 <a href="edit-profile.php" class="btn btn-sm  float-right"><strong>EDIT PROFILE</strong></a>
               </div>
             </div>
@@ -309,9 +367,14 @@ ul, li {
                   <i class="ni education_hat mr-2"></i><strong>Phone Number</strong> <?php echo $seller['phone_number'];?>
                   <i class="ni education_hat mr-2"></i><strong>IC Number</strong> <?php echo $seller['ic_number'];?>
                   <i class="ni education_hat mr-2"></i><strong>IC Colour</strong> <?php echo $seller['ic_color'];?>
-                  <p class="text-align-center">Disclaimer & Policies</p>
+                  
+                  <p class="text-align-center"><b>Disclaimer</b> <br> <?php echo $seller['disclaimer']; ?></p>
+                  <p class="text-align-center"><b>Policies</b> <br> <?php echo $seller['policies']; ?></p>
+                  <p class="text-align-center"><b>Shipping</b> <br> <?php echo $seller['shipping']; ?></p>
                 </div>
                 <hr class="my-4">
+
+                <a href="seller-dashboard.php" class="btn btn-sm btn-warning mr-2"><strong>Seller Dashboard</strong></a>
                 
               </div>
               <!-- feedback -->
@@ -337,7 +400,8 @@ ul, li {
                                     { echo '<li><i class="fa fa-star-o"></i></li>'; }
                                 }
                                 
-                                ; ?></div>
+                                 ;?>
+                                </div>
                                 
                             </div>  
                             <div class="rate-star">
@@ -356,7 +420,23 @@ ul, li {
 <!-- Selling Item -->
   <div class="container mt-3 px-2 pb-5">
       <h4 class="pb-3"><strong>Sell Item</strong></h4>
-    <div class="table-responsive">
+      <div class="product">
+                        <?php foreach($result as $product){ 
+                             if (empty($product['bid_expiry'])) { ?>
+                            <div class="content">
+                                <form method="POST"></form>
+                                    <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($product['prd_img']); ?>">
+                                    <input type="hidden" name="ide" value=<?php echo $product['prd_id'];?> >
+                                    <h4><?php echo $product['prd_name']; ?></h4>
+                                    <h6>$<?php echo $product['prd_price']; ?></h6>
+                                    <a class="text-warning" href="product-details.php?product=<?php echo $product['prd_id'];?>">View</a>
+                                    <button class="buy-prd btn-warning">Add to cart</button>
+                                </form>  
+                                
+                            </div>
+                            
+                        <?php } }?>
+    <!-- <div class="table-responsive">
         <table class="table table-responsive table-borderless">
             <thead>
                 <tr class="bg-light">
@@ -377,7 +457,7 @@ ul, li {
             </thead>
             <tbody>
                 <tr>
-                <!-- display sell item     -->
+                
                 
                 <?php
                 foreach($result as $rowProduct){
@@ -400,7 +480,7 @@ ul, li {
                 
             </tbody>
         </table>
-    </div>
+    </div> -->
 </div>
   
   <!-- Footer-->
