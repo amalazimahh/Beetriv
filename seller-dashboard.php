@@ -195,9 +195,8 @@ body {
         </div>
         <?php } ?>   
 
-        <div class="row">
-          
-
+        <div class="container mt-3 px-2 pb-5 d-flex justify-content-center">
+        <!-- <div class="row"> -->
           <!-- Total Sales Card -->
           <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
@@ -258,6 +257,7 @@ body {
                 </div>
               </div>
             </div>
+        <!-- </div> -->
         </div>
 
         <!-- Selling Item -->
@@ -268,7 +268,7 @@ body {
               <thead>
                 <tr class="bg-light">
                     
-                    <th scope="col" width="10%">Product ID</th>
+                    <!-- <th scope="col" width="10%">Product ID</th> -->
                     <th scope="col" width="15%">Product Name</th>
                     <th scope="col" width="10%">Product Image</th>
                     <th scope="col" width="10%">Product Category</th>
@@ -291,7 +291,7 @@ body {
 
                 ?>
                 <tr>
-                <td><?php echo $rowProduct['prd_id']; ?></td>
+                <!-- <td><?php echo $rowProduct['prd_id']; ?></td> -->
                 <td><?php echo $rowProduct['prd_name']; ?></td>
                 <th scope="row"><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($rowProduct['prd_img']); ?>" class="rounded" style="width:150px; height:150px"></th>
                 <td><?php echo $rowProduct['prd_category']; ?></td>
