@@ -59,12 +59,13 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-  background-color: #ead3d7;
+  background-color: #000;
+  color: #fff;
 }
 
 .prd-container {
   border-radius: 5px;
-  background-color: #f2f2f2;
+  /* background-color: #f2f2f2; */
   padding: 20px;
 }
 
@@ -164,84 +165,77 @@ input::-webkit-inner-spin-button {
 <div class="add-prd"><h3>New Item Details</h3></div>
 <hr>
   <form method="post" enctype="multipart/form-data">
-    <div class="row">
-      <div class="col-25">
+
+  <!-- First row -->
+    <div class="row mt-2">
+      <div class="col-md-6">
         <label for="name">Display Name</label>
-      </div>
-      <div class="col-75">
         <input type="hidden" name="email" value="<?php echo $email; ?>">
         <input type="text" name="display_name" placeholder="<?php echo $email; ?>" disabled>
       </div>
-</div>
-      <div class="row">
-    <div class="col-25">
+    
+      <div class="col-md-6">
         <label for="name">Username</label>
-      </div>
-    <div class="col-75">
         <input type="hidden" name="username" value="<?php echo $row['username']; ?>">
         <input type="text" name="username" placeholder="<?php echo $row['username']; ?>" disabled>
       </div>
-</div>
-<div class="row">
-    <div class="col-25">
-        <!-- <label for="name">Phone Number</label>
-      </div>
-    <div class="col-75"> -->
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-6">
         <input type="hidden" name="phone_number" value="<?php echo $row['phone_number']; ?>">
-        <!-- <input type="text" name="phone_number" placeholder="<?php echo $row['phone_number']; ?>" disabled> -->
-      </div>
-</div>
-    <div class="row">
-      <div class="col-25">
         <label for="price">Product Name</label>
-      </div>
-      <div class="col-75">
         <input type="text" name="prd_name" step="any">
       </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
+
+      <div class="col-md-6">
         <label for="category">Product Category</label>
-      </div>
-      <div class="col-75">
-      <select name="prd_category">
-        <option value="Select">Select</option>
-          <option value="Home">Home and Living</option>
-          <option value="Fashion">Fashion</option>
-          <option value="Mobile">Mobile and Electronics</option>
-          <option value="Hobbies">Hobbies and Games</option>
-          <option value="Cars">Cars and Property</option>
-          <option value="Freebies">Freebies, Deals and More!</option>
-        </select>
-      </div>
+          <select name="prd_category">
+            <option value="Select">Select Category</option>
+              <option value="Home">Home and Living</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Mobile">Mobile and Electronics</option>
+              <option value="Hobbies">Hobbies and Games</option>
+              <option value="Cars">Cars and Property</option>
+              <option value="Freebies">Freebies, Deals and More!</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+          <label>If no category matches your product and you wish to request for new category, kindly select Request New Category</label>
+        </div>
+
+        <div class="col-md-4">
+          <label for="newCat">New Category (Optional)</label>
+          <select name="new_cat" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+            <option value="">Click here</option>
+            <option value="requestcategory.php">Request new category</option>
+          </select>
+        </div>
     </div>
-    <div class="row">
-      <div class="col-25">
+    
+    <div class="row mt-2">
+      <div class="col-md-6">
         <label for="price">Product Price</label>
-      </div>
-      <div class="col-75">
         <input type="number" name="prd_price" step="any">
       </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
+
+      <div class="col-md-6">
         <label for="quantity">Product Quantity</label>
-      </div>
-      <div class="col-75">
         <input type="number" name="prd_qty">
       </div>
     </div>
-    <div class="row">
-      <div class="col-25">
+
+    <div class="row mt-2">
+      <div class="col-md-6">
         <label for="condition">Product Condition</label>
-      </div>
-      <div class="col-75">
-        <input type="radio" name="prd_condition" value="New"/>
-    <label for="New">New</label>
-    <input type="radio" name="prd_condition" value="Used">
-    <label for="Used">Used</label>
+          <input type="radio" name="prd_condition" value="New"/>
+            <label for="New">New</label>
+          <input type="radio" name="prd_condition" value="Used">
+            <label for="Used">Used</label>
       </div>
     </div>
+    
     <div class="row">
       <div class="col-25">
         <label for="description">Product Description</label>
@@ -250,29 +244,24 @@ input::-webkit-inner-spin-button {
         <textarea name="prd_desc" placeholder="Write something.." style="height:200px"></textarea>
       </div>
     </div>
-    <div class="row">
-      <div class="col-25">
+
+    <div class="row mt-2">
+      <div class="col-md-6">
         <label for="prd_rating">Product Numeric Rating</label>
+        <input type="number" name="prd_rating" placeholder="Out of 10">
       </div>
-      <div class="col-75">
-        <input type="number" name="prd_rating">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
+
+      <div class="col-md-6">
         <label for="prd_location">Meet-up Location</label>
-      </div>
-      <div class="col-75">
-      <select name="prd_location">
-        <option value="Select">Select</option>
+        <select name="prd_location">
+          <option value="Select">Select</option>
           <option value="KB">Kuala Belait</option>
           <option value="Tutong">Tutong</option>
           <option value="BSB">Bandar Seri Begawan</option>
           <option value="Temburong">Temburong</option>
         </select>
-      
+      </div>
     </div>
-        </div>
 
     <!-- bid details -->
     <div class="add-prd"><h3>Bid Details</h3></div>
@@ -290,45 +279,55 @@ input::-webkit-inner-spin-button {
         </select>
       </div>
 
-      <div class="col-25" id="bid_details">
-        <label for="bid_date">Choose Date Expiry</label>
+      <div id="bidFields">
+        <div class="row mt-2">
+          <div class="col-md-3" id="bid_details">
+            <label for="bid_date">Choose Date Expiry</label>
+            <input type="date" name="date_expired" id="date_expired" class="form-control">
+          </div>
+
+          <div class="col-md-3" id="bid_details">
+            <label for="time_expired">Choose Time Expiry</label>
+            <input type="time" name="time_expired" id="time_expired" class="form-control">
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <!-- Starting Price for Bidding -->
+          <div class="col-md-6" id="bid_details">
+            <label for="starting_price">Enter Starting Price for Bid</label>
+            <input type="number" name="starting_price" id="starting_price">
+          </div>
+
+          <div class="col-md-6" id="bid_details">
+            <label for="bid_increment">Enter Bid Increment</label>
+            <input type="number" name="bid_increment" id="bid_increment">
+          </div>
+        </div>
       </div>
 
-      <div class="col-75">
-          <input type="date" name="date_expired" id="date_expired">
-      </div>
+      <!-- JQuery to help with update links -->
 
-      <div class="col-25" id="bid_details">
-        <label for="time_expired">Choose Time Expiry</label>
-      </div>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+      <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 
-      <div class="col-75">
-          <input type="time" name="time_expired" id="time_expired">
-      </div>
-
-      <!-- Starting Price for Bidding -->
-      <div class="col-25" id="bid_details">
-        <label for="starting_price">Enter Starting Price for Bid</label>
-      </div>
-
-      <div class="col-75">
-          <input type="number" name="starting_price" id="starting_price">
-      </div>
-      
-      <!-- Bid Increment -->
-      <div class="col-25" id="bid_details">
-        <label for="bid_increment">Enter Bid Increment</label>
-      </div>
-
-      <div class="col-75">
-          <input type="number" name="bid_increment" id="bid_increment">
-      </div>
-
-      <!-- <p id="timer_value"></p> -->
-
-      <!-- <script type="text/javascript">
+      <script>
         
-      </script> -->
+        $(document).ready(function() {
+          toggleFields(); 
+          $("#bid_stat").change(function () {
+          toggleFields();
+          });
+
+        });
+        // show or hide bid forms depending on what user select
+        function toggleFields() {
+            if ($("#bid_stat").val() === "yes")
+                $("#bidFields").show();
+            else
+                $("#bidFields").hide();
+        }
+      </script>
 
     </div>
 
