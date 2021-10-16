@@ -187,10 +187,7 @@ else
             exit;
         }
     
-    // fetching bidding data
-    $stmt = $conn->query("SELECT * FROM product_bid WHERE prd_id = '$id'");
-    $res = $stmt->fetch(PDO::FETCH_ASSOC);
-    //$count = $stmt->fetchColumn();
+   
 
     // fetching paypal details
     $statement = $conn->query("SELECT * FROM paypal_details WHERE user_paypal = '$email'");
@@ -198,6 +195,9 @@ else
 
     // add into product_bid
     if(isset($_POST['placebid'])){
+        // fetching bidding data
+    $stmt = $conn->query("SELECT * FROM product_bid WHERE prd_id = '$id'");
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
         // fetching item seller
     $display_name = $row['display_name'];
     $sellers = $conn->query("SELECT * FROM users WHERE email = '$display_name'");
@@ -205,13 +205,24 @@ else
         // if ($count) {
             $item_seller = $row['display_name'];
             $current_bid   = $_POST['current_bid'];
-            if ( $current_bid < $row['starting_bid'] || $current_bid < (isset($res['current_bid']) + $row['bid_increment']) || $current_bid < isset($res['current_bid']) ) {
+            $prev_bid = $_POST['prev_bid'];
+            $bid_inc = $row['bid_increment'];
+            $increment = $bid_inc + $prev_bid;
+            // echo $prev_bid;
+            // echo $row['starting_bid'];
+            // echo $current_bid ;
+            // echo $bid_inc;
+            // echo $increment;
+            // echo $prev_bid;
+            if ( $row['starting_bid'] > $current_bid || $prev_bid >= $current_bid || $increment  > $current_bid) {
                  echo '<script>alert("Bid needs to be higher!")</script>';
-                 echo "<meta http-equiv='refresh' content='0'>";
+                  echo "<meta http-equiv='refresh' content='0'>";
                  
                 //echo "<script>Qual.error('Unsuccessful Bid','Bid needs to be higher.')</script>";
                 
-            } else {
+            }
+            
+            else {
             if ( isset($res['prd_id']) ) {
                     //$seller = $row['display_name'];
                 // Update bid
@@ -280,7 +291,7 @@ else
                     $select1 = "SELECT * FROM paypal_details WHERE 1";
                     $insert1 = $conn->query ("INSERT INTO paypal_details (user_paypal, paypal_email, paypal_psw) VALUES ('$email','$paypal_email','$paypal_psw')");
                     }
-                    echo "<meta http-equiv='refresh' content='0'>";
+                     echo "<meta http-equiv='refresh' content='0'>";
 
 
             }catch (Exception $e){
@@ -691,6 +702,11 @@ else
         $pdoQuery_run = $conn->prepare($pdoQuery);
         $pdoQuery_run->execute();
     }
+
+     // fetching bidding data
+     $stmt = $conn->query("SELECT * FROM product_bid WHERE prd_id = '$id'");
+     $res = $stmt->fetch(PDO::FETCH_ASSOC);
+     //$count = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1006,6 +1022,7 @@ else
                     <div class="d-flex p-2 bd-highlight">
                     <span class="input-group-text">BND$</span>
                     <input type="hidden" name="prd_id" value="<?php echo $row['prd_id']?>">
+                    <input type="hidden" name="prev_bid" value="<?php echo $res['current_bid']?>">
                     <input type="hidden" name="current_bidder" value="<?php if (isset($res['current_bidder']) ){
                                                     //Exists
                                                     echo $res['current_bidder'];
@@ -1052,13 +1069,17 @@ else
                         $(document).ready(function(){
                         $("input[name=current_bid]").keyup(function(){
                         var bid=$("input[name=current_bid]").val();
-                        if (bid <= <?php echo $res['current_bid'] ?>) {
+                        if (bid <= <?php echo $res['current_bid'] ?> || bid <= <?php 
+                        $cbid = $res['current_bid'];
+                        $inc = $row['bid_increment'];
+                        $new_inc = $cbid + $inc;
+                        echo $new_inc ?> || bid < <?php echo $row['starting_bid'] ?>) {
                             $('span.current_bid').css("color", "red");
                             $('span.current_bid').text("Your bid needs to be higher.");
                             }
-                        if  (bid > <?php echo $res['current_bid'] ?>) {
+                        else {
                             $('span.current_bid').css("color", "grey");
-                            $('span.current_bid').text("Minimum bid increment is $0.01");
+                            $('span.current_bid').text("Minimum bid increment is BND$<?php if (isset($row['bid_increment'])) { echo $row['bid_increment']; } else { echo "0.01";}?>");
                             }
                         });
                         });
