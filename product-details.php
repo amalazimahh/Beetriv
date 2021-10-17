@@ -182,9 +182,6 @@ else
                 'product_img'   =>$row['prd_img']
                 
             ];
-    
-            header("Location: chat.php?product=" . $row['prd_id']);
-            exit;
         }
     
    
@@ -789,38 +786,61 @@ else
             padding-right: 15px;
             }
 
-            /* Rate Star CSS */
-            .result-container{
-                width: 120px; 
-                height: 24px;
-                background-color: #ccc;
-                vertical-align: middle;
-                display: inline-block;
-                position: relative;
-                top: -4px;
-            }
-            .rate-stars{
-                width: 120px; 
-                height: 24px;
-                background: url(img/rate-stars.png) no-repeat;
-                background-size: cover;
-                position: absolute;
-            }
-            .rate-bg{
-                height: 24px;
-                background-color: #ffbe10;
-                position: absolute;
-            }
+            /* For stars */
+      .rate2:not(:checked) > input {
+        position:absolute;
+        top:-9999px; 
+      } 
+      .rate2:not(:checked) > label {
+        float:center;
+        width:30px;
+        overflow:hidden;
+        white-space:nowrap;
+        cursor:pointer;
+        font-size:30px;
+        color:#ccc;
+      }
+      .rate2:not(:checked) > label:before {
+        content: '★ ';
+      }
+      .rate2 > input:checked ~ label {
+        color: #ffc700;    
+      }
+      .rate2:not(:checked) > label:hover,
+      .rate2:not(:checked) > label:hover ~ label {
+        color: #deb217;  
+      }
+      .rate2 > input:checked + label:hover,
+      .rate2 > input:checked + label:hover ~ label,
+      .rate2 > input:checked ~ label:hover,
+      .rate2 > input:checked ~ label:hover ~ label,
+      .rate2 > label:hover ~ input:checked ~ label {
+        color: #c59b08;
+      }
 
-            /* Display Rate Count */
-            .reviewCount, .reviewScore {
-                font-size: 14px; 
-                color: #666666; 
-                margin-left: 5px;
-            }
-            .reviewScore {
-                font-weight: 600;
-            }
+      h2.centerh2 {
+        text-align: center;
+      }
+
+      .rate-star{
+        width: 120px; 
+        height: 24px;
+        background: url(img/rate-stars.png) no-repeat;
+        background-size: cover;
+        position: absolute;
+      }
+      .rate-bg{
+        height: 15px;
+        background-color: #ffbe10;
+      }
+          
+      .checked {
+        color: orange;
+      }
+
+      ul, li {
+          display:inline
+      }
         </style>
     </head>
     <body>
@@ -912,7 +932,7 @@ else
                         <h10 class="lead"><?php echo $seller['username'];?></h10></a>
                         </div>
                         <div class="pb-5">
-                        <textarea class="lead" style="width:700px;height:200px;background-color:transparent;border:0px;" disabled><?php echo $row['prd_desc']?></textarea>
+                        <textarea class="lead" style="width:500px;height:200px;background-color:transparent;border:0px;" disabled><?php echo $row['prd_desc']?></textarea>
                         </div>
                         <?php // if( empty($row['bid_expiry']) ): ?>
                         <form method="POST">
@@ -1151,17 +1171,33 @@ else
                     
                     <h2>Reviews</h2>
                     <?php foreach($rates as $review){ ?>
-                        <div class="wrap-input100" style="margin-top: 10px">
-                            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($review['img']); ?>" class="rounded" style="width:40px;">
-                            <div class="result-container">
-                                <?php $reviewAvgCalc = $review['prd_quality'] + $review['seller_service'];
-                                        $reviewAvg = ($reviewAvgCalc/2)*10; ?>
-                                <div class="rate-bg" style="width:<?php echo $reviewAvg; ?>%"></div>
-                                <div class="rate-stars"></div>
-                            </div>  
-                            <p><?php echo $review['feedback']; ?></p>
-                            <p>by <?php echo $review['username']; ?></p>
-                        </div>
+                              <div class="wrap-input100" style="margin-top: 10px">
+                                  <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($review['img']); ?>" class="rounded" style="width:40px; height:40px; float:left;">
+                                  <div class="result-container">
+                                      <?php $reviewAvgCalc = $review['prd_quality'] + $review['seller_service'];
+                                              $reviewAvg = ($reviewAvgCalc/2)*10; ?>
+                                                <p> <?php echo $review['feedback']; ?></p>
+                                                <p>by <?php echo $review['username']; ?></p>
+                                                <div class="fa fa-star checked" 
+                                                    <?php 
+                                                    //counting stars
+                                                    for( $x = 0; $x < 4; $x++ )
+                                                    {
+                                                        if( floor( $review['seller_service'] )-$x >= 2 )
+                                                        { echo '<li><i class="fa fa-star checked"></i></li>'; }
+                                                        elseif( $review['seller_service']-$x > 1 )
+                                                        { echo '<li><i class="fa fa-star-half-o"></i></li>'; }
+                                                        else
+                                                        { echo '<li><i class="fa fa-star-o"></i></li>'; }
+                                                    }
+                                                    
+                                                    ;?>
+                                                </div>
+                                    </div>
+                                                
+                                      
+                                </div>  
+                                  <div class="rate-star"></div>
                     <?php }?>
 
         </section>
