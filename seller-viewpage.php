@@ -15,7 +15,8 @@ $statement->execute();
 $row = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch seller_review 
-$rateQuery = $conn->prepare("SELECT * FROM seller_review LEFT JOIN users ON users.user_id=seller_review.user_id WHERE email = '$email' ");
+// $rateQuery = $conn->prepare("SELECT * FROM seller_review LEFT JOIN users ON users.user_id=seller_review.user_id WHERE email = '$email' ");
+$rateQuery = $conn->prepare("SELECT * FROM seller_review LEFT JOIN product ON product.prd_id=seller_review.prd_id LEFT JOIN users ON users.user_id=product.prd_id WHERE username = '$profile' ");
 $rateQuery->execute();
 $rates = $rateQuery->fetchAll(PDO::FETCH_ASSOC);
 
